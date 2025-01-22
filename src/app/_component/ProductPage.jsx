@@ -189,7 +189,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                   price={product.price}
                   saleprice={product.saleprice}
                   image={product.image}
-                  href={`/product/${product.title}`}
+                  href={`/product/${product.slug}`}
                 />
               ))}
               {products.length === 0 && (

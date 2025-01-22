@@ -8,16 +8,7 @@ export const fetchProducts = async () => {
     }
 }
 
-export const fetchsingleProduct = async (title) => {
-    try {
-       const response = await fetch('/product.json');
-       const data = await response.json();
-       const product = data.find(product => product.title === title)
-       return product
-    } catch (error) {
-        throw error
-    }
-}
+
 export const searchProducts = async (query) => {
     try {
       const response = await fetch("/product.json");
@@ -129,6 +120,21 @@ export const submitContactForm = async (formData) => {
     }
 
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchsingleProduct = async (slug) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/product/${slug}`);
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch product");
+    }
+
+    return data; 
   } catch (error) {
     throw error;
   }
