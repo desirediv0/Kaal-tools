@@ -1,11 +1,12 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CiLocationOn } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 import { PiPhoneThin } from "react-icons/pi";
 import Wrapper from "@/app/_component/Wrapper";
+import { submitContactForm } from "@/Api";
 
 const contactMethods = [
   {
@@ -15,7 +16,7 @@ const contactMethods = [
   },
   {
     icon: CiMail,
-    title: "Mail",
+    title: "Mail", 
     info: "hello@domain.com",
   },
   {
@@ -28,27 +29,67 @@ const contactMethods = [
 function ContactForm() {
   const searchParams = useSearchParams();
   const subject = searchParams.get("subject") || "NoSubject";
+  const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    if (alert.show) {
+      const timer = setTimeout(() => {
+        setAlert({ show: false, type: '', message: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert.show]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
     try {
-      event.preventDefault();
       const formData = new FormData(event.target);
       const formValues = Object.fromEntries(formData.entries());
-      console.log("Form data:", formValues);
-      console.log(subject);
+      
+      await submitContactForm({
+        ...formValues,
+        subject
+      });
+
+      setAlert({
+        show: true,
+        type: 'success',
+        message: 'Message sent successfully!'
+      });
       event.target.reset();
-      alert("Form Submitted Successfully");
     } catch (error) {
       console.error(error);
-      alert("Error Please try Again Later");
+      setAlert({
+        show: true,
+        type: 'error',
+        message: error.message || "Error submitting form. Please try again later."
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
+    <div className="relative">
+   {alert.show && (
+        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
+          alert.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white animate-slide-in`}
+        style={{
+          animation: 'slideIn 0.5s ease-out forwards'
+        }}>
+          {alert.message}
+        </div>
+      )}
     <form
       className="bg-white border rounded-lg border-gray-200 py-8 md:px-16 px-8"
       onSubmit={handleSubmit}
     >
+     
+
       <div className="flex flex-col pb-4 gap-2">
         <label htmlFor="name" className="text-xl">
           Name
@@ -57,9 +98,11 @@ function ContactForm() {
           id="name"
           name="name"
           required
+          disabled={isLoading}
           className="border rounded-lg border-gray-200 py-2 px-3"
         />
       </div>
+
       <div className="flex flex-col pb-4 gap-2">
         <label htmlFor="email" className="text-xl">
           Email
@@ -69,9 +112,11 @@ function ContactForm() {
           name="email"
           type="email"
           required
+          disabled={isLoading}
           className="border rounded-lg border-gray-200 py-2 px-3"
         />
       </div>
+
       <div className="flex flex-col pb-4 gap-2">
         <label htmlFor="phone" className="text-xl">
           Phone
@@ -81,9 +126,11 @@ function ContactForm() {
           name="phone"
           type="tel"
           required
+          disabled={isLoading}
           className="border rounded-lg border-gray-200 py-2 px-3"
         />
       </div>
+
       <div className="flex flex-col pb-4 gap-2">
         <label htmlFor="message" className="text-xl">
           Message
@@ -92,28 +139,34 @@ function ContactForm() {
           id="message"
           name="message"
           required
+          disabled={isLoading}
           className="border rounded-lg border-gray-200 p-3"
           rows={6}
         />
       </div>
+
       <button
         type="submit"
-        className="w-full bg-[var(--maincolor)] text-white text-xl py-2 px-4 rounded-lg transition-colors"
+        disabled={isLoading}
+        className={`w-full bg-[var(--maincolor)] text-white text-xl py-2 px-4 rounded-lg transition-colors ${
+          isLoading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
+        }`}
       >
-        Submit
+        {isLoading ? "Submitting..." : "Submit"}
       </button>
-    </form>
+      </form>
+      </div>
   );
 }
 
 export default function Component() {
   return (
     <Wrapper className="mb-6">
-      <span className="w-full text-center ">
-        <h1 className="mb-12  text-4xl ">Get in Touch</h1>
+      <span className="w-full text-center">
+        <h1 className="mb-12 text-4xl">Get in Touch</h1>
       </span>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-8 ">
-        <section className="flex-col  md:flex space-y-10">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-8">
+        <section className="flex-col md:flex space-y-10">
           {contactMethods.map((items, index) => (
             <div key={index} className="flex gap-4">
               <span className="p-4 rounded-full bg-[var(--lightcolor)]">
