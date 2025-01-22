@@ -7,15 +7,34 @@ import Wrapper from "./Wrapper";
 import ProductCard from "./product-card";
 
 export default function NewProducts() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    products: [],
+    totalProducts: 0,
+    totalPages: 0,
+    currentPage: 1
+  });
   const [loading, setLoading] = useState(true);
-  const featuredProducts = data.slice(0, 5);
+
+  // Handle both API response types
+  const featuredProducts = Array.isArray(data) 
+    ? data.slice(0, 5) 
+    : data.products?.slice(0, 5);
 
   useEffect(() => {
     const fetchProductData = async () => {
-      const productData = await fetchProducts();
-      setData(productData);
-      setLoading(false);
+      try {
+        const productData = await fetchProducts();
+        // Handle both response types
+        if (Array.isArray(productData)) {
+          setData(productData);
+        } else {
+          setData(productData);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProductData();
   }, []);
@@ -31,17 +50,16 @@ export default function NewProducts() {
         {loading ? (
           <div className="flex justify-center items-center w-full h-64">
             <Loader2Icon className="h-12 w-12 animate-spin text-orange-500" />
-            <span className="ml-4 text-xl font-medium text-black">
-              Loading...
-            </span>
+            <span className="ml-4 text-xl font-medium text-black">Loading...</span>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 p-3">
-            {featuredProducts.map((item, index) => (
+            {featuredProducts?.map((item, index) => (
               <ProductCard
                 key={index}
                 title={item.title}
                 price={item.price}
+                saleprice={item.saleprice}
                 image={item.image}
                 tag={"NEW"}
                 href={`/product/${item.title}`}

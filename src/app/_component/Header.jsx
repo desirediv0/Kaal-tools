@@ -1,12 +1,12 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, Phone, X, MessageCircle } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { SearchResults } from "./SearchResults";
-import { searchProducts } from "@/Api";
+import { getAllCategoriesAndSubCategories, searchProducts } from "@/Api";
 import MegaMenu from "./mega.menu";
 
 export default function Header() {
@@ -14,6 +14,8 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   const handleSearch = useCallback(async (query) => {
     if (!query.trim()) return;
@@ -40,6 +42,22 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const result = await getAllCategoriesAndSubCategories();
+        if (result.success) {
+          setCategories(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -124,7 +142,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <MegaMenu isMobile={false} />
+              <MegaMenu isMobile={false} categories={categories} />
               </li>
               <li>
                 <Link
@@ -182,7 +200,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="border-b">
-                <MegaMenu isMobile={true} />
+              <MegaMenu isMobile={true} categories={categories} />
               </li>
               <li className="border-b">
                 <Link

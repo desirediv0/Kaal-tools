@@ -1,10 +1,11 @@
 import ProductPage from '@/app/_component/ProductPage'
 import React from 'react'
 
-export default function page() {
+export default function Page({ searchParams }) {
   return (
-   <>
-   <ProductPage/>
-   </>
-  )
+    <ProductPage 
+      initialCategory={searchParams.category} 
+      initialSubCategory={searchParams.subcategory}
+    />
+  );
 }

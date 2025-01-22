@@ -1,138 +1,206 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { ChevronDown, Filter } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import ProductCard from "./product-card";
+import { fetchCategoryProducts, getAllCategoriesAndSubCategories } from "@/Api";
 
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Link from 'next/link';
-import { fetchProducts } from '@/Api';
-import { filteredProducts, setProducts, filtersubcategory } from '@/ProductSlicer';
-import Image from 'next/image';
-import { ChevronDown } from 'lucide-react';
+const stripHtml = (html) => {
+  return html?.replace(/<[^>]*>/g, '') || '';
+};
 
-export default function ProductPage() {
-    const dispatch = useDispatch();
-    const { filteredProducts: products = [] } = useSelector((state) => state.products || {});
+export default function ProductPage({ initialCategory, initialSubCategory }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState(initialCategory || "all");
+  const [activeSubCategory, setActiveSubCategory] = useState(initialSubCategory || null);
+  const [openCategory, setOpenCategory] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const [activeCategory, setActiveCategory] = useState('all');
-    const [openCategory, setOpenCategory] = useState(null);
-
-    useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const data = await fetchProducts();
-                dispatch(setProducts(data));
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
-
-        getProducts();
-    }, [dispatch]);
-
-    const handleCategory = (category) => {
-        setActiveCategory(category);
-        dispatch(filteredProducts(category));
+  const updateUrl = (params) => {
+    const newParams = new URLSearchParams(searchParams);
+    
+    // Clear existing category-related params
+    newParams.delete('category');
+    newParams.delete('subcategory');
+    
+    // Add new params if they exist
+    if (params.category) {
+      newParams.set('category', params.category.toLowerCase());
     }
-
-    const handlesubCategory = (subcategory) => {
-        setActiveCategory(subcategory);
-        dispatch(filtersubcategory(subcategory));
+    if (params.subcategory) {
+      newParams.set('subcategory', params.subcategory.toLowerCase());
     }
+    
+    router.push(`/product?${newParams.toString()}`);
+  };
 
-    const toggleDropdown = (categoryName, hasSubcategories) => {
-        if (!hasSubcategories) {
-            handleCategory(categoryName);
-            setOpenCategory(null);
-        } else {
-            setOpenCategory(openCategory === categoryName ? null : categoryName);
+  const handleCategory = async (category) => {
+    const categoryValue = category === 'Uncategorized' ? 'all' : category;
+    setActiveCategory(categoryValue);
+    setActiveSubCategory(null);
+    updateUrl({ category: categoryValue });
+    setIsSidebarOpen(false);
+  };
+
+  const handleSubCategory = async (subcategory) => {
+    setActiveSubCategory(subcategory);
+    setActiveCategory(null);
+    updateUrl({ subcategory });
+    setIsSidebarOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch categories
+        const categoryData = await getAllCategoriesAndSubCategories();
+        if (categoryData.success) {
+          setCategories(categoryData.data);
         }
+
+        // Get current params
+        const currentCategory = searchParams.get('category');
+        const currentSubcategory = searchParams.get('subcategory');
+
+        // Set active states based on URL
+        if (currentSubcategory) {
+          setActiveSubCategory(currentSubcategory);
+          setActiveCategory(null);
+        } else if (currentCategory) {
+          setActiveCategory(currentCategory);
+          setActiveSubCategory(null);
+        }
+
+        // Fetch products
+        const productData = await fetchCategoryProducts({
+          categoryName: currentCategory,
+          subcategoryName: currentSubcategory
+        });
+
+        if (productData.success) {
+          setProducts(productData.data.products.map(product => ({
+            ...product,
+            shortDesc: stripHtml(product.shortDesc),
+            description: stripHtml(product.description)
+          })));
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const renderProducts = () => {
-        if (!Array.isArray(products)) {
-            return <div>No products available</div>;
-        }
+    fetchData();
+  }, [searchParams]);
 
-        return products.map(product => (
-            <Link
-                href={`/product/${product.title}`}
-                key={product?.title}
-                className="border rounded-lg p-2  hover:shadow-lg transition-shadow"
-            >
-                <div className='flex flex-col pb-3 '>
-                    <div className='relative border-b'>
-                        <Image className="w-full h-full  object-cover" alt={product.title} width={300} height={300} src={product.image} />
-                    </div>
-                    <h2 className='pt-5 px-4'>{product.title}</h2>
-                    <h2 className='pt-2 px-4'>₹{product.price}</h2>
-                </div>
-            </Link>
-        ));
-    };
+  const toggleDropdown = (categoryName) => {
+    setOpenCategory(openCategory === categoryName ? null : categoryName);
+  };
 
-    const category = [
-        {
-            name: "All",
-            activeCategory: "all",
-        },
-        {
-            name: "LATHE ACCESSORIES",
-            activeCategory: "Earthmoving Equipment",
-            subcategories: ["Motor Grader", "KNURLING TOOL HOLDERS", "TURNING TOOL HOLDERS"]
-        },
-        {
-            name: "MILLING ACCESSORIES",
-            activeCategory: "Material Handling Equipment",
-            subcategories: ["Forklift Truck", "KNURLING TOOL HOLDERS", "TURNING TOOL HOLDERS"]
-        },
-        {
-            name: "Construction Equipment",
-            activeCategory: "Construction Equipment",
-            subcategories: ["Concrete Mixers", "Compactors", "Pavers"]
-        },
-    ];
+  const renderCategoryName = (name) => {
+    return name === "Uncategorized" ? "All" : name;
+  };
 
-    return (
-        <>
-            <div className="w-full flex gap-4 sm:gap-8">
-                <section className="lg:w-1/5 w-2/5 flex border-r flex-1 items-center flex-col">
-                    <h1 className="md:text-2xl text-lg border-b border-gray-200 flex pl-4 xl:pl-12 w-full sm:justify-start justify-center py-4">Categories:</h1>
-                    {category.map((item, index) => (
-                        <div key={index} className="w-full">
-                            <button
-                                onClick={() => toggleDropdown(item.activeCategory, !!item.subcategories)}
-                                className={`flex md:text-md text-sm px-4 xl:pl-12 sm:justify-start justify-between items-center py-2 w-full hover:bg-[var(--lightcolor)] ${activeCategory === item.activeCategory ? 'bg-[var(--lightcolor)]' : ''}`}
-                            >
-                                <span>{item.name}</span>
-                                {item.subcategories && (
-                                    <div className={`transform transition-transform duration-300 ${openCategory === item.activeCategory ? 'rotate-180' : ''}`}>
-                                        <ChevronDown className="h-4 w-4" />
-                                    </div>
-                                )}
-                            </button>
-                            {item.subcategories && (
-                                <div
-                                    className={`overflow-hidden transition-all duration-300 ease-in-out ${openCategory === item.activeCategory ? 'max-h-48' : 'max-h-0'}`}
-                                >
-                                    <div className="bg-gray-50">
-                                        {item.subcategories.map((subcategory, subIndex) => (
-                                            <button
-                                                key={subIndex}
-                                                onClick={() => handlesubCategory(subcategory)}
-                                                className={`flex md:text-sm text-xs px-4 xl:pl-16 sm:justify-start justify-center py-2 w-full hover:bg-[var(--lightcolor)] ${activeCategory === subcategory ? 'bg-[var(--lightcolor)]' : ''}`}
-                                            >
-                                                {subcategory}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </section>
-                <section className="lg:w-4/5 w-3/5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 py-8 sm:px-8 gap-4">
-                    {renderProducts()}
-                </section>
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <button
+        className="lg:hidden flex items-center gap-2 mb-4 text-gray-600"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <Filter className="h-5 w-5" />
+        <span>Filter Products</span>
+      </button>
+
+      <div className="flex gap-6">
+        <aside
+          className={`${
+            isSidebarOpen ? "block" : "hidden"
+          } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
+        >
+          <h2 className="text-xl font-bold mb-4">Categories</h2>
+          <div className="space-y-2">
+            {categories.map((category) => (
+              <div key={category.id}>
+                <button
+                  onClick={() => {
+                    handleCategory(category.name);
+                    toggleDropdown(category.name);
+                  }}
+                  className={`w-full text-left px-2 py-1.5 rounded ${
+                    activeCategory === category.name
+                      ? "bg-orange-100 text-orange-600"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span>{renderCategoryName(category.name)}</span>
+                    {category.subCategories.length > 0 && (
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          openCategory === category.name ? "rotate-180" : ""
+                        }`}
+                      />
+                    )}
+                  </div>
+                </button>
+
+                {category.subCategories.length > 0 &&
+                  openCategory === category.name && (
+                    <ul className="ml-4 mt-1 space-y-1">
+                      {category.subCategories.map((sub) => (
+                        <li key={sub.id}>
+                          <button
+                            onClick={() => handleSubCategory(sub.name)}
+                            className={`w-full text-left px-2 py-1.5 rounded ${
+                              activeSubCategory === sub.name
+                                ? "text-orange-600"
+                                : "text-gray-600 hover:text-orange-500"
+                            }`}
+                          >
+                            {sub.name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <main className="lg:w-3/4 w-full">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
             </div>
-        </>
-    );
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((product, index) => (
+                <ProductCard
+                  key={index}
+                  title={product.title}
+                  price={product.price}
+                  saleprice={product.saleprice}
+                  image={product.image}
+                  href={`/product/${product.title}`}
+                />
+              ))}
+              {products.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No products found
+                </div>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
 }
