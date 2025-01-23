@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-gray-100 py-10 md:py-16">
+    <section className="bg-gray-100">
       <Wrapper>
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black uppercase mb-4">

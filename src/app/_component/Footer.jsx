@@ -78,12 +78,12 @@ export default function Footer() {
               </p>
             </div>
             <h2 className="flex  gap-4 items-center">
-              <LuMail size={22} /> hello@domain.com
+              <LuMail size={22} /> sales@kaaltools.com
             </h2>
           </section>
         </div>
         <div className="w-full mt-8 text-lg py-4 border-t border-black">
-          ©Kaal Tools 2024 | All Rights Reserved | Designed by{" "}
+          ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
           <Link href="https://xcelb2b.com/">
             <span className="text-blue-600">Xcel B2B</span>
           </Link>{" "}

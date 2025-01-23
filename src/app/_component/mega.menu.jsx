@@ -57,7 +57,7 @@ export default function MegaMenu({ isMobile, categories }) {
               <div key={category.id} className={category.subCategories.length === 0 ? 'mb-0' : 'mb-4'}>
                 <Link 
                   href={getCategoryUrl(category)}
-                  className="font-semibold text-lg text-orange-500 hover:text-orange-600 block"
+                  className="font-semibold text-lg text-orange-500 hover:text-orange-600 block uppercase"
                 >
                   {renderCategoryName(category.name)}
                 </Link>
@@ -67,7 +67,7 @@ export default function MegaMenu({ isMobile, categories }) {
                       <li key={subCategory.id}>
                         <Link
                           href={getSubCategoryUrl(subCategory)}
-                          className="text-gray-700 hover:text-orange-700 transition-colors text-lg block"
+                          className="text-gray-700 hover:text-orange-700 transition-colors text-sm block uppercase"
                         >
                           {subCategory.name}
                         </Link>

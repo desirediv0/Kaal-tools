@@ -33,7 +33,7 @@ const Cta = () => {
           </Link>
 
           <div className="text-center text-sm text-gray-400">
-            ISO Certified 2024
+            ISO Certified 2025
           </div>
         </div>
       </div>

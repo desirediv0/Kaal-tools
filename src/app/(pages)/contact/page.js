@@ -17,7 +17,7 @@ const contactMethods = [
   {
     icon: CiMail,
     title: "Mail", 
-    info: "hello@domain.com",
+    info: "sales@kaaltools.com",
   },
   {
     icon: CiLocationOn,
