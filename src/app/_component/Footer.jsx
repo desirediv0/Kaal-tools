@@ -1,5 +1,4 @@
 import React from "react";
-import Wrapper from "./Wrapper";
 import { IoLocationOutline } from "react-icons/io5";
 import { LuMail } from "react-icons/lu";
 import { IoIosArrowForward } from "react-icons/io";
@@ -9,8 +8,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <div className="w-full bg-gray-900 text-white">
-      <Wrapper className="pb-2">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 py-2">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 p-4 pt-10">
           <section className="flex flex-col gap-2">
           <Link href="/" className="flex-shrink-0 relative">
             <span className="absolute top-5 right-0 text-xs font-medium">®</span>
@@ -70,7 +68,7 @@ export default function Footer() {
               <h2>HAND TOOLS</h2>
             </span>
           </section>
-          <section className="flex flex-col gap-4">
+          <section className="flex flex-col gap-4 w-full ">
             <h1 className="text-2xl pb-2 font-medium ">Get in Touch</h1>
             <div className="grid grid-cols-7 gap-1">
               <h2 className="flex flex-wrap gap-3 items-center">
@@ -86,13 +84,12 @@ export default function Footer() {
             </h2>
           </section>
         </div>
-        <div className="w-full mt-8 text-lg py-4 border-t border-black">
+        <div className="w-full mt-8 text-lg py-4 border-t border-black max-w-7xl mx-auto">
           ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
           <Link href="https://xcelb2b.com/">
             <span className="text-blue-600">Xcel B2B</span>
           </Link>{" "}
         </div>
-      </Wrapper>
     </div>
   );
 }

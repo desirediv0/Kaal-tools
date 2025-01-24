@@ -17,8 +17,6 @@ const items = [
     shortdesc:
       "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
   },
-];
-const items2 = [
   {
     image: "/ks2.webp",
     heading: "Power Up Your Projects with Tools You Can Count On.",
@@ -32,15 +30,23 @@ const items2 = [
       "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
   },
 ];
+const items2 = [
+  {
+    image: "/ks2.webp",
+    heading: "Power Up Your Projects with Tools You Can Count On.",
+    shortdesc:
+      "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+  }
+];
 
 export default function page() {
   return (
     <>
-      <Banner items={items} />
+      <Banner items={items} h={"65vh"}/>
       <NewProducts />
       <TopCategories />
       <div className="my-10 md:my-20">
-        <Banner items={items2} />
+        <Banner items={items2}  h={"55vh"}/>
       </div>
       {/* <TopBrands /> */}
       <Product activepage="homepage" />

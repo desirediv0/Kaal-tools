@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export function Banner({ items }) {
+export function Banner({ items , h}) {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
   );
@@ -30,7 +30,9 @@ export function Banner({ items }) {
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={index}>
-              <div className="relative w-full md:aspect-[21/8] aspect-square h-[55vh]">
+              <div  className="relative w-full md:aspect-[21/8] aspect-square"
+                style={{ height: h }}
+                  >
                 <Image
                   src={item.image}
                   alt={`Banner image ${index + 1}`}
@@ -57,8 +59,8 @@ export function Banner({ items }) {
         </CarouselContent>
         {showControls && (
           <>
-            <CarouselPrevious className="absolute text-white left-4 top-1/2 -translate-y-1/2" />
-            <CarouselNext className="absolute text-white right-4 top-1/2 -translate-y-1/2" />
+            <CarouselPrevious className="absolute text-white left-0 top-1/2 -translate-y-1/2 rounded-none" />
+            <CarouselNext className="absolute text-white right-0 top-1/2 -translate-y-1/2 rounded-none" />
           </>
         )}
       </Carousel>
