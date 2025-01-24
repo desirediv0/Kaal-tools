@@ -1,5 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "yes-book.com",
+      },
+      {
+        protocol: "http",
+        hostname: "yes-book.com",
+      },
+      {
+        protocol: "https",
+        hostname: "kaaltools.com",
+      },
+    ],
+  },
   async headers() {
     return [
       {
@@ -20,6 +36,7 @@ const nextConfig = {
           },
         ],
       },
+      
     ];
   },
 };

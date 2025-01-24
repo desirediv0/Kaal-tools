@@ -12,13 +12,17 @@ export default function Footer() {
       <Wrapper className="pb-2">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 py-2">
           <section className="flex flex-col gap-2">
+          <Link href="/" className="flex-shrink-0 relative">
+            <span className="absolute top-5 right-0 text-xs font-medium">®</span>
             <Image
               src="/logowhite.png"
+              alt="Logo"
               width={400}
               height={100}
-              className="w-auto  md:h-28"
-              alt="logo"
+              className="w-auto h-20 md:h-28"
+              priority
             />
+          </Link>
           </section>
           <section className="flex flex-col gap-2">
             <h1 className="text-2xl pb-2 font-medium ">Useful Links</h1>

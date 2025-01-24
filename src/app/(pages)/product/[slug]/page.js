@@ -13,17 +13,38 @@ import {
 } from "@/components/ui/carousel";
 import { fetchsingleProduct } from "@/Api";
 import Link from "next/link";
-import { Loader2Icon } from "lucide-react";
+import { ArrowLeftIcon, AwardIcon, CheckCircleIcon, GaugeIcon, HomeIcon, LayersIcon, Loader2Icon, PenToolIcon, ShieldCheckIcon, TagIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+
+const FALLBACK_IMAGE = "/rr.png";
 
 export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const [product, setProduct] = useState(null);
-  const [mainImage, setMainImage] = useState(null);
+  const [mainImage, setMainImage] = useState(FALLBACK_IMAGE);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const productFeatures = [
+    {
+      icon: <ShieldCheckIcon className="w-6 h-6 text-[var(--maincolor)]" />,
+      text: "Premium Quality Assured"
+    },
+    {
+      icon: <PenToolIcon className="w-6 h-6 text-[var(--maincolor)]" />,
+      text: "Professional Grade Tools"
+    },
+    {
+      icon: <AwardIcon className="w-6 h-6 text-[var(--maincolor)]" />,
+      text: "Industry Leading Standards"
+    },
+    {
+      icon: <GaugeIcon className="w-6 h-6 text-[var(--maincolor)]" />,
+      text: "High Performance"
+    }
+  ];
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -32,16 +53,16 @@ export default function ProductPage() {
         const response = await fetchsingleProduct(params.slug);
         if (response.success) {
           setProduct(response.data);
-          const imageUrl = response.data.image 
-            ? `${process.env.NEXT_PUBLIC_API_URL}/uploads/${response.data.image}`
-            : "/rr.png"; // Fallback image
-          setMainImage(imageUrl);
+          if (response.data.image) {
+            setMainImage(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${response.data.image}`);
+          }
         } else {
           throw new Error(response.message || "Failed to fetch product");
         }
       } catch (error) {
         console.error(error);
         setError(error.message || "Product not found");
+        setMainImage(FALLBACK_IMAGE);
       } finally {
         setIsLoading(false);
       }
@@ -49,12 +70,9 @@ export default function ProductPage() {
     loadProduct();
   }, [params.slug]);
 
-  const allImages = product
-  ? [
-      product.image && `${process.env.NEXT_PUBLIC_API_URL}/public/upload/${product.image}`,
-      ...(product.images || []).map(img => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${img.url}`)
-    ].filter(Boolean) || ["/rr.png"] 
-  : [];
+  const allImages = product?.image 
+    ? [`${process.env.NEXT_PUBLIC_API_URL}/uploads/${product.image}`]
+    : [FALLBACK_IMAGE];
 
   const scrollTo = useCallback(
     (index) => emblaApi && emblaApi.scrollTo(index),
@@ -88,25 +106,33 @@ export default function ProductPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-8 pb-16 mt-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="flex items-center gap-2 mb-8 text-sm">
+        <Link href="/" className="flex items-center gap-1 text-gray-600 hover:text-[var(--maincolor)]">
+          <HomeIcon className="w-4 h-4" />
+          Home
+        </Link>
+        <span>/</span>
+        <span className="text-gray-900">{product.title}</span>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image Section */}
         <div className="space-y-4">
-          <div className="relative flex justify-center aspect-auto overflow-hidden rounded-lg">
-          <Image
-                  src={mainImage}
-                  alt={product.title}
-                  height={400}
-                  width={400}
-                  priority={true}
-                  className="object-contain"
-                  onError={(e) => {
-                    e.target.src = "/rr.png";
-                    e.target.onerror = null; 
-                  }}
-                />
+          <div className="relative flex justify-center aspect-auto overflow-hidden rounded-lg bg-gray-100">
+            <Image
+              src={mainImage}
+              alt={product.title}
+              height={400}
+              width={400}
+              priority={true}
+              className="object-contain"
+              onError={() => {
+                setMainImage(FALLBACK_IMAGE);
+              }}
+            />
           </div>
           
-                    {allImages.length > 0 && (
+          {allImages.length > 1 && (
             <Carousel className="w-full max-w-xs mx-auto" ref={emblaRef}>
               <CarouselContent>
                 {allImages.map((image, index) => (
@@ -125,9 +151,8 @@ export default function ProductPage() {
                               setMainImage(image);
                               scrollTo(index);
                             }}
-                            onError={(e) => {
-                              e.target.src = "/rr.png";
-                              e.target.onerror = null;
+                            onError={() => {
+                              setMainImage(FALLBACK_IMAGE);
                             }}
                           />
                         </CardContent>
@@ -135,43 +160,38 @@ export default function ProductPage() {
                     </div>
                   </CarouselItem>
                 ))}
-                </CarouselContent>
-              {allImages.length > 1 && (
-                <>
-                  <CarouselPrevious className="hidden sm:flex" />
-                  <CarouselNext className="hidden sm:flex" />
-                </>
-              )}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
             </Carousel>
           )}
         </div>
 
         {/* Product Details Section */}
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="space-y-8">
+          <h1 className="text-4xl font-bold text-gray-900 border-b pb-4 uppercase">
             {product.title}
           </h1>
 
-          <div className="flex items-baseline space-x-2">
-            <span className="text-2xl md:text-3xl font-medium text-[var(--maincolor)]">
-              ₹{product.salePrice?.toLocaleString('en-IN')}
-            </span>
-            {product.price && (
-              <span className="text-lg md:text-xl text-gray-500 line-through">
-                ₹{product.price?.toLocaleString('en-IN')}
-              </span>
-            )}
+          {/* Features Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {productFeatures.map((feature, index) => (
+              <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                {feature.icon}
+                <span className="text-gray-700">{feature.text}</span>
+              </div>
+            ))}
           </div>
 
           {product.categories?.length > 0 && (
-            <div className="space-y-2">
-              <h2 className="text-xl font-medium text-gray-900">Categories</h2>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xl font-medium text-gray-900">
+                <TagIcon className="w-5 h-5 text-[var(--maincolor)]" />
+                <h2>Categories</h2>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {product.categories.map((cat) => (
-                  <span 
-                    key={cat.categoryId}
-                    className="bg-[var(--lightcolor)] px-3 py-1 rounded-full text-sm font-medium"
-                  >
+                  <span key={cat.categoryId} className="flex items-center gap-1 bg-[var(--lightcolor)] px-4 py-2 rounded-full uppercase text-xs font-medium">
                     {cat.category.name}
                   </span>
                 ))}
@@ -179,15 +199,16 @@ export default function ProductPage() {
             </div>
           )}
 
+       
           {product.subCategories?.length > 0 && (
-            <div className="space-y-2">
-              <h2 className="text-xl font-medium text-gray-900">Sub Categories</h2>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xl font-medium text-gray-900">
+                <LayersIcon className="w-5 h-5 text-[var(--maincolor)]" />
+                <h2>Sub Categories</h2>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {product.subCategories.map((subCat) => (
-                  <span 
-                    key={subCat.subCategoryId}
-                    className="bg-[var(--lightcolor)] px-3 py-1 rounded-full text-sm font-medium"
-                  >
+                  <span key={subCat.subCategoryId} className="flex items-center gap-1 bg-[var(--lightcolor)] px-4 py-2 rounded-full uppercase text-xs font-medium">
                     {subCat.subCategory.name}
                   </span>
                 ))}
@@ -195,31 +216,34 @@ export default function ProductPage() {
             </div>
           )}
 
-          <div 
-            className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: product.shortDesc }}
-          />
+          <div className="prose max-w-none bg-gray-50 p-6 rounded-lg capitalize">
+            <div dangerouslySetInnerHTML={{ __html: product.shortDesc }} />
+          </div>
 
-          <Link href={`/contact?subject=${product.title}`}>
-            <button className="flex items-center justify-center w-full sm:w-auto px-6 py-3 text-white bg-[var(--maincolor)] rounded-lg hover:opacity-90 transition-opacity">
+          <Link href={`/contact?subject=${encodeURIComponent(product.title)}`}>
+            <button className="flex items-center justify-center w-full gap-2 px-8 py-4 text-white bg-[var(--maincolor)] rounded-lg hover:opacity-90 transition-opacity text-lg font-medium">
               Contact Now
+              <ArrowLeftIcon className="w-5 h-5" />
             </button>
           </Link>
         </div>
       </div>
 
+
       {/* Description Section */}
-      <div className="mt-12">
-        <div className="border-b mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900 pb-3">
-            Description
-          </h2>
+      {product.description && (
+        <div className="mt-16">
+          <div className="flex items-center gap-2 border-b mb-8">
+            <CheckCircleIcon className="w-6 h-6 text-[var(--maincolor)]" />
+            <h2 className="text-2xl font-semibold text-gray-900 pb-3">
+              Description
+            </h2>
+          </div>
+          <div className="prose max-w-none bg-gray-50 p-8 rounded-lg capitalize">
+            <div dangerouslySetInnerHTML={{ __html: product.description }} />
+          </div>
         </div>
-        <div 
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: product.description }}
-        />
-      </div>
+      )}
     </div>
   );
 }
