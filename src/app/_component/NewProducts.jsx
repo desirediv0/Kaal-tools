@@ -62,7 +62,7 @@ export default function NewProducts() {
                 saleprice={item.saleprice}
                 image={item.image}
                 tag={"NEW"}
-                href={`/product/${item.title}`}
+                href={`/product?category=all`}
               />
             ))}
           </div>

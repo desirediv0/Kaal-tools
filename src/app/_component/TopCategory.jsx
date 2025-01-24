@@ -38,7 +38,7 @@ export default function TopCategories() {
                     Explore Tools
                   </h2>
                   <Link
-                    href="/products"
+                    href="/product?category=all"
                     className="bg-[var(--maincolor)] text-white px-4 py-2 rounded-lg text-sm text-center"
                   >
                     View All
@@ -51,7 +51,7 @@ export default function TopCategories() {
             <div className="lg:w-3/5">
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {categories.map((category, index) => (
-                  <Link href="/product" key={index} className="group">
+                  <Link href="/product?category=all" key={index} className="group">
                     <div className="relative aspect-square overflow-hidden rounded-lg shadow-md">
                       <Image
                         src={category.image}
@@ -87,7 +87,7 @@ export default function TopCategories() {
                     New Tools
                   </h2>
                   <Link
-                    href="/products"
+                    href="/product?category=all"
                     className="bg-[var(--maincolor)] text-white px-4 py-2 rounded-lg text-sm text-center"
                   >
                     Shop Now

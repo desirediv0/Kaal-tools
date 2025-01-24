@@ -60,7 +60,7 @@ export default function Product({ activepage = "product" }) {
               key={index}
               price={items.price}
               saleprice={items.saleprice}
-              href={`/product/${items.title}`}
+              href={`/product?category=all`}
               image={items.image}
               title={items.title}
               tag={"POPULAR"}
