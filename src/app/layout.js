@@ -1,3 +1,4 @@
+import { Kanit } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { rubik } from "@/font";
@@ -5,12 +6,18 @@ import Header from "./_component/Header";
 import Footer from "./_component/Footer";
 import { ReduxProvider } from "@/ReduxProvider";
 
+const kanit = Kanit({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '500', '700', '900'],
+  variable: '--font-kanit',
+});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -26,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} bg-white text-[#060809]  antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${kanit.variable} bg-white text-[#060809] antialiased`}
       >
         <Header/>
         <ReduxProvider>{children}</ReduxProvider>        

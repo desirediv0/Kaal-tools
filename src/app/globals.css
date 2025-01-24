@@ -9,8 +9,15 @@
   --lightcolor :#FFF5F1;
 }
 
-body {
-  font-family: var(--font-rubik);
+@layer base {
+  body {
+    font-family: var(--font-kanit), system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-kanit), system-ui, sans-serif;
+    font-weight: 500;
+  }
 }
 
 @layer utilities {
@@ -106,4 +113,9 @@ body {
 
 .animate-slide-in {
   animation: slideIn 3s ease-in-out forwards;
+}
+
+
+.font-kanit {
+  font-family: var(--font-kanit), system-ui, sans-serif;
 }
