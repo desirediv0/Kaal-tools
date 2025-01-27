@@ -24,6 +24,9 @@ export default function MegaMenu({ isMobile, categories }) {
   };
 
   const getCategoryUrl = (category) => {
+    if (category.name === "Uncategorized") {
+      return "/product?category=all";
+    }
     return `/product?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`;
   };
 
