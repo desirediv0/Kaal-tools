@@ -5,13 +5,9 @@ import { Loader2Icon } from "lucide-react";
 import { fetchProducts } from "@/Api";
 import Wrapper from "./Wrapper";
 import ProductCard from "./product-card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
+
 
 export default function NewProducts() {
   const [data, setData] = useState({
@@ -21,6 +17,20 @@ export default function NewProducts() {
     currentPage: 1
   });
   const [loading, setLoading] = useState(true);
+
+  const [emblaRef] = useEmblaCarousel(
+    { 
+      loop: true,
+      align: "start",
+      slidesToScroll: 1
+    }, 
+    [
+      Autoplay({
+        delay: 3000,
+        stopOnInteraction: false
+      })
+    ]
+  );
 
   const featuredProducts = Array.isArray(data) 
     ? data.slice(0, 10) 
@@ -59,16 +69,18 @@ export default function NewProducts() {
           </div>
         ) : (
           <div className="relative">
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-2 md:-ml-4">
+            <div ref={emblaRef} className="overflow-hidden">
+              <div className="flex">
                 {featuredProducts?.map((item, index) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/5">
+                  <div 
+                    key={index} 
+                    className="pl-2 md:pl-4 min-w-0 
+                      flex-[0_0_100%]        /* Mobile: 1 item */
+                      sm:flex-[0_0_50%]      /* Small: 2 items */
+                      md:flex-[0_0_33.333%]  /* Medium: 3 items */
+                      lg:flex-[0_0_20%]      /* Large: 5 items */
+                      xl:flex-[0_0_20%]      /* XL: 5 items */"
+                  >
                     <ProductCard
                       title={item.title}
                       price={item.price}
@@ -77,14 +89,10 @@ export default function NewProducts() {
                       tag={"NEW"}
                       href={`/product?category=all`}
                     />
-                  </CarouselItem>
+                  </div>
                 ))}
-              </CarouselContent>
-              <div className="hidden md:block">
-                <CarouselPrevious className="absolute -left-12 top-1/2 transform -translate-y-1/2" />
-                <CarouselNext className="absolute -right-12 top-1/2 transform -translate-y-1/2" />
               </div>
-            </Carousel>
+            </div>
           </div>
         )}
       </Wrapper>
