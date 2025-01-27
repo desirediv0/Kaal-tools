@@ -20,6 +20,10 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   const [openCategory, setOpenCategory] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const updateUrl = (params) => {
     const newParams = new URLSearchParams(searchParams);
     
@@ -44,6 +48,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     setActiveSubCategory(null);
     updateUrl({ category: categoryValue });
     setIsSidebarOpen(false);
+    scrollToTop();
   };
 
   const handleSubCategory = async (subcategory) => {
@@ -51,11 +56,13 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     setActiveCategory(null);
     updateUrl({ subcategory });
     setIsSidebarOpen(false);
+    scrollToTop();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      scrollToTop()
       try {
         // Fetch categories
         const categoryData = await getAllCategoriesAndSubCategories();
