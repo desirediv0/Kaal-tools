@@ -33,20 +33,6 @@ const testimonials = [
       "KAAL TOOLS has been instrumental in streamlining our construction processes. Their tools are not only durable but also ergonomically designed, which has significantly improved our team's efficiency and safety.",
     image: "/user.png",
   },
-  {
-    name: "Vikram Malhotra",
-    role: "Founder, AutoTech Solutions",
-    content:
-      "As an automotive repair specialist, precision is key. KAAL TOOLS provides us with the accuracy and reliability we need. Their innovative designs have helped us tackle even the most complex repair jobs with ease.",
-    image: "/user.png",
-  },
-  {
-    name: "Ananya Desai",
-    role: "Project Manager, GreenBuild Eco Homes",
-    content:
-      "In the sustainable construction industry, we need tools that are both efficient and environmentally friendly. KAAL TOOLS has been our go-to supplier, offering eco-conscious solutions without compromising on quality.",
-    image: "/user.png",
-  },
 ];
 
 const TestimonialCard = ({ testimonial }) => (
