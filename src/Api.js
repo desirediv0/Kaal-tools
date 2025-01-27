@@ -128,14 +128,19 @@ export const submitContactForm = async (formData) => {
 export const fetchsingleProduct = async (slug) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/product/${slug}`);
-    const data = await response.json();
-    
     if (!response.ok) {
-      throw new Error(data.message || "Failed to fetch product");
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    return data; 
+    
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.error('JSON Parse Error:', text);
+      throw new Error('Invalid response format from server');
+    }
   } catch (error) {
+    console.error('Fetch Error:', error);
     throw error;
   }
 };

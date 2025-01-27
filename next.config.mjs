@@ -14,6 +14,14 @@ images: {
         protocol: "https",
         hostname: "kaaltools.com",
       },
+      {
+        protocol: "https",
+        hostname: "desirediv-storage.blr1.digitaloceanspaces.com"
+      },
+      {
+        protocol: "https",
+        hostname: "blr1.digitaloceanspaces.com"
+      }
     ],
   },
   async headers() {
