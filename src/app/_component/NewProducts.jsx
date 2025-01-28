@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { Loader2Icon, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchProducts } from "@/Api";
 import Wrapper from "./Wrapper";
 import ProductCard from "./product-card";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-
 
 export default function NewProducts() {
   const [data, setData] = useState({
@@ -17,8 +16,9 @@ export default function NewProducts() {
     currentPage: 1
   });
   const [loading, setLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const [emblaRef] = useEmblaCarousel(
+  const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
       loop: true,
       align: "start",
@@ -31,6 +31,22 @@ export default function NewProducts() {
       })
     ]
   );
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on('select', () => {
+        setSelectedIndex(emblaApi.selectedScrollSnap());
+      });
+    }
+  }, [emblaApi]);
 
   const featuredProducts = Array.isArray(data) 
     ? data.slice(0, 10) 
@@ -69,6 +85,15 @@ export default function NewProducts() {
           </div>
         ) : (
           <div className="relative">
+            {/* Navigation Buttons */}
+            <button
+              className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+              onClick={scrollPrev}
+            >
+              <ChevronLeft className="h-6 w-6 text-gray-800" />
+            </button>
+
+            {/* Carousel */}
             <div ref={emblaRef} className="overflow-hidden">
               <div className="flex">
                 {featuredProducts?.map((item, index) => (
@@ -92,6 +117,29 @@ export default function NewProducts() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <button
+              className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+              onClick={scrollNext}
+            >
+              <ChevronRight className="h-6 w-6 text-gray-800" />
+            </button>
+
+            {/* Navigation Dots */}
+            <div className="flex justify-center gap-2 mt-6">
+              {featuredProducts?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    selectedIndex === index 
+                      ? 'bg-orange-500 scale-110' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         )}
