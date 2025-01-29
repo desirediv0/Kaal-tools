@@ -274,7 +274,6 @@ export default function ProductPage() {
           {/* Short Description */}
           <div className="prose max-w-none bg-gray-50 p-6 rounded-lg">
             <div
-              className="overflow-auto max-h-[200px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
               dangerouslySetInnerHTML={{ __html: product.shortDesc }}
             />
           </div>
@@ -298,7 +297,6 @@ export default function ProductPage() {
           </div>
           <div className="prose max-w-none bg-gray-50 p-8 rounded-lg">
             <div
-              className="overflow-auto m"
               dangerouslySetInnerHTML={{ __html: product.description }}
             />
           </div>
