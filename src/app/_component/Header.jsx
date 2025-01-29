@@ -67,7 +67,7 @@ export default function Header() {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 relative">
-            <span className="absolute top-7 right-2 text-xs font-medium">®</span>
+            <span className="absolute top-5 md:top-7 right-0 md:right-2 text-xs font-medium">®</span>
             <Image
               src="/logo.webp"
               alt="Logo"

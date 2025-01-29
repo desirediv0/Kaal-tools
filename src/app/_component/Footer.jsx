@@ -11,9 +11,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 p-4 pt-10">
           <section className="flex flex-col gap-2">
           <Link href="/" className="flex-shrink-0 relative">
-          <span className="absolute top-7 right-2 text-xs font-medium">®</span>
+            <span className="absolute top-5 md:top-7 right-32 md:right-2 text-xs font-medium hidden md:block">®</span>
             <Image
-              src="/logowhite.png"
+              src="/logoWhite.png"
               alt="Logo"
               width={400}
               height={100}
@@ -84,7 +84,7 @@ export default function Footer() {
             </h2>
           </section>
         </div>
-        <div className="w-full mt-8 text-lg py-4 border-t border-black max-w-7xl mx-auto">
+        <div className="w-full mt-8 text-lg py-4 border-t border-black max-w-7xl mx-auto text-center md:text-start">
           ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
           <Link href="https://xcelb2b.com/">
             <span className="text-blue-600">Xcel B2B</span>
