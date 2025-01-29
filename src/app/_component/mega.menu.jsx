@@ -99,35 +99,35 @@ export default function MegaMenu({ isMobile, categories }) {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between w-full py-3 px-4 text-base font-bold"
       >
-        Products
+        <span>Products</span>
         <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
   
       <div 
-        className={`transition-all duration-300 
-          ${isOpen ? "max-h-[calc(100vh-200px)] overflow-y-auto" : "max-h-0 overflow-hidden"}
+        className={`transition-all duration-300 bg-gray-50
+          ${isOpen ? "max-h-[60vh] overflow-y-auto" : "max-h-0 overflow-hidden"}
           scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-200`}
       >
-        <div className="space-y-1 py-2">
+        <div className="py-2">
           {filteredCategories.map((category) => (
             <div key={category.id} className="border-b last:border-b-0">
               <Link
                 href={getCategoryUrl(category)}
                 onClick={handleClick}
-                className="block px-4 py-2.5 font-semibold text-gray-900 hover:text-orange-600"
+                className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100"
               >
-                {category.name}
+                <span className="uppercase">{category.name}</span>
               </Link>
               {category.subCategories?.length > 0 && (
-                <ul className="pl-6 pr-4 pb-2 space-y-2 bg-gray-50">
+                <ul className="bg-white">
                   {category.subCategories.map((subCategory) => (
                     <li key={subCategory.id}>
                       <Link
                         href={getSubCategoryUrl(subCategory)}
                         onClick={handleClick}
-                        className="block py-1.5 px-2 text-gray-600 hover:text-orange-600 transition-colors text-sm"
+                        className="block py-2 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors text-sm"
                       >
-                        {subCategory.name}
+                        <span className="uppercase">{subCategory.name}</span>
                       </Link>
                     </li>
                   ))}

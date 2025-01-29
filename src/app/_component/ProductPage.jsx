@@ -26,12 +26,9 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
   const updateUrl = (params) => {
     const newParams = new URLSearchParams(searchParams);
-    
-    // Clear existing category-related params
     newParams.delete('category');
     newParams.delete('subcategory');
     
-    // Add new params if they exist
     if (params.category) {
       newParams.set('category', params.category.toLowerCase());
     }
@@ -43,10 +40,9 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   };
 
   const handleCategory = async (category) => {
-    const categoryValue = category === 'Uncategorized' ? 'all' : category;
-    setActiveCategory(categoryValue);
+    setActiveCategory(category);
     setActiveSubCategory(null);
-    updateUrl({ category: categoryValue });
+    updateUrl({ category });
     setIsSidebarOpen(false);
     scrollToTop();
   };
@@ -62,19 +58,20 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      scrollToTop()
+      scrollToTop();
       try {
-        // Fetch categories
         const categoryData = await getAllCategoriesAndSubCategories();
         if (categoryData.success) {
-          setCategories(categoryData.data);
+          // Filter out unwanted categories and transform names to uppercase
+          const filteredCategories = categoryData.data.filter(
+            cat => cat.name !== "Uncategorized" && cat.name !== "All"
+          );
+          setCategories(filteredCategories);
         }
 
-        // Get current params
         const currentCategory = searchParams.get('category');
         const currentSubcategory = searchParams.get('subcategory');
 
-        // Set active states based on URL
         if (currentSubcategory) {
           setActiveSubCategory(currentSubcategory);
           setActiveCategory(null);
@@ -83,7 +80,6 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
           setActiveSubCategory(null);
         }
 
-        // Fetch products
         const productData = await fetchCategoryProducts({
           categoryName: currentCategory,
           subcategoryName: currentSubcategory
@@ -109,10 +105,6 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
   const toggleDropdown = (categoryName) => {
     setOpenCategory(openCategory === categoryName ? null : categoryName);
-  };
-
-  const renderCategoryName = (name) => {
-    return name === "Uncategorized" ? "All" : name;
   };
 
   return (
@@ -147,7 +139,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span>{renderCategoryName(category.name)}</span>
+                    <span className="uppercase">{category.name}</span>
                     {category.subCategories.length > 0 && (
                       <ChevronDown
                         className={`h-4 w-4 transition-transform ${
@@ -171,7 +163,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                                 : "text-gray-600 hover:text-orange-500"
                             }`}
                           >
-                            {sub.name}
+                            <span className="uppercase">{sub.name}</span>
                           </button>
                         </li>
                       ))}

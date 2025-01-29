@@ -162,19 +162,26 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      <div 
-        className={`md:hidden fixed inset-0 bg-white z-50 ${
-          isMobileMenuOpen ? "block" : "hidden"
-        }`}
+      <div className={`md:hidden fixed inset-0 bg-white z-50 ${isMobileMenuOpen ? "block" : "hidden"}`}>
+  <div className="h-full overflow-y-auto">
+    {/* Mobile Header with Close Button */}
+    <div className="sticky top-0 bg-white border-b z-20 flex items-center justify-between p-4">
+      <h2 className="text-lg font-bold"></h2>
+      <button
+        onClick={() => setIsMobileMenuOpen(false)}
+        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
       >
-        <div className="h-full overflow-y-auto">
-          {/* Mobile Search */}
-          <div className="p-4 border-b sticky top-0 bg-white z-10">
-            <div className="relative mx-auto max-w-xl">
-              <SearchBar onSearch={handleSearch} />
-              <SearchResults results={searchResults} onProductClick={clearSearch} />
-            </div>
-          </div>
+        <X className="h-6 w-6" />
+      </button>
+    </div>
+
+    {/* Mobile Search */}
+    <div className="p-4 border-b bg-white">
+      <div className="relative mx-auto max-w-xl">
+        <SearchBar onSearch={handleSearch} />
+        <SearchResults results={searchResults} onProductClick={clearSearch} />
+      </div>
+    </div>
 
           {/* Mobile Navigation */}
           <nav className="py-2">
