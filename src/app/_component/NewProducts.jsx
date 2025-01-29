@@ -87,11 +87,13 @@ export default function NewProducts() {
           <div className="relative">
             {/* Navigation Buttons */}
             <button
-              className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-              onClick={scrollPrev}
-            >
-              <ChevronLeft className="h-6 w-6 text-gray-800" />
-            </button>
+            className="absolute left-0 md:-left-0 top-1/2 -translate-y-1/2 z-10 
+                     bg-white/80 hover:bg-white p-2 rounded-full shadow-lg 
+                     transition-all duration-300 hover:scale-110"
+            onClick={scrollPrev}
+          >
+            <ChevronLeft className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
+          </button>
 
             {/* Carousel */}
             <div ref={emblaRef} className="overflow-hidden">
@@ -119,15 +121,18 @@ export default function NewProducts() {
               </div>
             </div>
 
+       
             <button
-              className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-              onClick={scrollNext}
-            >
-              <ChevronRight className="h-6 w-6 text-gray-800" />
-            </button>
+            className="absolute right-0 md:-right-0 top-1/2 -translate-y-1/2 z-10 
+                     bg-white/80 hover:bg-white p-2 rounded-full shadow-lg 
+                     transition-all duration-300 hover:scale-110"
+            onClick={scrollNext}
+          >
+            <ChevronRight className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
+          </button>
 
             {/* Navigation Dots */}
-            <div className="flex justify-center gap-2 mt-6">
+            <div className="flex justify-center gap-2 mt-6 overflow-x-hidden px-2">
               {featuredProducts?.map((_, index) => (
                 <button
                   key={index}

@@ -15,8 +15,9 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
+  // Search handler
   const handleSearch = useCallback(async (query) => {
     if (!query.trim()) return;
     setIsSearching(true);
@@ -42,6 +43,7 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -55,14 +57,16 @@ export default function Header() {
         setLoading(false);
       }
     };
-  
     fetchCategories();
   }, []);
+
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50">
+      {/* Top Bar */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between gap-4">
-                   <Link href="/" className="flex-shrink-0 relative">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0 relative">
             <span className="absolute top-7 right-2 text-xs font-medium">®</span>
             <Image
               src="/logo.webp"
@@ -74,14 +78,13 @@ export default function Header() {
             />
           </Link>
 
+          {/* Desktop Search */}
           <div className="hidden md:block flex-grow max-w-2xl mx-auto px-4">
             <SearchBar onSearch={handleSearch} />
-            <SearchResults
-              results={searchResults}
-              onProductClick={clearSearch}
-            />
+            <SearchResults results={searchResults} onProductClick={clearSearch} />
           </div>
 
+          {/* Desktop Contact */}
           <div className="hidden md:flex items-center gap-8">
             <a
               href="tel:+918800199820"
@@ -101,6 +104,7 @@ export default function Header() {
             </a>
           </div>
 
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2"
@@ -114,6 +118,7 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Navigation Bar */}
       <div className="border-t bg-orange-500">
         <div className="container mx-auto px-4">
           <nav className="hidden md:block">
@@ -122,9 +127,7 @@ export default function Header() {
                 <Link
                   href="/"
                   className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/")
-                      ? "text-black font-bold"
-                      : "text-white hover:text-gray-100"
+                    isActive("/") ? "text-black font-bold" : "text-white hover:text-gray-100"
                   }`}
                 >
                   Home
@@ -134,24 +137,20 @@ export default function Header() {
                 <Link
                   href="/about"
                   className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/about")
-                      ? "text-black font-bold"
-                      : "text-white hover:text-gray-100"
+                    isActive("/about") ? "text-black font-bold" : "text-white hover:text-gray-100"
                   }`}
                 >
                   About
                 </Link>
               </li>
               <li>
-              <MegaMenu isMobile={false} categories={categories} />
+                <MegaMenu isMobile={false} categories={categories} />
               </li>
               <li>
                 <Link
                   href="/contact"
                   className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/contact")
-                      ? "text-black font-bold"
-                      : "text-white hover:text-gray-100"
+                    isActive("/contact") ? "text-black font-bold" : "text-white hover:text-gray-100"
                   }`}
                 >
                   Contact
@@ -162,26 +161,30 @@ export default function Header() {
         </div>
       </div>
 
-      <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
-        <div className="border-t">
-          <div className="p-4 border-b relative mx-auto max-w-xl">
-            <SearchBar onSearch={handleSearch} />
-            <SearchResults
-              results={searchResults}
-              onProductClick={clearSearch}
-            />
+      {/* Mobile Menu */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-white z-50 ${
+          isMobileMenuOpen ? "block" : "hidden"
+        }`}
+      >
+        <div className="h-full overflow-y-auto">
+          {/* Mobile Search */}
+          <div className="p-4 border-b sticky top-0 bg-white z-10">
+            <div className="relative mx-auto max-w-xl">
+              <SearchBar onSearch={handleSearch} />
+              <SearchResults results={searchResults} onProductClick={clearSearch} />
+            </div>
           </div>
 
+          {/* Mobile Navigation */}
           <nav className="py-2">
             <ul className="space-y-2">
               <li className="border-b">
                 <Link
                   href="/"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-lg font-bold ${
-                    isActive("/")
-                      ? "text-black font-bold"
-                      : "hover:text-orange-500"
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/") ? "text-black font-bold" : "hover:text-orange-500"
                   }`}
                 >
                   Home
@@ -191,26 +194,22 @@ export default function Header() {
                 <Link
                   href="/about"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-lg font-bold ${
-                    isActive("/about")
-                      ? "text-black font-bold"
-                      : "hover:text-orange-500"
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/about") ? "text-black font-bold" : "hover:text-orange-500"
                   }`}
                 >
                   About
                 </Link>
               </li>
               <li className="border-b">
-              <MegaMenu isMobile={true} categories={categories} />
+                <MegaMenu isMobile={true} categories={categories} />
               </li>
               <li className="border-b">
                 <Link
                   href="/contact"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-lg font-bold ${
-                    isActive("/contact")
-                      ? "text-black font-bold"
-                      : "hover:text-orange-500"
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/contact") ? "text-black font-bold" : "hover:text-orange-500"
                   }`}
                 >
                   Contact
@@ -219,7 +218,8 @@ export default function Header() {
             </ul>
           </nav>
 
-          <div className="p-4 space-y-4 border-t">
+          {/* Mobile Contact */}
+          <div className="p-4 space-y-4 border-t sticky bottom-0 bg-white">
             <a
               href="tel:+918800199820"
               className="flex items-center gap-2 hover:text-orange-500 transition-colors"

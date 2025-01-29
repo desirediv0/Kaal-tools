@@ -6,6 +6,12 @@ export default function MegaMenu({ isMobile, categories }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
+  // Filter out unwanted categories
+  const filteredCategories = categories?.filter(cat => 
+    cat.name !== "Uncategorized" && cat.name !== "All"
+  ) || [];
+
+  // Click outside handler
   useEffect(() => {
     if (!isMobile) {
       const handleClickOutside = (event) => {
@@ -13,20 +19,16 @@ export default function MegaMenu({ isMobile, categories }) {
           setIsOpen(false);
         }
       };
-
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isMobile]);
 
-  const renderCategoryName = (name) => {
-    return name === "Uncategorized" ? "All" : name;
+  const handleClick = () => {
+    setIsOpen(false);
   };
 
   const getCategoryUrl = (category) => {
-    if (category.name === "Uncategorized") {
-      return "/product?category=all";
-    }
     return `/product?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`;
   };
 
@@ -34,7 +36,6 @@ export default function MegaMenu({ isMobile, categories }) {
     return `/product?subcategory=${subCategory.name.toLowerCase().replace(/\s+/g, "-")}`;
   };
 
-  
   // Desktop menu
   if (!isMobile) {
     return (
@@ -46,31 +47,37 @@ export default function MegaMenu({ isMobile, categories }) {
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-1 py-1 px-4 text-sm font-bold text-white hover:text-gray-100 transition-colors"
+          className="flex items-center gap-1 py-2 px-4 text-sm font-bold text-white hover:text-gray-100 transition-colors"
         >
           Products
-          <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
         </button>
 
-        <div className={`absolute left-1/2 -translate-x-1/2 w-[800px] bg-white shadow-xl rounded-lg p-6 transition-all duration-300 ${
-          isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-4"
-        }`}>
-         <div className="grid grid-cols-2 gap-8">
-            {categories?.map((category) => (
-              <div key={category.id} className={category.subCategories.length === 0 ? 'mb-0' : 'mb-4'}>
+        <div 
+          className={`absolute left-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] bg-white shadow-xl rounded-lg p-4 md:p-6 
+            transition-all duration-300 z-50 origin-top
+            ${isOpen 
+              ? "opacity-100 visible translate-y-0 scale-100" 
+              : "opacity-0 invisible -translate-y-4 scale-95"}`}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-h-[70vh] overflow-y-auto">
+            {filteredCategories.map((category) => (
+              <div key={category.id} className="min-w-[200px]">
                 <Link 
                   href={getCategoryUrl(category)}
-                  className="font-semibold text-lg text-black hover:text-gray-900 block uppercase"
+                  onClick={handleClick}
+                  className="font-semibold text-base text-black hover:text-orange-600 block uppercase"
                 >
-                  {renderCategoryName(category.name)}
+                  {category.name}
                 </Link>
-                {category.subCategories.length > 0 && (
+                {category.subCategories?.length > 0 && (
                   <ul className="space-y-2 mt-2">
                     {category.subCategories.map((subCategory) => (
                       <li key={subCategory.id}>
                         <Link
                           href={getSubCategoryUrl(subCategory)}
-                          className="text-gray-700 hover:text-orange-800 transition-colors text-sm block uppercase"
+                          onClick={handleClick}
+                          className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1"
                         >
                           {subCategory.name}
                         </Link>
@@ -85,43 +92,50 @@ export default function MegaMenu({ isMobile, categories }) {
       </div>
     );
   }
-
   // Mobile menu
   return (
     <div className="w-full">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full py-2 px-4 text-xl font-bold"
+        className="flex items-center justify-between w-full py-3 px-4 text-base font-bold"
       >
         Products
-        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
-
-      <div className={`${isOpen ? "max-h-[500px]" : "max-h-0"} overflow-hidden transition-all duration-300`}>
-        {categories?.map((category) => (
-          <div key={category.id} className={`py-2 px-4 ${category.subCategories.length === 0 ? 'pb-0' : 'pb-2'}`}>
-            <Link
-              href={getCategoryUrl(category)}
-              className="font-semibold text-primary text-xl block hover:text-orange-600"
-            >
-              {renderCategoryName(category.name)}
-            </Link>
-            {category.subCategories.length > 0 && (
-              <ul className="mt-1 ml-4">
-                {category.subCategories.map((subCategory) => (
-                  <li key={subCategory.id}>
-                    <Link
-                      href={getSubCategoryUrl(subCategory)}
-                      className="block py-1 text-gray-600 hover:text-primary transition-colors text-lg"
-                    >
-                      {subCategory.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+  
+      <div 
+        className={`transition-all duration-300 
+          ${isOpen ? "max-h-[calc(100vh-200px)] overflow-y-auto" : "max-h-0 overflow-hidden"}
+          scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-200`}
+      >
+        <div className="space-y-1 py-2">
+          {filteredCategories.map((category) => (
+            <div key={category.id} className="border-b last:border-b-0">
+              <Link
+                href={getCategoryUrl(category)}
+                onClick={handleClick}
+                className="block px-4 py-2.5 font-semibold text-gray-900 hover:text-orange-600"
+              >
+                {category.name}
+              </Link>
+              {category.subCategories?.length > 0 && (
+                <ul className="pl-6 pr-4 pb-2 space-y-2 bg-gray-50">
+                  {category.subCategories.map((subCategory) => (
+                    <li key={subCategory.id}>
+                      <Link
+                        href={getSubCategoryUrl(subCategory)}
+                        onClick={handleClick}
+                        className="block py-1.5 px-2 text-gray-600 hover:text-orange-600 transition-colors text-sm"
+                      >
+                        {subCategory.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
