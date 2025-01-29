@@ -13,7 +13,7 @@ export default function Footer() {
           <Link href="/" className="flex-shrink-0 relative">
             <span className="absolute top-5 md:top-7 right-32 md:right-2 text-xs font-medium hidden md:block">®</span>
             <Image
-              src="/logoWhite.png"
+              src="/logowhite.png"
               alt="Logo"
               width={400}
               height={100}
