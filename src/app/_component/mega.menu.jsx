@@ -77,7 +77,7 @@ export default function MegaMenu({ isMobile, categories }) {
                         <Link
                           href={getSubCategoryUrl(subCategory)}
                           onClick={handleClick}
-                          className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1"
+                          className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase"
                         >
                           {subCategory.name}
                         </Link>
