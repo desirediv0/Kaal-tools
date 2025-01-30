@@ -45,6 +45,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     updateUrl({ category });
     setIsSidebarOpen(false);
     scrollToTop();
+    router.refresh()
   };
 
   const handleSubCategory = async (subcategory) => {
@@ -53,38 +54,30 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     updateUrl({ subcategory });
     setIsSidebarOpen(false);
     scrollToTop();
+    router.refresh()
   };
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       scrollToTop();
       try {
-        const categoryData = await getAllCategoriesAndSubCategories();
+        
+        const [categoryData, productData] = await Promise.all([
+          getAllCategoriesAndSubCategories(),
+          fetchCategoryProducts({
+            categoryName: searchParams.get('category'),
+            subcategoryName: searchParams.get('subcategory')
+          })
+        ]);
+  
         if (categoryData.success) {
-          // Filter out unwanted categories and transform names to uppercase
           const filteredCategories = categoryData.data.filter(
             cat => cat.name !== "Uncategorized" && cat.name !== "All"
           );
           setCategories(filteredCategories);
         }
-
-        const currentCategory = searchParams.get('category');
-        const currentSubcategory = searchParams.get('subcategory');
-
-        if (currentSubcategory) {
-          setActiveSubCategory(currentSubcategory);
-          setActiveCategory(null);
-        } else if (currentCategory) {
-          setActiveCategory(currentCategory);
-          setActiveSubCategory(null);
-        }
-
-        const productData = await fetchCategoryProducts({
-          categoryName: currentCategory,
-          subcategoryName: currentSubcategory
-        });
-
+  
         if (productData.success) {
           setProducts(productData.data.products.map(product => ({
             ...product,
@@ -99,7 +92,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [searchParams]);
 
