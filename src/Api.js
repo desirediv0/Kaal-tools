@@ -86,14 +86,36 @@ export const fetchsingleProduct = async (slug) => {
 export const fetchCategoryProducts = async ({ categoryName = '', subcategoryName = '' }) => {
   try {
     let url;
-
     const timestamp = Date.now();
     
     if (subcategoryName && subcategoryName !== 'all') {
       url = `${process.env.NEXT_PUBLIC_API_URL}/subcategory/products?subcategory=${
         subcategoryName.toLowerCase().replace(/\s+/g, '-')
       }&_t=${timestamp}`;
-    } else if (categoryName && categoryName !== 'all' && categoryName !== 'Uncategorized') {
+      
+      const response = await fetch(url, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      const rawData = await response.json();
+      
+      // If subcategory has no products, return empty array
+      if (!rawData.success || !rawData.data?.products?.length) {
+        return {
+          success: false,
+          data: { products: [] },
+          message: "No products found in this subcategory"
+        };
+      }
+      
+      return normalizeProductData(rawData);
+    }
+    
+    // If no subcategory or subcategory is 'all', fetch category products
+    if (categoryName && categoryName !== 'all') {
       url = `${process.env.NEXT_PUBLIC_API_URL}/category/products?category=${
         categoryName.toLowerCase().replace(/\s+/g, '-')
       }&_t=${timestamp}`;
@@ -109,35 +131,8 @@ export const fetchCategoryProducts = async ({ categoryName = '', subcategoryName
       }
     });
     const rawData = await response.json();
+    return normalizeProductData(rawData);
 
-    // Normalize the response data
-    const products = rawData.data?.products || rawData.data || [];
-
-    return {
-      success: rawData.success || rawData.statusCode === 200,
-      data: {
-        products: products.map(product => ({
-          id: product.id,
-          title: product.title,
-          description: product.description,
-          shortDesc: product.shortDesc || product.description,
-          price: product.price,
-          saleprice: product.salePrice >= 0 ? product.salePrice : null,
-          image: product.image,
-          slug: product.slug,
-          images: Array.isArray(product.images) 
-            ? product.images.map(img => typeof img === 'string' ? img : img.url)
-            : [],
-          categories: Array.isArray(product.categories)
-            ? product.categories.map(c => c.category?.name)
-            : product.categories?.split(',').map(c => c.trim()) || [],
-          subCategories: Array.isArray(product.subCategories)
-            ? product.subCategories.map(s => s.subCategory?.name)
-            : []
-        }))
-      },
-      message: rawData.message
-    };
   } catch (error) {
     console.error('Error fetching products:', error);
     return {
@@ -146,6 +141,37 @@ export const fetchCategoryProducts = async ({ categoryName = '', subcategoryName
       message: error.message
     };
   }
+};
+
+// Helper function to normalize product data
+const normalizeProductData = (rawData) => {
+  const products = rawData.data?.products || rawData.data || [];
+  
+  return {
+    success: rawData.success || rawData.statusCode === 200,
+    data: {
+      products: products.map(product => ({
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        shortDesc: product.shortDesc || product.description,
+        price: product.price,
+        saleprice: product.salePrice >= 0 ? product.salePrice : null,
+        image: product.image,
+        slug: product.slug,
+        images: Array.isArray(product.images) 
+          ? product.images.map(img => typeof img === 'string' ? img : img.url)
+          : [],
+        categories: Array.isArray(product.categories)
+          ? product.categories.map(c => c.category?.name)
+          : product.categories?.split(',').map(c => c.trim()) || [],
+        subCategories: Array.isArray(product.subCategories)
+          ? product.subCategories.map(s => s.subCategory?.name)
+          : []
+      }))
+    },
+    message: rawData.message
+  };
 };
 
 

@@ -57,12 +57,11 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     router.refresh()
   };
 
-   useEffect(() => {
+    useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       scrollToTop();
       try {
-        
         const [categoryData, productData] = await Promise.all([
           getAllCategoriesAndSubCategories(),
           fetchCategoryProducts({
@@ -76,6 +75,12 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
             cat => cat.name !== "Uncategorized" && cat.name !== "All"
           );
           setCategories(filteredCategories);
+        }
+  
+        
+        if (!productData.success && searchParams.get('subcategory')) {
+          setProducts([]);
+          return;
         }
   
         if (productData.success) {
