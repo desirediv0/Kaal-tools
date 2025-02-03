@@ -132,6 +132,9 @@ export default function ProductPage() {
     [emblaApi],
   )
 
+  const noSelectClass = "select-none pointer-events-none"
+
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -215,8 +218,10 @@ export default function ProductPage() {
               alt={product.title}
               fill
               priority
-              className="object-contain"
+              className={`object-contain ${noSelectClass}`}
               onError={() => setMainImage(FALLBACK_IMAGE)}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable="false"
             />
           </div>
 
@@ -235,11 +240,13 @@ export default function ProductPage() {
                             src={image || "/placeholder.svg"}
                             alt={`${product.title} - Image ${index + 1}`}
                             fill
-                            className="rounded-md object-cover hover:opacity-80 transition-opacity duration-300"
+                            className={`rounded-md object-cover hover:opacity-80 transition-opacity duration-300 ${noSelectClass}`}
                             onClick={() => handleThumbnailClick(image, index)}
                             onError={(e) => {
                               e.currentTarget.src = FALLBACK_IMAGE
                             }}
+                            onContextMenu={(e) => e.preventDefault()}
+                            draggable="false"
                           />
                         </CardContent>
                       </Card>
