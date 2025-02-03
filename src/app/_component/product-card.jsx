@@ -28,7 +28,7 @@ const ProductCard = ({ title, price, saleprice, image, href, tag }) => {
         ) : null}
         <div className="relative flex-shrink-0">
           <Image
-            className="w-full h-60 object-cover transform group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-60 object-contain transform group-hover:scale-105 transition-transform duration-300"
             alt={title}
             width={800}
             height={500}

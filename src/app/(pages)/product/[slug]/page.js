@@ -163,53 +163,53 @@ export default function ProductPage() {
   }
 
   return (
-           <div className="max-w-7xl mx-auto px-4 mt-8">
-               <div className="flex justify-start items-center gap-4 mb-8 ">
-                    {/* Left Side - Categories */}
-                    <div className="flex items-center gap-2">
-                      {product.categories?.map((cat) => (
-                        <button
-                          key={cat.categoryId}
-                          onClick={() => updateUrl({ category: cat.category.name })}
-                          className={`px-3 py-1 text-sm font-bold
-                                     ${cat.active 
-                                       ? 'text-[var(--maincolor)]' 
-                                       : 'text-gray-600 hover:text-[var(--maincolor)]'} 
+    <div className="max-w-7xl mx-auto px-4 mt-8">
+      <div className="flex justify-start items-center gap-4 mb-8 ">
+        {/* Left Side - Categories */}
+        <div className="flex items-center gap-2">
+          {product.categories?.map((cat) => (
+            <button
+              key={cat.categoryId}
+              onClick={() => updateUrl({ category: cat.category.name })}
+              className={`px-3 py-1 text-sm font-bold
+                                     ${cat.active
+                  ? 'text-[var(--maincolor)]'
+                  : 'text-gray-600 hover:text-[var(--maincolor)]'} 
                                      transition-all uppercase`}
-                        >
-                          {cat.category.name}
-                        </button>
-                      ))}
-                    </div>
-                  
-                    {/* Right Side - Subcategories with "/" prefix */}
-                    <div className="flex items-center gap-2">
-                      {product.subCategories?.length > 0 && product.subCategories.map((subCat) => (
-                        <button
-                          key={subCat.subCategoryId}
-                          onClick={() => updateUrl({ subcategory: subCat.subCategory.name })}
-                          className={`px-2 py-1 text-sm font-medium flex items-center
-                                     ${subCat.active 
-                                       ? 'text-[var(--maincolor)]' 
-                                       : 'text-gray-500 hover:text-[var(--maincolor)]'}
-                                     transition-all uppercase`}
-                        >
-                          <span className="text-gray-400 mr-2">
-                            <ChevronRight className="w-4 h-4" />
-                          </span>
-                          {subCat.subCategory.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+            >
+              {cat.category.name}
+            </button>
+          ))}
+        </div>
 
-      <div 
-        
-                      
-      className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Right Side - Subcategories with "/" prefix */}
+        <div className="flex items-center gap-2">
+          {product.subCategories?.length > 0 && product.subCategories.map((subCat) => (
+            <button
+              key={subCat.subCategoryId}
+              onClick={() => updateUrl({ subcategory: subCat.subCategory.name })}
+              className={`px-2 py-1 text-sm font-medium flex items-center
+                                     ${subCat.active
+                  ? 'text-[var(--maincolor)]'
+                  : 'text-gray-500 hover:text-[var(--maincolor)]'}
+                                     transition-all uppercase`}
+            >
+              <span className="text-gray-400 mr-2">
+                <ChevronRight className="w-4 h-4" />
+              </span>
+              {subCat.subCategory.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div
+
+
+        className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image Section */}
         <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+          <div className="relative aspect-square overflow-hidden rounded-lg bg-white">
             <Image
               src={mainImage || "/placeholder.svg"}
               alt={product.title}
@@ -227,9 +227,8 @@ export default function ProductPage() {
                   <CarouselItem key={index} className="basis-1/3">
                     <div className="p-1">
                       <Card
-                        className={`hover:shadow-md transition-all duration-300 cursor-pointer ${
-                          mainImage === image ? "ring-2 ring-[var(--maincolor)]" : ""
-                        }`}
+                        className={`hover:shadow-md transition-all duration-300 cursor-pointer ${mainImage === image ? "ring-2 ring-[var(--maincolor)]" : ""
+                          }`}
                       >
                         <CardContent className="flex aspect-square relative p-0">
                           <Image
