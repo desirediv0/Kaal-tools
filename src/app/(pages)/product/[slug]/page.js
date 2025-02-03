@@ -240,13 +240,11 @@ export default function ProductPage() {
                             src={image || "/placeholder.svg"}
                             alt={`${product.title} - Image ${index + 1}`}
                             fill
-                            className={`rounded-md object-cover hover:opacity-80 transition-opacity duration-300 ${noSelectClass}`}
+                            className="rounded-md object-cover hover:opacity-80 transition-opacity duration-300"
                             onClick={() => handleThumbnailClick(image, index)}
                             onError={(e) => {
                               e.currentTarget.src = FALLBACK_IMAGE
                             }}
-                            onContextMenu={(e) => e.preventDefault()}
-                            draggable="false"
                           />
                         </CardContent>
                       </Card>
