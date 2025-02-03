@@ -153,19 +153,13 @@
   font-size: 16px;
 }
 
-.prose tr:nth-child(even),
-.prose tr:nth-child(odd) {
-  background-color: #ffffff;
-}
 
 .prose tr:first-child {
-  background-color: #ffffff;
   font-weight: bold;
 }
 
 .prose tr:first-child strong,
 .prose tr:first-child td {
-  color: #000000;
   font-family: verdana, geneva, sans-serif;
   font-size: 16px;
   font-weight: bold;
