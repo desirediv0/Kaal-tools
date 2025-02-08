@@ -28,14 +28,14 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     const newParams = new URLSearchParams(searchParams);
     newParams.delete('category');
     newParams.delete('subcategory');
-    
+
     if (params.category) {
       newParams.set('category', params.category.toLowerCase());
     }
     if (params.subcategory) {
       newParams.set('subcategory', params.subcategory.toLowerCase());
     }
-    
+
     router.push(`/product?${newParams.toString()}`);
   };
 
@@ -57,7 +57,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     router.refresh()
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       scrollToTop();
@@ -69,20 +69,20 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
             subcategoryName: searchParams.get('subcategory')
           })
         ]);
-  
+
         if (categoryData.success) {
           const filteredCategories = categoryData.data.filter(
             cat => cat.name !== "Uncategorized" && cat.name !== "All"
           );
           setCategories(filteredCategories);
         }
-  
-        
+
+
         if (!productData.success && searchParams.get('subcategory')) {
           setProducts([]);
           return;
         }
-  
+
         if (productData.success) {
           setProducts(productData.data.products.map(product => ({
             ...product,
@@ -97,7 +97,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, [searchParams]);
 
@@ -117,9 +117,8 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
       <div className="flex gap-6">
         <aside
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
+          className={`${isSidebarOpen ? "block" : "hidden"
+            } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
         >
           <h2 className="text-xl font-bold mb-4">Categories</h2>
           <div className="space-y-2">
@@ -130,19 +129,17 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                     handleCategory(category.name);
                     toggleDropdown(category.name);
                   }}
-                  className={`w-full text-left px-2 py-1.5 rounded ${
-                    activeCategory === category.name
-                      ? "bg-orange-100 text-orange-600"
-                      : "hover:bg-gray-100"
-                  }`}
+                  className={`w-full text-left px-2 py-1.5 rounded ${activeCategory === category.name
+                    ? "bg-orange-100 text-orange-600"
+                    : "hover:bg-gray-100"
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="uppercase">{category.name}</span>
                     {category.subCategories.length > 0 && (
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                          openCategory === category.name ? "rotate-180" : ""
-                        }`}
+                        className={`h-4 w-4 transition-transform ${openCategory === category.name ? "rotate-180" : ""
+                          }`}
                       />
                     )}
                   </div>
@@ -155,11 +152,10 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                         <li key={sub.id}>
                           <button
                             onClick={() => handleSubCategory(sub.name)}
-                            className={`w-full text-left px-2 py-1.5 rounded ${
-                              activeSubCategory === sub.name
-                                ? "text-orange-600"
-                                : "text-gray-600 hover:text-orange-500"
-                            }`}
+                            className={`w-full text-left px-2 py-1.5 rounded ${activeSubCategory === sub.name
+                              ? "text-orange-600"
+                              : "text-gray-600 hover:text-orange-500"
+                              }`}
                           >
                             <span className="uppercase">{sub.name}</span>
                           </button>
@@ -187,6 +183,8 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                   saleprice={product.saleprice}
                   image={product.image}
                   href={`/product/${product.slug}`}
+                  className={"bg-[#1155CC] p-2 text-center"}
+                  textClass={"text-white font-[500]"}
                 />
               ))}
               {products.length === 0 && (

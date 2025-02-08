@@ -2,13 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const ProductCard = ({ title, price, saleprice, image, href, tag }) => {
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR'
-    }).format(price);
-  };
+const ProductCard = ({ title, saleprice, image, href, tag, className, textClass }) => {
 
   const getImageUrl = (image) => {
     if (!image) return 'https://placehold.co/600x400?text=No+Image'
@@ -17,7 +11,7 @@ const ProductCard = ({ title, price, saleprice, image, href, tag }) => {
   };
 
   return (
-    <Link href={href} className="block group">
+    <Link href={href} className="block hover:scale-105 transform  transition-transform duration-300">
       <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden relative h-full flex flex-col">
         {saleprice ? (
           <div className="absolute -left-8 top-4 rotate-[-45deg] bg-orange-500 text-white px-10 py-1 shadow-lg z-10">
@@ -28,15 +22,15 @@ const ProductCard = ({ title, price, saleprice, image, href, tag }) => {
         ) : null}
         <div className="relative flex-shrink-0">
           <Image
-            className="w-full h-60 object-contain transform group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-60 object-contain"
             alt={title}
             width={800}
             height={500}
             src={getImageUrl(image)}
           />
         </div>
-        <div className="p-4 flex flex-col flex-grow w-full">
-          <h2 className="text-sm lg:text-base font-semibold text-black line-clamp-2 w-full uppercase text-center">
+        <div className={`p-4 flex flex-col flex-grow w-full ${className}`}>
+          <h2 className={`text-sm lg:text-base font-semibold line-clamp-2 w-full uppercase text-center text-black ${textClass}`}>
             {title}
           </h2>
           {/* <div className="mt-2">

@@ -17,15 +17,18 @@ export default function Header() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search handler
   const handleSearch = useCallback(async (query) => {
-    if (!query.trim()) return;
+    if (!query?.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
     setIsSearching(true);
     try {
       const results = await searchProducts(query);
-      setSearchResults(results || []);
+      setSearchResults(results);
     } catch (error) {
-      console.error(error);
+      console.error("Search error:", error);
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -80,8 +83,17 @@ export default function Header() {
 
           {/* Desktop Search */}
           <div className="hidden md:block flex-grow max-w-2xl mx-auto px-4">
-            <SearchBar onSearch={handleSearch} />
-            <SearchResults results={searchResults} onProductClick={clearSearch} />
+            <SearchBar
+              onSearch={handleSearch}
+              isSearching={isSearching}
+              onClearSearch={clearSearch}
+            />
+            <SearchResults
+              results={searchResults}
+              onProductClick={clearSearch}
+              onClearSearch={clearSearch}
+              isLoading={isSearching}
+            />
           </div>
 
           {/* Desktop Contact */}
@@ -126,9 +138,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                  }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/") ? "text-black font-bold" : "text-white hover:text-gray-100"
+                    }`}
                 >
                   Home
                 </Link>
@@ -136,9 +147,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/about"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/about") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                  }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/about") ? "text-black font-bold" : "text-white hover:text-gray-100"
+                    }`}
                 >
                   About
                 </Link>
@@ -149,9 +159,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/contact"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${
-                    isActive("/contact") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                  }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/contact") ? "text-black font-bold" : "text-white hover:text-gray-100"
+                    }`}
                 >
                   Contact
                 </Link>
@@ -163,25 +172,34 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div className={`md:hidden fixed inset-0 bg-white z-50 ${isMobileMenuOpen ? "block" : "hidden"}`}>
-  <div className="h-full overflow-y-auto">
-    {/* Mobile Header with Close Button */}
-    <div className="sticky top-0 bg-white border-b z-20 flex items-center justify-between p-4">
-      <h2 className="text-lg font-bold"></h2>
-      <button
-        onClick={() => setIsMobileMenuOpen(false)}
-        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-      >
-        <X className="h-6 w-6" />
-      </button>
-    </div>
+        <div className="h-full overflow-y-auto">
+          {/* Mobile Header with Close Button */}
+          <div className="sticky top-0 bg-white border-b z-20 flex items-center justify-between p-4">
+            <h2 className="text-lg font-bold"></h2>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
 
-    {/* Mobile Search */}
-    <div className="p-4 border-b bg-white">
-      <div className="relative mx-auto max-w-xl">
-        <SearchBar onSearch={handleSearch} />
-        <SearchResults results={searchResults} onProductClick={clearSearch} />
-      </div>
-    </div>
+          {/* Mobile Search */}
+          <div className="p-4 border-b bg-white">
+            <div className="relative mx-auto max-w-xl">
+              <SearchBar
+                onSearch={handleSearch}
+                isSearching={isSearching}
+                onClearSearch={clearSearch}
+              />
+              <SearchResults
+                results={searchResults}
+                onProductClick={clearSearch}
+                onClearSearch={clearSearch}
+                isLoading={isSearching}
+              />
+            </div>
+          </div>
 
           {/* Mobile Navigation */}
           <nav className="py-2">
@@ -190,9 +208,8 @@ export default function Header() {
                 <Link
                   href="/"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${
-                    isActive("/") ? "text-black font-bold" : "hover:text-orange-500"
-                  }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/") ? "text-black font-bold" : "hover:text-orange-500"
+                    }`}
                 >
                   Home
                 </Link>
@@ -201,9 +218,8 @@ export default function Header() {
                 <Link
                   href="/about"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${
-                    isActive("/about") ? "text-black font-bold" : "hover:text-orange-500"
-                  }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/about") ? "text-black font-bold" : "hover:text-orange-500"
+                    }`}
                 >
                   About
                 </Link>
@@ -215,9 +231,8 @@ export default function Header() {
                 <Link
                   href="/contact"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${
-                    isActive("/contact") ? "text-black font-bold" : "hover:text-orange-500"
-                  }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/contact") ? "text-black font-bold" : "hover:text-orange-500"
+                    }`}
                 >
                   Contact
                 </Link>

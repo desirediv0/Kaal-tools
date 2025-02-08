@@ -212,13 +212,14 @@ export default function ProductPage() {
         className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image Section */}
         <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-lg bg-white">
+          <div className="relative aspect-square overflow-hidden rounded-lg bg-white max-h-[500px]">
             <Image
               src={mainImage || "/placeholder.svg"}
               alt={product.title}
               fill
               priority
-              className={`object-contain ${noSelectClass}`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+              className={`object-contain p-4 ${noSelectClass}`}
               onError={() => setMainImage(FALLBACK_IMAGE)}
               onContextMenu={(e) => e.preventDefault()}
               draggable="false"
@@ -260,7 +261,7 @@ export default function ProductPage() {
 
         {/* Product Details Section */}
         <div className="space-y-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8 uppercase">{product.title}</h1>
+          <h1 className="text-3xl font-[500] text-gray-900 mb-6 uppercase">{product.title}</h1>
 
           {/* Features Grid */}
           <div className="grid grid-cols-2 gap-4">
@@ -294,7 +295,7 @@ export default function ProductPage() {
 
       {/* Description Section */}
       {product.description && (
-        <div className="mt-16">
+        <div className="mt-16 max-w-6xl mx-auto">
           <div className="flex items-center gap-2 border-b mb-8">
             <CheckCircleIcon className="w-6 h-6 text-[var(--maincolor)]" />
             <h2 className="text-2xl font-semibold text-gray-900 pb-3">Description</h2>

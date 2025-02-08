@@ -7,7 +7,7 @@ export default function MegaMenu({ isMobile, categories }) {
   const menuRef = useRef(null);
 
   // Filter out unwanted categories
-  const filteredCategories = categories?.filter(cat => 
+  const filteredCategories = categories?.filter(cat =>
     cat.name !== "Uncategorized" && cat.name !== "All"
   ) || [];
 
@@ -53,45 +53,49 @@ export default function MegaMenu({ isMobile, categories }) {
           <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
         </button>
 
-        <div 
-          className={`absolute left-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] bg-white shadow-xl rounded-lg p-4 md:p-6 
-            transition-all duration-300 z-50 origin-top
-            ${isOpen 
-              ? "opacity-100 visible translate-y-0 scale-100" 
-              : "opacity-0 invisible -translate-y-4 scale-95"}`}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-h-[70vh] overflow-y-auto">
-            {filteredCategories.map((category) => (
-              <div key={category.id} className="min-w-[200px]">
-                <Link 
-                  href={getCategoryUrl(category)}
-                  onClick={handleClick}
-                  className="font-semibold text-base text-black hover:text-orange-600 block uppercase"
-                >
-                  {category.name}
-                </Link>
-                {category.subCategories?.length > 0 && (
-                  <ul className="space-y-2 mt-2">
-                    {category.subCategories.map((subCategory) => (
-                      <li key={subCategory.id}>
-                        <Link
-                          href={getSubCategoryUrl(subCategory)}
-                          onClick={handleClick}
-                          className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase"
-                        >
-                          {subCategory.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+        {isOpen && (
+          <div
+            className="fixed top-[145px] left-0 right-0 mx-auto w-full max-w-7xl bg-white shadow-xl rounded-lg 
+              p-4 md:p-6 z-50 overflow-hidden"
+            style={{
+              maxHeight: 'calc(100vh - 80px)',
+              margin: '0 auto'
+            }}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 overflow-y-auto">
+              {filteredCategories.map((category) => (
+                <div key={category.id} className="min-w-0">
+                  <Link
+                    href={getCategoryUrl(category)}
+                    onClick={handleClick}
+                    className="font-semibold text-sm text-black hover:text-orange-600 block uppercase truncate"
+                  >
+                    {category.name}
+                  </Link>
+                  {category.subCategories?.length > 0 && (
+                    <ul className="space-y-2 mt-2">
+                      {category.subCategories.map((subCategory) => (
+                        <li key={subCategory.id}>
+                          <Link
+                            href={getSubCategoryUrl(subCategory)}
+                            onClick={handleClick}
+                            className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase truncate"
+                          >
+                            {subCategory.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
+
   // Mobile menu
   return (
     <div className="w-full">
@@ -102,11 +106,13 @@ export default function MegaMenu({ isMobile, categories }) {
         <span>Products</span>
         <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
-  
-      <div 
-        className={`transition-all duration-300 bg-gray-50
-          ${isOpen ? "max-h-[60vh] overflow-y-auto" : "max-h-0 overflow-hidden"}
-          scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-200`}
+
+      <div
+        className={`overflow-y-auto bg-gray-50`}
+        style={{
+          maxHeight: isOpen ? 'calc(100vh - 120px)' : '0',
+          transition: 'max-height 0.3s ease-in-out'
+        }}
       >
         <div className="py-2">
           {filteredCategories.map((category) => (
@@ -116,18 +122,18 @@ export default function MegaMenu({ isMobile, categories }) {
                 onClick={handleClick}
                 className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100"
               >
-                <span className="uppercase">{category.name}</span>
+                {category.name}
               </Link>
               {category.subCategories?.length > 0 && (
-                <ul className="bg-white">
+                <ul className="bg-white border-t border-gray-100">
                   {category.subCategories.map((subCategory) => (
                     <li key={subCategory.id}>
                       <Link
                         href={getSubCategoryUrl(subCategory)}
                         onClick={handleClick}
-                        className="block py-2 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors text-sm"
+                        className="block py-3 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors"
                       >
-                        <span className="uppercase">{subCategory.name}</span>
+                        {subCategory.name}
                       </Link>
                     </li>
                   ))}
