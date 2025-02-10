@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Search, Loader2, X } from "lucide-react";
 import { useCustomDebounce } from "@/hook/useCustomDebounce";
 
@@ -8,21 +8,33 @@ export default function SearchBar({ onSearch, isSearching, onClearSearch }) {
   const debouncedQuery = useCustomDebounce(query, 500);
 
   useEffect(() => {
-    if (debouncedQuery) {
-      onSearch(debouncedQuery);
+    if (!debouncedQuery?.trim()) {
+      onClearSearch?.();
+      return;
     }
-  }, [debouncedQuery, onSearch]);
+    onSearch(debouncedQuery);
+  }, [debouncedQuery, onSearch, onClearSearch]);
+
+  const handleClear = useCallback(() => {
+    setQuery("");
+    onClearSearch?.();
+  }, [onClearSearch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (query.trim()) {
-      onSearch(query);
+    if (!query.trim()) {
+      handleClear();
+      return;
     }
+    onSearch(query);
   };
 
-  const handleClear = () => {
-    setQuery("");
-    onClearSearch?.();
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    if (!value.trim()) {
+      onClearSearch?.();
+    }
   };
 
   return (
@@ -30,7 +42,7 @@ export default function SearchBar({ onSearch, isSearching, onClearSearch }) {
       <input
         type="text"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
         placeholder="Search products..."
         className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
       />
@@ -46,7 +58,7 @@ export default function SearchBar({ onSearch, isSearching, onClearSearch }) {
         )}
         <button
           type="submit"
-          disabled={isSearching}
+          disabled={isSearching || !query.trim()}
           className="p-2 text-gray-500 hover:text-orange-500 disabled:opacity-50 transition-colors"
         >
           {isSearching ? (

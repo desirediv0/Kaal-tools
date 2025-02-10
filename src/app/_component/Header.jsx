@@ -17,9 +17,15 @@ export default function Header() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const clearSearch = useCallback(() => {
+    setSearchResults([]);
+    setIsSearching(false);
+    setIsMobileMenuOpen(false);
+  }, []);
+
   const handleSearch = useCallback(async (query) => {
     if (!query?.trim()) {
-      setSearchResults([]);
+      clearSearch();
       return;
     }
 
@@ -33,12 +39,9 @@ export default function Header() {
     } finally {
       setIsSearching(false);
     }
-  }, []);
+  }, [clearSearch])
 
-  const clearSearch = useCallback(() => {
-    setSearchResults([]);
-    setIsMobileMenuOpen(false);
-  }, []);
+
 
   const isActive = (path) => pathname === path;
 

@@ -295,8 +295,8 @@ export default function ProductPage() {
 
       {/* Description Section */}
       {product.description && (
-        <div className="mt-16 max-w-6xl mx-auto">
-          <div className="flex items-center gap-2 border-b mb-8">
+        <div className="mt-16 max-w-5xl mx-auto">
+          <div className="flex items-center gap-2 border-b mb-4">
             <CheckCircleIcon className="w-6 h-6 text-[var(--maincolor)]" />
             <h2 className="text-2xl font-semibold text-gray-900 pb-3">Description</h2>
           </div>

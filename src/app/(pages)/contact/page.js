@@ -16,7 +16,7 @@ const contactMethods = [
   },
   {
     icon: CiMail,
-    title: "Mail", 
+    title: "Mail",
     info: "sales@kaaltools.com",
   },
   {
@@ -48,7 +48,7 @@ function ContactForm() {
     try {
       const formData = new FormData(event.target);
       const formValues = Object.fromEntries(formData.entries());
-      
+
       await submitContactForm({
         ...formValues,
         subject
@@ -74,88 +74,86 @@ function ContactForm() {
 
   return (
     <div className="relative">
-   {alert.show && (
-        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
-          alert.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white animate-slide-in`}
-        style={{
-          animation: 'slideIn 0.5s ease-out forwards'
-        }}>
+      {alert.show && (
+        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${alert.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          } text-white animate-slide-in`}
+          style={{
+            animation: 'slideIn 0.5s ease-out forwards'
+          }}>
           {alert.message}
         </div>
       )}
-    <form
-      className="bg-white border rounded-lg border-gray-200 py-8 md:px-16 px-8"
-      onSubmit={handleSubmit}
-    >
-     
-
-      <div className="flex flex-col pb-4 gap-2">
-        <label htmlFor="name" className="text-xl">
-          Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          required
-          disabled={isLoading}
-          className="border rounded-lg border-gray-200 py-2 px-3"
-        />
-      </div>
-
-      <div className="flex flex-col pb-4 gap-2">
-        <label htmlFor="email" className="text-xl">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          disabled={isLoading}
-          className="border rounded-lg border-gray-200 py-2 px-3"
-        />
-      </div>
-
-      <div className="flex flex-col pb-4 gap-2">
-        <label htmlFor="phone" className="text-xl">
-          Phone
-        </label>
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          required
-          disabled={isLoading}
-          className="border rounded-lg border-gray-200 py-2 px-3"
-        />
-      </div>
-
-      <div className="flex flex-col pb-4 gap-2">
-        <label htmlFor="message" className="text-xl">
-          Message
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          required
-          disabled={isLoading}
-          className="border rounded-lg border-gray-200 p-3"
-          rows={6}
-        />
-      </div>
-
-      <button
-        type="submit"
-        disabled={isLoading}
-        className={`w-full bg-[var(--maincolor)] text-white text-xl py-2 px-4 rounded-lg transition-colors ${
-          isLoading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
-        }`}
+      <form
+        className="bg-white border rounded-lg border-gray-200 py-8 md:px-16 px-8"
+        onSubmit={handleSubmit}
       >
-        {isLoading ? "Submitting..." : "Submit"}
-      </button>
+
+
+        <div className="flex flex-col pb-4 gap-2">
+          <label htmlFor="name" className="text-xl">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            required
+            disabled={isLoading}
+            className="border rounded-lg border-gray-200 py-2 px-3"
+          />
+        </div>
+
+        <div className="flex flex-col pb-4 gap-2">
+          <label htmlFor="email" className="text-xl">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            disabled={isLoading}
+            className="border rounded-lg border-gray-200 py-2 px-3"
+          />
+        </div>
+
+        <div className="flex flex-col pb-4 gap-2">
+          <label htmlFor="phone" className="text-xl">
+            Phone
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            disabled={isLoading}
+            className="border rounded-lg border-gray-200 py-2 px-3"
+          />
+        </div>
+
+        <div className="flex flex-col pb-4 gap-2">
+          <label htmlFor="message" className="text-xl">
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            disabled={isLoading}
+            className="border rounded-lg border-gray-200 p-3"
+            rows={6}
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`w-full bg-[var(--maincolor)] text-white text-xl py-2 px-4 rounded-lg transition-colors ${isLoading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
+            }`}
+        >
+          {isLoading ? "Submitting..." : "Submit"}
+        </button>
       </form>
-      </div>
+    </div>
   );
 }
 
