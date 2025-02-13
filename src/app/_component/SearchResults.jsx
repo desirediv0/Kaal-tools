@@ -15,7 +15,7 @@ export const SearchResults = ({ results, onProductClick, isLoading, onClearSearc
 
   if (isLoading) {
     return (
-      <div className="absolute top-full left-1/2 -translate-x-1/2 w-full md:max-w-[50%] min-w-[320px] bg-white shadow-lg rounded-b-lg mt-1 p-4 text-center">
+      <div className="absolute top-full left-1/2 -translate-x-1/2 w-full md:max-w-[60%] min-w-[320px] bg-white shadow-lg rounded-b-lg mt-1 p-4 text-center">
         <Loader2 className="h-6 w-6 animate-spin mx-auto" />
       </div>
     );
@@ -24,8 +24,8 @@ export const SearchResults = ({ results, onProductClick, isLoading, onClearSearc
   if (!Array.isArray(results) || results.length === 0) return null;
 
   return (
-    <div className="absolute top-full left-1/2 -translate-x-1/2 w-full md:max-w-[50%] min-w-[320px] bg-white shadow-lg rounded-b-lg mt-1 max-h-[80vh] overflow-y-auto z-50">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+    <div className="absolute top-full left-1/2 -translate-x-1/2 w-full md:max-w-[60%] min-w-[320px] bg-white shadow-lg rounded-b-lg mt-1 max-h-[80vh] overflow-y-auto z-50">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 p-4">
         {results.map((product) => (
           <button
             key={product.id}

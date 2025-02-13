@@ -184,7 +184,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                   image={product.image}
                   href={`/product/${product.slug}`}
                   className={"bg-[#1155CC] p-2 text-center"}
-                  textClass={"text-white font-[500]"}
+                  textClass={"text-white font-[400]"}
                 />
               ))}
               {products.length === 0 && (
