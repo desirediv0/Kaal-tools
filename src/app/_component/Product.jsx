@@ -14,8 +14,8 @@ export default function Product({ activepage = "product" }) {
     currentPage: 1
   });
   const [Loading, setLoading] = useState(true);
-  
-  const FeaturedProduct = activepage === "homepage" 
+
+  const FeaturedProduct = activepage === "homepage"
     ? (Array.isArray(Data) ? Data.slice(0, 5) : Data.products?.slice(0, 5))
     : (Array.isArray(Data) ? Data : Data.products);
 
@@ -54,7 +54,7 @@ export default function Product({ activepage = "product" }) {
           <span className="ml-2 text-lg font-medium">Loading...</span>
         </div>
       ) : (
-        <div className="grid relative grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 p-2">
+        <div className="grid relative grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 p-4 md:p-2">
           {FeaturedProduct?.map((items, index) => (
             <ProductCard
               key={index}

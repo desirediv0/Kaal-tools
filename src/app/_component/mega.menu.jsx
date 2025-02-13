@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-export default function MegaMenu({ isMobile, categories }) {
+export default function MegaMenu({ isMobile, categories, handleMobileClick }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -26,6 +26,7 @@ export default function MegaMenu({ isMobile, categories }) {
 
   const handleClick = () => {
     setIsOpen(false);
+    handleMobileClick?.();
   };
 
   const getCategoryUrl = (category) => {
@@ -120,7 +121,7 @@ export default function MegaMenu({ isMobile, categories }) {
               <Link
                 href={getCategoryUrl(category)}
                 onClick={handleClick}
-                className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100"
+                className="block px-4 py-3 font-semibold  text-gray-900 hover:text-orange-600 hover:bg-gray-100 uppercase"
               >
                 {category.name}
               </Link>
@@ -131,7 +132,7 @@ export default function MegaMenu({ isMobile, categories }) {
                       <Link
                         href={getSubCategoryUrl(subCategory)}
                         onClick={handleClick}
-                        className="block py-3 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors"
+                        className="block py-3 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 uppercase text-sm transition-colors"
                       >
                         {subCategory.name}
                       </Link>

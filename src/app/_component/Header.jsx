@@ -228,7 +228,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="border-b">
-                <MegaMenu isMobile={true} categories={categories} />
+                <MegaMenu isMobile={true} categories={categories} handleMobileClick={handleMobileClick} />
               </li>
               <li className="border-b">
                 <Link
