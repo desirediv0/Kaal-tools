@@ -30,7 +30,7 @@ const ProductCard = ({ title, saleprice, image, href, tag, className, textClass 
           />
         </div>
         <div className={`p-4 flex flex-col flex-grow w-full ${className}`}>
-          <h2 className={`text-sm  font-semibold line-clamp-2 w-full uppercase text-center text-black ${textClass}`}>
+          <h2 className={`text-sm  line-clamp-2 w-full uppercase text-center text-black ${textClass}`}>
             {title}
           </h2>
           {/* <div className="mt-2">
