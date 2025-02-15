@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-export default function MegaMenu({ isMobile, categories, handleMobileClick }) {
+export default function MegaMenu({ isMobile, categories, handleMobileClick, onMenuToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -23,6 +23,10 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick }) {
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isMobile]);
+
+  useEffect(() => {
+    onMenuToggle?.(isOpen);
+  }, [isOpen, onMenuToggle]);
 
   const handleClick = () => {
     setIsOpen(false);
@@ -101,7 +105,11 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick }) {
   return (
     <div className="w-full">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          const newState = !isOpen;
+          setIsOpen(newState);
+          onMenuToggle?.(newState);
+        }}
         className="flex items-center justify-between w-full py-3 px-4 text-base font-bold"
       >
         <span>Products</span>

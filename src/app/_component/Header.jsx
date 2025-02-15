@@ -16,6 +16,7 @@ export default function Header() {
   const [isSearching, setIsSearching] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
 
   const clearSearch = useCallback(() => {
     setSearchResults([]);
@@ -41,6 +42,12 @@ export default function Header() {
     }
   }, [clearSearch])
 
+  const handleMegaMenuOpen = useCallback((isOpen) => {
+    setIsMegaMenuOpen(isOpen);
+    if (isOpen) {
+      clearSearch();
+    }
+  }, [clearSearch]);
 
 
   const isActive = (path) => pathname === path;
@@ -157,7 +164,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <MegaMenu isMobile={false} categories={categories} />
+                <MegaMenu isMobile={false} categories={categories} onMenuToggle={handleMegaMenuOpen} />
               </li>
               <li>
                 <Link
