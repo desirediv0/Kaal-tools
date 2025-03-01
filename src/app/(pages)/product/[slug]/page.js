@@ -132,8 +132,14 @@ export default function ProductPage() {
     [emblaApi],
   )
 
-  const noSelectClass = "select-none pointer-events-none"
+  // Enhanced class to prevent image interaction
+  const noSelectClass = "select-none pointer-events-none user-select-none"
 
+  // Prevent image download through context menu
+  const preventImageDownload = (e) => {
+    e.preventDefault()
+    return false
+  }
 
   if (isLoading) {
     return (
@@ -206,10 +212,7 @@ export default function ProductPage() {
         </div>
       </div>
 
-      <div
-
-
-        className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image Section */}
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-lg bg-white max-h-[500px]">
@@ -221,8 +224,11 @@ export default function ProductPage() {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
               className={`object-contain p-4 ${noSelectClass}`}
               onError={() => setMainImage(FALLBACK_IMAGE)}
-              onContextMenu={(e) => e.preventDefault()}
+              onContextMenu={preventImageDownload}
               draggable="false"
+              onDragStart={(e) => e.preventDefault()}
+              loading="eager"
+              style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
             />
           </div>
 
@@ -246,6 +252,10 @@ export default function ProductPage() {
                             onError={(e) => {
                               e.currentTarget.src = FALLBACK_IMAGE
                             }}
+                            onContextMenu={preventImageDownload}
+                            draggable="false"
+                            onDragStart={(e) => e.preventDefault()}
+                            style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
                           />
                         </CardContent>
                       </Card>
