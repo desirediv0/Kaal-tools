@@ -9,7 +9,7 @@ const categories = [
   { name: "rotary tables & accessories", image: "/cate/ROTARY-TABLES.jpg", href: "/product?category=rotary-tables-&-accessories" },
   { name: "indexable tools", image: "/cate/INDEXABLE.jpeg", href: "/product?category=indexable-tools" },
   { name: "vises & milling tables", image: "/cate/VISES.jpg", href: "/product?category=vises-&-milling-tables" },
-  { name: "vee blocks & angle plates", image: "/cate/VEE-BLOCKS.jpg", href: "/product?category=vee-blocks-&-angle-plates" },
+  { name: "vee blocks & angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: "/product?category=vee-blocks-&-angle-plates" },
   { name: "boring heads & accessories", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: "/product?category=boring-heads-&-accessories" },
 ];
 export default function TopCategories() {
