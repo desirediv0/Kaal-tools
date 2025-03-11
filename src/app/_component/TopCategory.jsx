@@ -32,7 +32,7 @@ export default function TopCategories() {
                   height={500}
                   className="transition-opacity duration-300 hover:opacity-90 object-cover"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 to-transparent p-3 sm:p-4">
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
                   <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
                     metalworking lathe accessories
                   </h2>
@@ -53,7 +53,7 @@ export default function TopCategories() {
                         objectFit="cover"
                         className="transition-opacity duration-300 group-hover:opacity-80 "
                       />
-                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 to-transparent p-1.5 sm:p-2">
+                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-1.5 sm:p-2">
                         <h3 className="text-white text-xs sm:text-sm font-semibold uppercase text-center">
                           {category.name}
                         </h3>
@@ -74,7 +74,7 @@ export default function TopCategories() {
                   height={500}
                   className="transition-opacity duration-300 hover:opacity-90 object-cover"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 to-transparent p-3 sm:p-4">
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
                   <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
                     woodworking tools
                   </h2>
