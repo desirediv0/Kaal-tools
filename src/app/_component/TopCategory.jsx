@@ -3,15 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 const categories = [
-  { name: "measuring & marking tools", image: "/cate/MEASURING.jpg", href: "/product?category=measuring-&-marking-tools" },
+  { name: "measuring & marking", image: "/cate/MEASURING.jpg", href: "/product?category=measuring-&-marking-tools" },
   { name: "hand tools", image: "/cate/HAND-TOOLS.jpg", href: "/product?category=hand-tools" },
   { name: "cutting tools", image: "/cate/CUTTING-TOOLS.jpeg", href: "/product?category=cutting-tools" },
-  { name: "rotary tables & accessories", image: "/cate/ROTARY-TABLES.jpg", href: "/product?category=rotary-tables-&-accessories" },
+  { name: "rotary tables", image: "/cate/ROTARY-TABLES.jpg", href: "/product?category=rotary-tables-&-accessories" },
   { name: "indexable tools", image: "/cate/INDEXABLE.jpeg", href: "/product?category=indexable-tools" },
   { name: "vises & milling tables", image: "/cate/VISES.jpg", href: "/product?category=vises-&-milling-tables" },
-  { name: "vee blocks & angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: "/product?category=vee-blocks-&-angle-plates" },
-  { name: "boring heads & accessories", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: "/product?category=boring-heads-&-accessories" },
+  { name: "angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: "/product?category=vee-blocks-&-angle-plates" },
+  { name: "boring heads", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: "/product?category=boring-heads-&-accessories" },
 ];
+
 export default function TopCategories() {
   return (
     <section className="py-6 sm:py-8 md:py-12 bg-white">
@@ -20,43 +21,47 @@ export default function TopCategories() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black uppercase text-center">Product Categories</h1>
           <div className="bg-[var(--maincolor)] w-32 sm:w-40 md:w-44 h-1 rounded-full mt-2"></div>
         </span>
+
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col lg:flex-row gap-4 ">
+          <div className="flex flex-col lg:flex-row gap-4">
             {/* Left Banner */}
-            <div className="w-full lg:w-1/5">
-              <div className="relative sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
-                <div className="w-full h-full relative">
+            <div className="w-full lg:w-1/5 h-auto">
+              <Link
+                href="/product?category=metalworking-lathe-accessories"
+                className="block h-full">
+                <div className="relative w-full h-[300px] lg:h-full rounded-lg shadow-md overflow-hidden">
                   <Image
                     src="/cate/METALWORKING-LATHE-ACCESSORIES.jpeg"
-                    alt="Category Banner"
+                    alt="Metalworking Lathe Accessories"
                     fill
-                    sizes="(max-width: 768px) 100vw, 20vw"
+                    sizes="(max-width: 1024px) 100vw, 20vw"
                     className="object-contain"
+                    priority
                   />
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-3">
+                    <h2 className="text-white text-base sm:text-lg font-bold uppercase text-center w-full">
+                      metalworking lathe accessories
+                    </h2>
+                  </div>
                 </div>
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-3 sm:p-4">
-                  <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
-                    metalworking lathe accessories
-                  </h2>
-                </div>
-              </div>
+              </Link>
             </div>
 
             {/* Center Cards */}
             <div className="w-full lg:w-3/5">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 ">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                 {categories.map((category, index) => (
-                  <Link href={category.href} key={index} className="group">
-                    <div className="relative aspect-square overflow-hidden rounded-lg shadow-md">
+                  <Link href={category.href} key={index} className="block">
+                    <div className="relative aspect-square rounded-lg shadow-md overflow-hidden">
                       <Image
                         src={category.image}
                         alt={category.name}
                         fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 15vw"
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-1.5 sm:p-2">
-                        <h3 className="text-white text-xs sm:text-sm font-semibold uppercase text-center">
+                      <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-2">
+                        <h3 className="text-white text-xs sm:text-sm font-semibold uppercase text-center w-full">
                           {category.name}
                         </h3>
                       </div>
@@ -67,23 +72,26 @@ export default function TopCategories() {
             </div>
 
             {/* Right Banner */}
-            <div className="w-full lg:w-1/5">
-              <div className="relative sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
-                <div className="w-full h-full relative">
+            <div className="w-full lg:w-1/5 h-auto">
+              <Link
+                href="/product?category=woodworking-tools"
+                className="block h-full">
+                <div className="relative w-full h-[300px] lg:h-full rounded-lg shadow-md overflow-hidden">
                   <Image
                     src="/cate/WOODTURNING-LATHE-ACCESSORIES.jpg"
-                    alt="Category Banner"
+                    alt="Woodworking Tools"
                     fill
-                    sizes="(max-width: 768px) 100vw, 20vw"
+                    sizes="(max-width: 1024px) 100vw, 20vw"
                     className="object-contain"
+                    priority
                   />
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-3">
+                    <h2 className="text-white text-base sm:text-lg font-bold uppercase text-center w-full">
+                      woodworking tools
+                    </h2>
+                  </div>
                 </div>
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-3 sm:p-4">
-                  <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
-                    woodworking tools
-                  </h2>
-                </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

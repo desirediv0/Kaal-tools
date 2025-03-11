@@ -19,11 +19,11 @@ export default function NewProducts() {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { 
+    {
       loop: true,
       align: "start",
       slidesToScroll: 1
-    }, 
+    },
     [
       Autoplay({
         delay: 3000,
@@ -48,9 +48,9 @@ export default function NewProducts() {
     }
   }, [emblaApi]);
 
-  const featuredProducts = Array.isArray(data) 
-    ? data.slice(0, 10) 
-    : data.products?.slice(0, 10);
+  const featuredProducts = Array.isArray(data)
+    ? data.slice(0, 12)
+    : data.products?.slice(0, 12);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -87,20 +87,20 @@ export default function NewProducts() {
           <div className="relative">
             {/* Navigation Buttons */}
             <button
-            className="absolute left-0 md:-left-0 top-1/2 -translate-y-1/2 z-10 
+              className="absolute left-0 md:-left-0 top-1/2 -translate-y-1/2 z-10 
                      bg-white/80 hover:bg-white p-2 rounded-full shadow-lg 
                      transition-all duration-300 hover:scale-110"
-            onClick={scrollPrev}
-          >
-            <ChevronLeft className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
-          </button>
+              onClick={scrollPrev}
+            >
+              <ChevronLeft className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
+            </button>
 
             {/* Carousel */}
             <div ref={emblaRef} className="overflow-hidden">
               <div className="flex">
                 {featuredProducts?.map((item, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="pl-2 md:pl-4 min-w-0 
                       flex-[0_0_100%]        /* Mobile: 1 item */
                       sm:flex-[0_0_50%]      /* Small: 2 items */
@@ -121,15 +121,15 @@ export default function NewProducts() {
               </div>
             </div>
 
-       
+
             <button
-            className="absolute right-0 md:-right-0 top-1/2 -translate-y-1/2 z-10 
+              className="absolute right-0 md:-right-0 top-1/2 -translate-y-1/2 z-10 
                      bg-white/80 hover:bg-white p-2 rounded-full shadow-lg 
                      transition-all duration-300 hover:scale-110"
-            onClick={scrollNext}
-          >
-            <ChevronRight className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
-          </button>
+              onClick={scrollNext}
+            >
+              <ChevronRight className="h-4 w-4 md:h-6 md:w-6 text-gray-800" />
+            </button>
 
             {/* Navigation Dots */}
             <div className="flex justify-center gap-2 mt-6 overflow-x-hidden px-2">
@@ -137,11 +137,10 @@ export default function NewProducts() {
                 <button
                   key={index}
                   onClick={() => emblaApi?.scrollTo(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    selectedIndex === index 
-                      ? 'bg-orange-500 scale-110' 
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${selectedIndex === index
+                      ? 'bg-orange-500 scale-110'
                       : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}

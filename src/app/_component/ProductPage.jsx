@@ -33,7 +33,8 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
       newParams.set('category', params.category.toLowerCase());
     }
     if (params.subcategory) {
-      newParams.set('subcategory', params.subcategory.toLowerCase());
+      // Properly encode subcategory to handle special characters like &
+      newParams.set('subcategory', encodeURIComponent(params.subcategory.toLowerCase()));
     }
 
     router.push(`/product?${newParams.toString()}`);
@@ -45,7 +46,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     updateUrl({ category });
     setIsSidebarOpen(false);
     scrollToTop();
-    router.refresh()
+    router.refresh();
   };
 
   const handleSubCategory = async (subcategory) => {
@@ -54,7 +55,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     updateUrl({ subcategory });
     setIsSidebarOpen(false);
     scrollToTop();
-    router.refresh()
+    router.refresh();
   };
 
   useEffect(() => {
@@ -62,11 +63,13 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
       setLoading(true);
       scrollToTop();
       try {
+        let subcategory = searchParams.get('subcategory');
+
         const [categoryData, productData] = await Promise.all([
           getAllCategoriesAndSubCategories(),
           fetchCategoryProducts({
             categoryName: searchParams.get('category'),
-            subcategoryName: searchParams.get('subcategory')
+            subcategoryName: subcategory
           })
         ]);
 
@@ -76,7 +79,6 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
           );
           setCategories(filteredCategories);
         }
-
 
         if (!productData.success && searchParams.get('subcategory')) {
           setProducts([]);
