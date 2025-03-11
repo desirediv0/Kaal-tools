@@ -24,15 +24,17 @@ export default function TopCategories() {
           <div className="flex flex-col lg:flex-row gap-4 ">
             {/* Left Banner */}
             <div className="w-full lg:w-1/5">
-              <div className="relative  sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
-                <Image
-                  src="/cate/METALWORKING-LATHE-ACCESSORIES.jpeg"
-                  alt="Category Banner"
-                  width={500}
-                  height={500}
-                  className="transition-opacity duration-300 hover:opacity-90 object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
+              <div className="relative sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
+                <div className="w-full h-full relative">
+                  <Image
+                    src="/cate/METALWORKING-LATHE-ACCESSORIES.jpeg"
+                    alt="Category Banner"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 20vw"
+                    className="object-contain"
+                  />
+                </div>
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-3 sm:p-4">
                   <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
                     metalworking lathe accessories
                   </h2>
@@ -49,11 +51,11 @@ export default function TopCategories() {
                       <Image
                         src={category.image}
                         alt={category.name}
-                        layout="fill"
-                        objectFit="cover"
-                        className="transition-opacity duration-300 group-hover:opacity-80 "
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover"
                       />
-                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-1.5 sm:p-2">
+                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-1.5 sm:p-2">
                         <h3 className="text-white text-xs sm:text-sm font-semibold uppercase text-center">
                           {category.name}
                         </h3>
@@ -66,15 +68,17 @@ export default function TopCategories() {
 
             {/* Right Banner */}
             <div className="w-full lg:w-1/5">
-              <div className="relative  sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
-                <Image
-                  src="/cate/WOODTURNING-LATHE-ACCESSORIES.jpg"
-                  alt="Category Banner"
-                  width={500}
-                  height={500}
-                  className="transition-opacity duration-300 hover:opacity-90 object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
+              <div className="relative sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
+                <div className="w-full h-full relative">
+                  <Image
+                    src="/cate/WOODTURNING-LATHE-ACCESSORIES.jpg"
+                    alt="Category Banner"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 20vw"
+                    className="object-contain"
+                  />
+                </div>
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-3 sm:p-4">
                   <h2 className="text-white text-base sm:text-lg font-bold mb-1 sm:mb-2 uppercase text-center">
                     woodworking tools
                   </h2>
