@@ -61,39 +61,41 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
         {isOpen && (
           <div
             className="fixed top-[145px] left-0 right-0 mx-auto w-full max-w-7xl bg-white shadow-xl rounded-lg 
-              p-4 md:p-6 z-50 overflow-hidden"
+              p-4 md:p-6 z-50"
             style={{
-              maxHeight: 'calc(100vh - 80px)',
+              maxHeight: 'calc(100vh - 160px)',
               margin: '0 auto'
             }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 overflow-y-auto">
-              {filteredCategories.map((category) => (
-                <div key={category.id} className="min-w-0">
-                  <Link
-                    href={getCategoryUrl(category)}
-                    onClick={handleClick}
-                    className="font-semibold text-sm text-black hover:text-orange-600 block uppercase truncate"
-                  >
-                    {category.name}
-                  </Link>
-                  {category.subCategories?.length > 0 && (
-                    <ul className="space-y-2 mt-2">
-                      {category.subCategories.map((subCategory) => (
-                        <li key={subCategory.id}>
-                          <Link
-                            href={getSubCategoryUrl(subCategory)}
-                            onClick={handleClick}
-                            className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase truncate"
-                          >
-                            {subCategory.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
+            <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto max-h-[calc(100vh-180px)]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {filteredCategories.map((category) => (
+                  <div key={category.id} className="min-w-0">
+                    <Link
+                      href={getCategoryUrl(category)}
+                      onClick={handleClick}
+                      className="font-semibold text-sm text-black hover:text-orange-600 block uppercase truncate"
+                    >
+                      {category.name}
+                    </Link>
+                    {category.subCategories?.length > 0 && (
+                      <ul className="space-y-2 mt-2">
+                        {category.subCategories.map((subCategory) => (
+                          <li key={subCategory.id}>
+                            <Link
+                              href={getSubCategoryUrl(subCategory)}
+                              onClick={handleClick}
+                              className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase truncate"
+                            >
+                              {subCategory.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -117,10 +119,11 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
       </button>
 
       <div
-        className={`overflow-y-auto bg-gray-50`}
+        className={`scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-50 bg-gray-50`}
         style={{
           maxHeight: isOpen ? 'calc(100vh - 120px)' : '0',
-          transition: 'max-height 0.3s ease-in-out'
+          transition: 'max-height 0.3s ease-in-out',
+          overflowY: isOpen ? 'auto' : 'hidden'
         }}
       >
         <div className="py-2">
@@ -129,12 +132,12 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
               <Link
                 href={getCategoryUrl(category)}
                 onClick={handleClick}
-                className="block px-4 py-3 font-semibold  text-gray-900 hover:text-orange-600 hover:bg-gray-100 uppercase"
+                className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100 uppercase"
               >
                 {category.name}
               </Link>
               {category.subCategories?.length > 0 && (
-                <ul className="bg-white border-t border-gray-100">
+                <ul className="bg-white border-t border-gray-100 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
                   {category.subCategories.map((subCategory) => (
                     <li key={subCategory.id}>
                       <Link
