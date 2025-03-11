@@ -20,8 +20,8 @@ export default function TopCategories() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black uppercase text-center">Product Categories</h1>
           <div className="bg-[var(--maincolor)] w-32 sm:w-40 md:w-44 h-1 rounded-full mt-2"></div>
         </span>
-        <div className="flex flex-col gap-4 sm:gap-6 md:gap-8">
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-5 lg:gap-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:flex-row gap-4 ">
             {/* Left Banner */}
             <div className="w-full lg:w-1/5">
               <div className="relative  sm:aspect-[3/4] lg:aspect-[4/6] overflow-hidden rounded-lg shadow-md">
@@ -42,7 +42,7 @@ export default function TopCategories() {
 
             {/* Center Cards */}
             <div className="w-full lg:w-3/5">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 ">
                 {categories.map((category, index) => (
                   <Link href={category.href} key={index} className="group">
                     <div className="relative aspect-square overflow-hidden rounded-lg shadow-md">
