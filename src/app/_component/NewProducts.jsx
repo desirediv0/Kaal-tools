@@ -114,7 +114,8 @@ export default function NewProducts() {
                       saleprice={item.saleprice}
                       image={item.image}
                       tag={"NEW"}
-                      href={`/product?category=all`}
+                      href={item.href}
+                      className={"h-20"}
                     />
                   </div>
                 ))}
@@ -138,8 +139,8 @@ export default function NewProducts() {
                   key={index}
                   onClick={() => emblaApi?.scrollTo(index)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${selectedIndex === index
-                      ? 'bg-orange-500 scale-110'
-                      : 'bg-gray-300 hover:bg-gray-400'
+                    ? 'bg-orange-500 scale-110'
+                    : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />

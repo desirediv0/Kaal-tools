@@ -10,7 +10,7 @@ const ProductCard = ({ title, saleprice, image, href, tag, className, textClass 
     return image.startsWith('/') ? image : `/${image}`;
   };
 
-  const safeHref = href.includes('&') ? href.replace(/&/g, '%26') : href;
+
 
   return (
     <Link href={href} className="block hover:scale-105 transform  transition-transform duration-300">
