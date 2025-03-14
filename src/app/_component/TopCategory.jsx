@@ -2,15 +2,19 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const encodeCategory = (name) => {
+  return encodeURIComponent(name.toLowerCase());
+};
+
 const categories = [
-  { name: "measuring & marking", image: "/cate/MEASURING.jpg", href: "/product?category=measuring-&-marking-tools" },
-  { name: "hand tools", image: "/cate/HAND-TOOLS.jpg", href: "/product?category=hand-tools" },
-  { name: "cutting tools", image: "/cate/CUTTING-TOOLS.jpeg", href: "/product?category=cutting-tools" },
-  { name: "rotary tables", image: "/cate/ROTARY-TABLES.jpg", href: "/product?category=rotary-tables-&-accessories" },
-  { name: "indexable tools", image: "/cate/INDEXABLE.jpeg", href: "/product?category=indexable-tools" },
-  { name: "vises & milling tables", image: "/cate/VISES.jpg", href: "/product?category=vises-&-milling-tables" },
-  { name: "angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: "/product?category=vee-blocks-&-angle-plates" },
-  { name: "boring heads", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: "/product?category=boring-heads-&-accessories" },
+  { name: "measuring & marking tools", image: "/cate/MEASURING.jpg", href: `/product?category=${encodeCategory("measuring & marking tools")}` },
+  { name: "hand tools", image: "/cate/HAND-TOOLS.jpg", href: `/product?category=${encodeCategory("hand tools")}` },
+  { name: "cutting tools", image: "/cate/CUTTING-TOOLS.jpeg", href: `/product?category=${encodeCategory("cutting tools")}` },
+  { name: "rotary tables & accessories", image: "/cate/ROTARY-TABLES.jpg", href: `/product?category=${encodeCategory("rotary tables & accessories")}` },
+  { name: "indexable tools", image: "/cate/INDEXABLE.jpeg", href: `/product?category=${encodeCategory("indexable tools")}` },
+  { name: "vises & milling tables", image: "/cate/VISES.jpg", href: `/product?category=${encodeCategory("vises & milling tables")}` },
+  { name: "vee blocks & angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: `/product?category=${encodeCategory("vee blocks & angle plates")}` },
+  { name: "boring heads & accessories", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: `/product?category=${encodeCategory("boring heads & accessories")}` },
 ];
 
 export default function TopCategories() {
@@ -27,7 +31,7 @@ export default function TopCategories() {
             {/* Left Banner */}
             <div className="w-full lg:w-1/5 h-auto">
               <Link
-                href="/product?category=metalworking-lathe-accessories"
+                href={`/product?category=${encodeCategory("metalworking lathe accessories")}`}
                 className="block h-full">
                 <div className="relative w-full h-[300px] lg:h-full rounded-lg shadow-md overflow-hidden">
                   <Image
@@ -74,7 +78,7 @@ export default function TopCategories() {
             {/* Right Banner */}
             <div className="w-full lg:w-1/5 h-auto">
               <Link
-                href="/product?category=woodworking-tools"
+                href={`/product?category=${encodeCategory("woodworking tools")}`}
                 className="block h-full">
                 <div className="relative w-full h-[300px] lg:h-full rounded-lg shadow-md overflow-hidden">
                   <Image

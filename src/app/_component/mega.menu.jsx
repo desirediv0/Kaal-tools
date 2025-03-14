@@ -34,11 +34,19 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
   };
 
   const getCategoryUrl = (category) => {
-    return `/product?category=${category.name.toLowerCase().replace(/\s+/g, "-")}`;
+    // Format the category name for URL
+    const formattedName = category.name.toLowerCase();
+
+    // Use encodeURIComponent for proper encoding of special characters
+    return `/product?category=${encodeURIComponent(formattedName)}`;
   };
 
   const getSubCategoryUrl = (subCategory) => {
-    return `/product?subcategory=${subCategory.name.toLowerCase().replace(/\s+/g, "-")}`;
+    // Format the subcategory name for URL
+    const formattedName = subCategory.name.toLowerCase();
+
+    // Use encodeURIComponent for proper encoding of special characters
+    return `/product?subcategory=${encodeURIComponent(formattedName)}`;
   };
 
   // Desktop menu
