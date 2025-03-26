@@ -141,6 +141,21 @@ export default function ProductPage() {
     return false
   }
 
+  // Disable right-click on the entire page
+  useEffect(() => {
+    const disableRightClick = (e) => {
+      e.preventDefault()
+      return false
+    }
+
+    document.addEventListener('contextmenu', disableRightClick)
+
+    // Cleanup function to remove event listener
+    return () => {
+      document.removeEventListener('contextmenu', disableRightClick)
+    }
+  }, [])
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
