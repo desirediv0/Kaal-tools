@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export function Banner({ items , h}) {
+export function Banner({ items, h }) {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
   );
@@ -30,9 +30,9 @@ export function Banner({ items , h}) {
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={index}>
-              <div  className="relative w-full md:aspect-[21/8] aspect-square"
+              <div className="relative w-full md:aspect-[21/8] aspect-square"
                 style={{ height: h }}
-                  >
+              >
                 <Image
                   src={item.image}
                   alt={`Banner image ${index + 1}`}
@@ -43,7 +43,7 @@ export function Banner({ items , h}) {
                   }}
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white p-4">
+                <div className="absolute inset-0 flex flex-col items-center justify-center  text-white p-4">
                   <section className="md:w-2/3">
                     <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
                       {item.heading}

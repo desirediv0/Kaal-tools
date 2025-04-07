@@ -12,10 +12,10 @@ import TopCategories from "./_component/TopCategory";
 
 const items = [
   {
-    image: "/ks1.webp",
-    heading: "Power Up Your Projects with Tools You Can Count On.",
-    shortdesc:
-      "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+    image: "/b1.png",
+    // heading: "Power Up Your Projects with Tools You Can Count On.",
+    // shortdesc:
+    //   "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
   },
   {
     image: "/ks2.webp",
@@ -42,11 +42,11 @@ const items2 = [
 export default function page() {
   return (
     <>
-      <Banner items={items} h={"65vh"}/>
+      <Banner items={items} h={"65vh"} />
       <NewProducts />
       <TopCategories />
       <div className="my-10 md:my-20">
-        <Banner items={items2}  h={"55vh"}/>
+        <Banner items={items2} h={"55vh"} />
       </div>
       {/* <TopBrands /> */}
       <Product activepage="homepage" />
