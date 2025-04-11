@@ -20,13 +20,26 @@ export function Banner({ items, h }) {
 
   const showControls = items.length > 1;
 
+  // Create handlers to ensure proper autoplay control
+  const handleMouseEnter = React.useCallback(() => {
+    if (showControls && plugin.current) {
+      plugin.current.stop();
+    }
+  }, [showControls]);
+
+  const handleMouseLeave = React.useCallback(() => {
+    if (showControls && plugin.current) {
+      plugin.current.play();
+    }
+  }, [showControls]);
+
   return (
-    <div className="w-full overflow-hidden relative ">
+    <div className="w-full overflow-hidden relative">
       <Carousel
         plugins={showControls ? [plugin.current] : []}
         className="w-full"
-        onMouseEnter={showControls ? plugin.current.stop : undefined}
-        onMouseLeave={showControls ? plugin.current.reset : undefined}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <CarouselContent>
           {items.map((item, index) => (
