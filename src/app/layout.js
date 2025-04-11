@@ -35,9 +35,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${kanit.variable} bg-white text-[#060809] antialiased`}
       >
-        <Header/>
-        <ReduxProvider>{children}</ReduxProvider>        
-        <Footer/>
+        <Header />
+        <ReduxProvider>{children}</ReduxProvider>
+        <Footer />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   Carousel,
@@ -30,30 +31,61 @@ export function Banner({ items, h }) {
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={index}>
-              <div className="relative w-full md:aspect-[21/8] aspect-square"
-                style={{ height: h }}
-              >
-                <Image
-                  src={item.image}
-                  alt={`Banner image ${index + 1}`}
-                  fill
-                  sizes="100vw"
-                  style={{
-                    objectFit: "cover",
-                  }}
-                  priority={index === 0}
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center  text-white p-4">
-                  <section className="md:w-2/3">
-                    <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
-                      {item.heading}
-                    </h2>
-                    <p className=" text-lg mb-4 text-center select-none">
-                      {item.shortdesc}
-                    </p>
-                  </section>
+              {item.link ? (
+                <Link href={item.link} className="block w-full h-full">
+                  <div
+                    className="relative w-full md:aspect-[21/8] aspect-square cursor-pointer"
+                    style={{ height: h }}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={`Banner image ${index + 1}`}
+                      fill
+                      sizes="100vw"
+                      style={{
+                        objectFit: "cover",
+                      }}
+                      priority={index === 0}
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                      <section className="md:w-2/3">
+                        <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
+                          {item.heading}
+                        </h2>
+                        <p className="text-lg mb-4 text-center select-none">
+                          {item.shortdesc}
+                        </p>
+                      </section>
+                    </div>
+                  </div>
+                </Link>
+              ) : (
+                <div
+                  className="relative w-full md:aspect-[21/8] aspect-square"
+                  style={{ height: h }}
+                >
+                  <Image
+                    src={item.image}
+                    alt={`Banner image ${index + 1}`}
+                    fill
+                    sizes="100vw"
+                    style={{
+                      objectFit: "cover",
+                    }}
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                    <section className="md:w-2/3">
+                      <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
+                        {item.heading}
+                      </h2>
+                      <p className="text-lg mb-4 text-center select-none">
+                        {item.shortdesc}
+                      </p>
+                    </section>
+                  </div>
                 </div>
-              </div>
+              )}
             </CarouselItem>
           ))}
         </CarouselContent>

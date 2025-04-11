@@ -1,33 +1,31 @@
 import React from "react";
 import { Banner } from "./_component/Banner";
 import Product from "./_component/Product";
-// import Aboutus from "./_component/Aboutus";
 import Whychoose from "./_component/Whychoose";
-// import Cta from "./_component/Cta";
 import Testimonials from "./_component/Testinomials";
 import NewProducts from "./_component/NewProducts";
-// import Counter from "./_component/Counter";
-// import TopBrands from "./_component/TopBrands";
 import TopCategories from "./_component/TopCategory";
 
 const items = [
   {
-    image: "/b1.png",
-    // heading: "Power Up Your Projects with Tools You Can Count On.",
-    // shortdesc:
-    //   "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+    image: "/s-1.png",
+    link: "/product?category=metalworking%20lathe%20accessories",
   },
   {
-    image: "/ks2.webp",
-    heading: "Power Up Your Projects with Tools You Can Count On.",
-    shortdesc:
-      "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+    image: "/s-2.png",
+    link: "/product?category=woodworking+tools"
   },
   {
-    image: "/ks1.webp",
-    heading: "Power Up Your Projects with Tools You Can Count On.",
-    shortdesc:
-      "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+    image: "/s-3.png",
+    link: "/product?category=measuring%20%26%20marking%20tools"
+  },
+  {
+    image: "/s-4.png",
+    link: "/product?category=thread%20repairing%20kits%20%26%20accessories"
+  },
+  {
+    image: "/s-5.png",
+    link: "/product?category=vises%20%26%20milling%20tables"
   },
 ];
 const items2 = [
