@@ -35,6 +35,7 @@ export function Banner({ items, h }) {
 
   return (
     <div className="w-full overflow-hidden relative">
+      
       <Carousel
         plugins={showControls ? [plugin.current] : []}
         className="w-full"
