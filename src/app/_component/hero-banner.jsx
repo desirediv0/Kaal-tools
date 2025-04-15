@@ -33,7 +33,7 @@ export function HeroBanner({ items }) {
   }, [showControls]);
 
   return (
-    <div className="w-full relative min-h-[400px] md:min-h-[650px] lg:min-h-[500px]">
+    <div className="w-full relative min-h-[450px] md:min-h-[650px] lg:min-h-[500px]">
       <div
         className="absolute inset-0 w-full h-full z-0"
         style={{
@@ -55,22 +55,22 @@ export function HeroBanner({ items }) {
               <CarouselItem key={index} className="h-full">
                 <div className="flex flex-col lg:grid lg:grid-cols-12 h-full items-center pt-6 px-4 md:px-8 lg:px-16 pb-8 md:pb-12 lg:pb-0">
                   {/* Content Section - First on mobile */}
-                  <div className="w-full lg:col-span-5 flex flex-col md:space-y-2 mt-10 text-white order-1 mb-2 md:mb-6 lg:mb-0 text-center md:text-start">
-                    <h1 className="text-2xl md:text-4xl lg:text-6xl font-semibold uppercase break-words">
+                  <div className="w-full lg:col-span-4 flex flex-col  sm:mt-10 xl:mt-[-100px]  text-white order-1 mb-2  lg:mb-0 text-center lg:text-start">
+                    <h1 className="text-4xl md:text-6xl lg:text-6xl  font-semibold text-shadow uppercase  break-words">
                       {item.head1}
                     </h1>
                     <h2
-                      className={`text-2xl md:text-4xl lg:text-6xl ${item.bg} bg-clip-text text-transparent font-bold uppercase break-words`}
+                      className={`text-4xl md:text-6xl lg:text-6xl  ${item.bg} stroke-text  bg-clip-text text-transparent  font-bold uppercase break-words text-nowrap`}
                     >
                       {item.head2}
                     </h2>
-                    <h3 className="text-2xl md:text-4xl lg:text-6xl uppercase font-semibold break-words">
+                    <h3 className="text-4xl md:text-6xl lg:text-6xl uppercase font-semibold break-words">
                       {item.head3}
                     </h3>
                     {item.btntext && (
                       <Link href={item.link} className="mt-4">
                         <Button
-                          className={`${item.bg} hover:${item.bg} text-white text-base md:text-xl font-semibold font-sans rounded-none py-2 lg:py-4 uppercase max-w-md md:w-auto`}
+                          className={`${item.bg} hover:${item.bg} shadow-[4px_4px_6px_rgba(255,255,255,0.8)]  text-white text-base md:text-xl font-semibold font-sans rounded-none py-2 lg:py-5  capitalize max-w-md md:w-auto lg:mt-8`}
                         >
                           {item.btntext}
                         </Button>
@@ -79,12 +79,12 @@ export function HeroBanner({ items }) {
                   </div>
 
                   {/* Image Section - Second on mobile */}
-                  <div className="w-full lg:col-span-7  relative h-[200px] md:h-[400px] lg:h-[400px] order-2 mt-2">
+                  <div className="w-full lg:col-span-8  relative h-[200px] md:h-[400px] lg:h-[400px]  order-2 mt-8 lg:mt-2">
                     <Image
                       src={item.image}
                       alt={`Slide ${index + 1}`}
                       fill
-                      className="object-contain"
+                      className="object-contain object-center "
                       priority={index === 0}
                     />
                   </div>

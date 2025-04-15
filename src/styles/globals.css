@@ -12,4 +12,13 @@ img {
   -moz-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
+
+  
 }
+
+/* @layer utilities {
+  .stroke-text {
+    -webkit-text-stroke: 5px rgb(255, 47, 47);
+  }
+
+} */

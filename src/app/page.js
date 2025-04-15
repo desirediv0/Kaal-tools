@@ -52,7 +52,7 @@ const items = [
     image: "/s-5.png",
     link: "/product?category=vises%20%26%20milling%20tables",
     btntext: "Explore Our Range",
-    head1: "vises",
+    head1: "vises &",
     head2: "milling",
     head3: "tables",
     bg: "bg-[#65999c]",

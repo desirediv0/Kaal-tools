@@ -184,3 +184,14 @@ img {
   user-select: none;
   -webkit-user-drag: none;
 }
+
+/* .stroke-text {
+  text-shadow: 1px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 0px #fff,
+               1px 0px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+} */
+
+ @layer utilities {
+  .stroke-text {
+    -webkit-text-stroke: 1px rgb(240, 240, 240);
+  }
+}
