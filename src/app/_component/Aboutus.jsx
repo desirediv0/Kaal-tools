@@ -7,15 +7,15 @@ import Wrapper from "./Wrapper";
 
 export default function AboutUs({ activePage = "about" }) {
   return (
-    <section className="bg-gray-100 py-12 md:py-20">
+    <section className="bg-gray-100 py-12 md:py-20 px-4 ">
       <Wrapper>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12  -mt-8 lg:-mt-16 ">
           {/* Left Column - Text Content */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center ">
             <h1 className="text-4xl font-bold text-gray-900 mb-6">About Us</h1>
             <div className="w-24 h-1 bg-orange-600 mb-8"></div>
 
-            <div className="border-l-4 border-orange-600 pl-6 mb-8 bg-white p-4 shadow-sm">
+            <div className="border-l-4  border-orange-600 pl-6 mb-8 bg-white p-4 shadow-sm ">
               <p className="text-gray-700 italic font-medium leading-relaxed">
                 KAAL TOOLS (formerly ATECH TOOLS) is a third-generation family
                 run business engaged in manufacturing &amp; exports of
@@ -23,7 +23,6 @@ export default function AboutUs({ activePage = "about" }) {
               </p>
             </div>
 
-           
             <p className="text-gray-700 mb-6 leading-relaxed">
               My grandfather established this business in the year 1979, he
               started as a trading company catering to the metalworking
@@ -89,9 +88,9 @@ export default function AboutUs({ activePage = "about" }) {
           </div>
 
           {/* Right Column - Image and Info Box */}
-          <div className="flex flex-col ">
+          <div className="flex flex-col  ">
             {/* Image Container */}
-            <div className="relative h-[650px] flex items-center">
+            <div className="relative h-auto lg:h-[650px] flex items-center">
               <div className="bg-white p-3 rounded-lg shadow-xl w-full">
                 <Image
                   alt="About KAAL TOOLS"

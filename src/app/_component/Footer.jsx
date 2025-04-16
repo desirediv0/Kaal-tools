@@ -8,129 +8,171 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <div className="w-full bg-gray-900 text-white">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 p-4 pt-10">
-        <section className="flex flex-col gap-2">
-          <Link href="/" className="flex-shrink-0 relative">
-            <span className="absolute top-5 md:top-7 right-32 md:right-2 text-xs font-medium hidden md:block">
-              ®
-            </span>
-            <Image
-              src="/logowhite.png"
-              alt="Logo"
-              width={400}
-              height={100}
-              className="w-auto h-20 md:h-28"
-              priority
-            />
-          </Link>
-        </section>
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Logo Section */}
+          <section className="flex flex-col gap-2 col-span-1 sm:col-span-2 lg:col-span-1">
+            <Link href="/" className="flex-shrink-0 relative mb-4">
+              <span className="absolute top-7 right-5 hidden md:block text-xs font-medium">
+                ®
+              </span>
+              <Image
+                src="/logowhite.png"
+                alt="Logo"
+                width={400}
+                height={100}
+                className="w-auto h-20"
+                priority
+              />
+            </Link>
+          </section>
 
-        <section className="flex flex-col gap-2">
-          <h1 className="text-2xl pb-2 font-normal">Useful Links</h1>
-          <Link href="/">
-            <h2>Home</h2>
-          </Link>
-          <Link href="/about">
-            <h2>About</h2>
-          </Link>
-          <Link href="/product">
-            <h2>Products</h2>
-          </Link>
-          <Link href="/contact">
-            <h2>Contact</h2>
-          </Link>
-        </section>
+          {/* Useful Links Section */}
+          <section className="flex flex-col gap-3">
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2">
+              Useful Links
+            </h1>
+            <Link href="/" className="hover:text-gray-300 transition-colors">
+              <h2 className="text-base">Home</h2>
+            </Link>
+            <Link
+              href="/about"
+              className="hover:text-gray-300 transition-colors"
+            >
+              <h2 className="text-base">About</h2>
+            </Link>
+            <Link
+              href="/product"
+              className="hover:text-gray-300 transition-colors"
+            >
+              <h2 className="text-base">Products</h2>
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-gray-300 transition-colors"
+            >
+              <h2 className="text-base">Contact</h2>
+            </Link>
+          </section>
 
-        {/* First Product Column */}
-        <section className="flex flex-col gap-2">
-          <h1 className="text-2xl pb-2 font-medium ">Products</h1>
-          <Link
-            href="/product?category=metalworking+lathe+accessories"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">
-              Metalworking lathe accessories
-            </h2>
-          </Link>
-          <Link
-            href="/product?category=woodworking+tools"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">Woodworking tools</h2>
-          </Link>
-          <Link
-            href="/product?category=measuring+%26+marking+tools"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">Measuring & marking tools</h2>
-          </Link>
-          <Link
-            href="/product?category=cutting+tools"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">Cutting tools</h2>
-          </Link>
-        </section>
+          {/* Products Column 1 */}
+          <section className="flex flex-col gap-3">
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2">
+              Products
+            </h1>
+            <Link
+              href="/product?category=metalworking+lathe+accessories"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                Metalworking lathe accessories
+              </h2>
+            </Link>
+            <Link
+              href="/product?category=woodworking+tools"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                Woodworking tools
+              </h2>
+            </Link>
+            <Link
+              href="/product?category=measuring+%26+marking+tools"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                Measuring & marking tools
+              </h2>
+            </Link>
+            <Link
+              href="/product?category=cutting+tools"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">Cutting tools</h2>
+            </Link>
+          </section>
 
-        {/* Second Product Column */}
-        <section className="flex flex-col gap-2">
-          <h1 className="text-2xl pb-2 font-medium opacity-0">Products</h1>
-          <Link
-            href="/product?category=hand+tools"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">hand tools</h2>
-          </Link>
-          <Link
-            href="/product?category=magnetic+%26+dressing+tools"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">magnetic & dressing tools</h2>
-          </Link>
-          <Link
-            href="/product?category=vee+blocks+%26+angle+plates"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase font-normal">vee blocks & angle plates</h2>
-          </Link>
-          <Link
-            href="/product?category=vises+%26+milling+tables"
-            className="flex items-center gap-2"
-          >
-            <IoIosArrowForward color="var(--maincolor)" size={15} />
-            <h2 className="uppercase  font-normal">vises & milling tables</h2>
-          </Link>
-        </section>
+          {/* Products Column 2 */}
+          <section className="flex flex-col gap-3">
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2 sm:block lg:hidden">
+              More Products
+            </h1>
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2 hidden lg:block opacity-0">
+              Products
+            </h1>
+            <Link
+              href="/product?category=hand+tools"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">hand tools</h2>
+            </Link>
+            <Link
+              href="/product?category=magnetic+%26+dressing+tools"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                magnetic & dressing tools
+              </h2>
+            </Link>
+            <Link
+              href="/product?category=vee+blocks+%26+angle+plates"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                vee blocks & angle plates
+              </h2>
+            </Link>
+            <Link
+              href="/product?category=vises+%26+milling+tables"
+              className="flex items-center gap-2 hover:text-gray-300 transition-colors"
+            >
+              <IoIosArrowForward className="text-orange-500" size={15} />
+              <h2 className="uppercase text-sm font-normal">
+                vises & milling tables
+              </h2>
+            </Link>
+          </section>
 
-        <section className="flex flex-col gap-4 w-full">
-          <h1 className="text-2xl pb-2 font-medium ">Get in Touch</h1>
-          <div className="grid grid-cols-7 gap-1">
-            <h2 className="flex flex-wrap gap-3 items-center">
-              <IoLocationOutline size={25} />
-            </h2>
-            <p className="col-span-6">
-              Plot No.164, Udyog Vihar Phase-6, Gurugram - 122004, Haryana
-              (India)
-            </p>
-          </div>
-          <h2 className="flex gap-4 items-center">
-            <LuMail size={22} /> sales@kaaltools.com
-          </h2>
-        </section>
+          {/* Contact Section */}
+          <section className="flex flex-col gap-4 col-span-1 sm:col-span-2 lg:col-span-1">
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2">
+              Get in Touch
+            </h1>
+            <div className="flex gap-3">
+              <IoLocationOutline size={22} className="flex-shrink-0 mt-1" />
+              <p className="text-base">
+                Plot No.164, Udyog Vihar Phase-6, Gurugram - 122004, Haryana
+                (India)
+              </p>
+            </div>
+            <Link
+              href="mailto:sales@kaaltools.com"
+              className="flex gap-3 items-center hover:text-gray-300 transition-colors"
+            >
+              <LuMail size={20} className="flex-shrink-0" />
+              <span className="text-base">sales@kaaltools.com</span>
+            </Link>
+          </section>
+        </div>
       </div>
 
-      <div className="w-full mt-8 text-lg py-4 border-t border-black max-w-7xl mx-auto text-center md:text-start">
-        ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
-        <Link href="https://xcelb2b.com/">
-          <span className="text-blue-600">Xcel B2B</span>
-        </Link>
+      <div className="border-t border-gray-800 max-w-7xl mx-auto">
+        <div className="container mx-auto px-4 py-4 text-base text-center sm:text-left">
+          ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
+          <Link
+            href="https://xcelb2b.com/"
+            className="text-blue-500 hover:text-blue-400 transition-colors"
+          >
+            Xcel B2B
+          </Link>
+        </div>
       </div>
     </div>
   );
