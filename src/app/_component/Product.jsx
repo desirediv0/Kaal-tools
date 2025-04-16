@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchProducts } from "@/Api";
+import { fetchProducts, fetchSalers } from "@/Api";
 import { Loader2Icon } from "lucide-react";
 import Wrapper from "./Wrapper";
 import ProductCard from "./product-card";
@@ -13,21 +13,23 @@ export default function Product({ activepage = "product" }) {
     totalPages: 0,
     currentPage: 1
   });
+ 
   const [Loading, setLoading] = useState(true);
 
-  const FeaturedProduct = activepage === "homepage"
-    ? (Array.isArray(Data) ? Data.slice(0, 5) : Data.products?.slice(0, 5))
-    : (Array.isArray(Data) ? Data : Data.products);
+  const FeaturedProduct = activepage === "homepage" &&  (Array.isArray(Data) ? Data : Data.products);
 
   useEffect(() => {
     const Products = async () => {
       try {
-        const data = await fetchProducts();
+       
+        const saleData = await fetchSalers();
+
+
         // Handle both response types
-        if (Array.isArray(data)) {
-          setData(data);
+        if (Array.isArray(saleData)) {
+          setData(saleData);
         } else {
-          setData(data);
+          setData(saleData);
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -35,7 +37,7 @@ export default function Product({ activepage = "product" }) {
         setLoading(false);
       }
     };
-    Products();
+    Products(); 
   }, []);
 
   return (
@@ -60,7 +62,7 @@ export default function Product({ activepage = "product" }) {
               key={index}
               price={items.price}
               saleprice={items.saleprice}
-              href={`/product?category=all`}
+              href={items.href}
               image={items.image}
               title={items.title}
               tag={"POPULAR"}
