@@ -89,7 +89,9 @@ export default function Footer() {
           </section>
           {/* Get in Touch Section with Logo */}
           <section className="flex flex-col gap-4 col-span-1 sm:col-span-2 lg:col-span-1">
-            
+            <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2">
+              Get in Touch
+            </h1>
             <Link href="/" className="flex-shrink-0 relative mb-4">
               <Image
                 src="/logowhite.png"

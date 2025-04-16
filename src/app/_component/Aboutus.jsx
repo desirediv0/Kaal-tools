@@ -45,6 +45,15 @@ export default function AboutUs({ activePage = "about" }) {
                 woodworking industries worldwide, serving both home users and
                 professionals.
               </p>
+              <p className="text-lg  pt-1 leading-relaxed text-gray-800">
+                We understand that success in machining relies on tool
+                reliability and accuracy. KAAL TOOLS dedicates itself to
+                manufacturing and supplying robust, high-performance tools that
+                exceed today's machinist demands, making us the MACHINIST'S
+                CHOICE. Our commitment extends beyond tools - our ethics and
+                code of conduct ensure the healthiest and most secure business
+                communication. We believe in attaining success, together.
+              </p>
             </div>
           </>
         )}
@@ -61,23 +70,7 @@ export default function AboutUs({ activePage = "about" }) {
           </div>
         )}
 
-        <div className="mt-8 border-t-2 border-orange-600 pt-6">
-          <h3 className="text-2xl font-serif font-bold mb-4 text-center">
-            Our Commitment
-          </h3>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <p className="text-lg leading-relaxed text-gray-800">
-              We understand that success in machining relies on tool reliability
-              and accuracy. KAAL TOOLS dedicates itself to manufacturing and
-              supplying robust, high-performance tools that exceed today's
-              machinist demands, making us the MACHINIST'S CHOICE. Our
-              commitment extends beyond tools - our ethics and code of conduct
-              ensure the healthiest and most secure business communication. We
-              believe in attaining success, together.
-            </p>
-          </div>
-        </div>
-      </div>
+     </div>
     </section>
   );
 }
