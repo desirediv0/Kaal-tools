@@ -7,14 +7,14 @@ const encodeCategory = (name) => {
 };
 
 const categories = [
-  { name: "measuring & marking tools", image: "/cate/MEASURING.jpg", href: `/product?category=${encodeCategory("measuring & marking tools")}` },
+  { name: "measuring & marking", image: "/cate/MEASURING.jpg", href: `/product?category=${encodeCategory("measuring & marking tools")}` },
   { name: "hand tools", image: "/cate/HAND-TOOLS.jpg", href: `/product?category=${encodeCategory("hand tools")}` },
   { name: "cutting tools", image: "/cate/CUTTING-TOOLS.jpeg", href: `/product?category=${encodeCategory("cutting tools")}` },
-  { name: "rotary tables & accessories", image: "/cate/ROTARY-TABLES.jpg", href: `/product?category=${encodeCategory("rotary tables & accessories")}` },
+  { name: "rotary tables", image: "/cate/ROTARY-TABLES.jpg", href: `/product?category=${encodeCategory("rotary tables & accessories")}` },
   { name: "indexable tools", image: "/cate/INDEXABLE.jpeg", href: `/product?category=${encodeCategory("indexable tools")}` },
   { name: "vises & milling tables", image: "/cate/VISES.jpg", href: `/product?category=${encodeCategory("vises & milling tables")}` },
-  { name: "vee blocks & angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: `/product?category=${encodeCategory("vee blocks & angle plates")}` },
-  { name: "boring heads & accessories", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: `/product?category=${encodeCategory("boring heads & accessories")}` },
+  { name: "angle plates", image: "/cate/VEE-BLOCKS.jpeg", href: `/product?category=${encodeCategory("vee blocks & angle plates")}` },
+  { name: "boring heads", image: "/cate/BORING-HEADS-&-ACCESSORIES.jpg", href: `/product?category=${encodeCategory("boring heads & accessories")}` },
 ];
 
 export default function TopCategories() {
