@@ -6,31 +6,21 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Rajan Mehra",
-    role: "CEO, TechInnovate",
+    name: "Thomas Hauser",
     content:
-      "KAAL TOOLS has consistently delivered top-notch quality tools that have significantly improved our production efficiency. Their commitment to innovation is truly commendable.",
+      "Avi is great to deal with. Parts are always perfect and on time, pleasure working with an honest man.",
     image: "/user.png",
   },
   {
-    name: "Rudra Pratap",
-    role: "CTO, MechaSolutions",
+    name: "B.C. Gwee",
     content:
-      "The reliability of KAAL TOOLS' products is unmatched. We've been using their tools for years, and they've never let us down, even in the most demanding conditions.",
+      "I have been doing business and buying tools from KAAL for the last 35 years. Feels like we have grown together, their tools have evolved with our needs and they have always been reliable partners.",
     image: "/user.png",
   },
   {
-    name: "Tarun Singh",
-    role: "COO, IndustrialPro",
+    name: "Charles LaBonte",
     content:
-      "What sets KAAL TOOLS apart is their exceptional customer support. They go above and beyond to ensure we have the right tools for our specific needs. It's not just about selling products; it's about building lasting partnerships.",
-    image: "/user.png",
-  },
-  {
-    name: "Priya Sharma",
-    role: "Operations Manager, BuildRight Construction",
-    content:
-      "KAAL TOOLS has been instrumental in streamlining our construction processes. Their tools are not only durable but also ergonomically designed, which has significantly improved our team's efficiency and safety.",
+      "Honestly, over the years, their quality has stayed consistently great. And if I ever have a question, they're right there. Good folks, good tools.",
     image: "/user.png",
   },
 ];
@@ -49,7 +39,6 @@ const TestimonialCard = ({ testimonial }) => (
         <h3 className="text-lg font-semibold text-gray-900">
           {testimonial.name}
         </h3>
-        <p className="text-sm text-gray-500">{testimonial.role}</p>
       </div>
     </div>
     <div className="flex-grow relative">
@@ -115,9 +104,8 @@ const Testimonial = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-3 w-3 mx-1 rounded-full transition-colors duration-300 ${
-                currentIndex === index ? "bg-[var(--maincolor)]" : "bg-gray-300"
-              }`}
+              className={`h-3 w-3 mx-1 rounded-full transition-colors duration-300 ${currentIndex === index ? "bg-[var(--maincolor)]" : "bg-gray-300"
+                }`}
               aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
