@@ -24,6 +24,19 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const NDLogos = localFont({
+  src: "./fonts/ND_Logos.ttf",
+  variable: "--font-nd-logos",
+  weight: "100 900",
+});
+
+
+const BankGothic = localFont({
+  src: "./fonts/BankGothic.ttf",
+  variable: "--font-bank-gothic",
+  weight: "100 900",
+});
+
 export const metadata = {
   title: "Kaal Tools",
   description: "Products",
@@ -33,7 +46,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${kanit.variable} bg-white text-[#060809] antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} ${kanit.variable} ${NDLogos.variable} ${BankGothic.variable} bg-white text-[#060809] antialiased`}
       >
         <Header />
         <ReduxProvider>{children}</ReduxProvider>

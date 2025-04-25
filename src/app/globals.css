@@ -225,3 +225,11 @@ img {
 .animate-slideIn {
   animation: slideIn 0.8s ease-out forwards;
 }
+
+.nd-logos { 
+  font-family: var(--font-nd-logos);
+}
+
+.BankGothic {
+  font-family: var(--font-bank-gothic);
+}
