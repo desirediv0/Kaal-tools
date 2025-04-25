@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Loader2Icon, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchProducts } from "@/Api";
 import Wrapper from "./Wrapper";
@@ -17,6 +17,12 @@ export default function NewProducts() {
   });
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const autoplay = useRef(
+    Autoplay({
+      delay: 3000,
+      stopOnInteraction: false,
+    })
+  );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -24,12 +30,7 @@ export default function NewProducts() {
       align: "start",
       slidesToScroll: 1
     },
-    [
-      Autoplay({
-        delay: 3000,
-        stopOnInteraction: false
-      })
-    ]
+    [autoplay.current]
   );
 
   const scrollPrev = useCallback(() => {
@@ -39,6 +40,18 @@ export default function NewProducts() {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  const handleMouseEnter = useCallback(() => {
+    if (autoplay.current && autoplay.current.stop) {
+      autoplay.current.stop();
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (autoplay.current && autoplay.current.play) {
+      autoplay.current.play();
+    }
+  }, []);
 
   useEffect(() => {
     if (emblaApi) {
@@ -107,11 +120,13 @@ export default function NewProducts() {
                       md:flex-[0_0_33.333%]  /* Medium: 3 items */
                       lg:flex-[0_0_20%]      /* Large: 5 items */
                       xl:flex-[0_0_20%]      /* XL: 5 items */"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                   >
                     <ProductCard
                       title={item.title}
                       price={item.price}
-                      saleprice={item.saleprice}
+                      // saleprice={item.saleprice}
                       image={item.image}
                       tag={"NEW"}
                       href={item.href}
@@ -121,7 +136,6 @@ export default function NewProducts() {
                 ))}
               </div>
             </div>
-
 
             <button
               className="absolute right-0 md:-right-0 top-1/2 -translate-y-1/2 z-10 

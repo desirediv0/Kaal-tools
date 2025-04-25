@@ -13,15 +13,15 @@ export default function Product({ activepage = "product" }) {
     totalPages: 0,
     currentPage: 1
   });
- 
+
   const [Loading, setLoading] = useState(true);
 
-  const FeaturedProduct = activepage === "homepage" &&  (Array.isArray(Data) ? Data : Data.products);
+  const FeaturedProduct = activepage === "homepage" && (Array.isArray(Data) ? Data : Data.products);
 
   useEffect(() => {
     const Products = async () => {
       try {
-       
+
         const saleData = await fetchSalers();
 
 
@@ -37,7 +37,7 @@ export default function Product({ activepage = "product" }) {
         setLoading(false);
       }
     };
-    Products(); 
+    Products();
   }, []);
 
   return (
@@ -61,7 +61,7 @@ export default function Product({ activepage = "product" }) {
             <ProductCard
               key={index}
               price={items.price}
-              saleprice={items.saleprice}
+              // saleprice={items.saleprice}
               href={items.href}
               image={items.image}
               title={items.title}
