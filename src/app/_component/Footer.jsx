@@ -87,24 +87,29 @@ export default function Footer() {
               </Link>
             ))}
           </section>
+
           {/* Get in Touch Section with Logo */}
           <section className="flex flex-col gap-4 col-span-1 sm:col-span-2 lg:col-span-1">
             <h1 className="text-xl font-medium border-b border-gray-700 pb-2 mb-2">
               Get in Touch
             </h1>
-            <Link href="/" className="flex-shrink-0 relative mb-4">
-              <Image
-                src="/logowhite.png"
-                alt="Logo"
-                width={400}
-                height={100}
-                className="w-auto h-20"
-                priority
-              />
-              <span className="absolute top-7 right-16 hidden md:block text-xs font-medium">
-                ®
-              </span>
-            </Link>
+            <div className="relative inline-block">
+              <Link href="/" className="inline-block">
+                <div className="relative">
+                  <Image
+                    src="/logowhite.png"
+                    alt="KAAL TOOLS - THE MACHINISTS CHOICE"
+                    width={500}
+                    height={120}
+                    className="w-auto h-28"
+                    priority
+                  />
+                  <span className="absolute   text-sm font-medium top-5 right-0">
+                    ®
+                  </span>
+                </div>
+              </Link>
+            </div>
             <div className="flex gap-3">
               <IoLocationOutline size={22} className="flex-shrink-0 mt-1" />
               <p className="text-base">
