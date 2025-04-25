@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function MegaMenu({ isMobile, categories, handleMobileClick, onMenuToggle }) {
@@ -49,6 +49,18 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
     return `/product?subcategory=${encodeURIComponent(formattedName)}`;
   };
 
+  // Function to get limited subcategories
+  const getLimitedSubcategories = (subcategories) => {
+    if (!subcategories || subcategories.length <= 5) {
+      return { displayItems: subcategories || [], hasMore: false };
+    }
+
+    return {
+      displayItems: subcategories.slice(0, 5),
+      hasMore: true
+    };
+  };
+
   // Desktop menu
   if (!isMobile) {
     return (
@@ -77,33 +89,50 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
           >
             <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto max-h-[calc(100vh-180px)]">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {filteredCategories.map((category) => (
-                  <div key={category.id} className="min-w-0">
-                    <Link
-                      href={getCategoryUrl(category)}
-                      onClick={handleClick}
-                      className="font-semibold text-sm text-black hover:text-orange-600 block uppercase truncate"
-                    >
-                      {category.name}
-                    </Link>
-                    {category.subCategories?.length > 0 && (
-                      <ul className="space-y-2 mt-2">
-                        {category.subCategories.map((subCategory) => (
-                          <li key={subCategory.id}>
-                            <Link
-                              href={getSubCategoryUrl(subCategory)}
-                              onClick={handleClick}
-                              className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase truncate"
-                            >
-                              {subCategory.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
+                {filteredCategories.map((category) => {
+                  const { displayItems, hasMore } = getLimitedSubcategories(category.subCategories);
+
+                  return (
+                    <div key={category.id} className="min-w-0">
+                      <Link
+                        href={getCategoryUrl(category)}
+                        onClick={handleClick}
+                        className="font-semibold text-sm text-black hover:text-orange-600 block uppercase truncate"
+                      >
+                        {category.name}
+                      </Link>
+                      {displayItems?.length > 0 && (
+                        <ul className="space-y-1 mt-2">
+                          {displayItems.map((subCategory) => (
+                            <li key={subCategory.id}>
+                              <Link
+                                href={getSubCategoryUrl(subCategory)}
+                                onClick={handleClick}
+                                className="text-gray-700 hover:text-orange-600 transition-colors text-sm block py-1 uppercase truncate"
+                              >
+                                {subCategory.name}
+                              </Link>
+                            </li>
+                          ))}
+
+                          {hasMore && (
+                            <li className="pt-1">
+                              <Link
+                                href={getCategoryUrl(category)}
+                                onClick={handleClick}
+                                className="text-orange-600 hover:text-orange-700 font-bold flex items-center text-sm uppercase transition-colors"
+                              >
+                                Explore More <ChevronRight className="h-4 w-4 ml-1" />
+                              </Link>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
+              <div className="h-6"></div> {/* Bottom spacing */}
             </div>
           </div>
         )}
@@ -135,32 +164,49 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
         }}
       >
         <div className="py-2">
-          {filteredCategories.map((category) => (
-            <div key={category.id} className="border-b last:border-b-0">
-              <Link
-                href={getCategoryUrl(category)}
-                onClick={handleClick}
-                className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100 uppercase"
-              >
-                {category.name}
-              </Link>
-              {category.subCategories?.length > 0 && (
-                <ul className="bg-white border-t border-gray-100 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-                  {category.subCategories.map((subCategory) => (
-                    <li key={subCategory.id}>
-                      <Link
-                        href={getSubCategoryUrl(subCategory)}
-                        onClick={handleClick}
-                        className="block py-3 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 uppercase text-sm transition-colors"
-                      >
-                        {subCategory.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
+          {filteredCategories.map((category) => {
+            const { displayItems, hasMore } = getLimitedSubcategories(category.subCategories);
+
+            return (
+              <div key={category.id} className="border-b last:border-b-0">
+                <Link
+                  href={getCategoryUrl(category)}
+                  onClick={handleClick}
+                  className="block px-4 py-3 font-semibold text-gray-900 hover:text-orange-600 hover:bg-gray-100 uppercase"
+                >
+                  {category.name}
+                </Link>
+                {displayItems?.length > 0 && (
+                  <ul className="bg-white border-t border-gray-100 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+                    {displayItems.map((subCategory) => (
+                      <li key={subCategory.id}>
+                        <Link
+                          href={getSubCategoryUrl(subCategory)}
+                          onClick={handleClick}
+                          className="block py-3 px-8 text-gray-600 hover:text-orange-600 hover:bg-gray-50 uppercase text-sm transition-colors"
+                        >
+                          {subCategory.name}
+                        </Link>
+                      </li>
+                    ))}
+
+                    {hasMore && (
+                      <li>
+                        <Link
+                          href={getCategoryUrl(category)}
+                          onClick={handleClick}
+                          className="block py-3 px-8 text-orange-600 hover:text-orange-700 font-bold flex items-center text-sm uppercase transition-colors"
+                        >
+                          Explore More <ChevronRight className="h-4 w-4 ml-1" />
+                        </Link>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+          <div className="h-6"></div> {/* Bottom spacing for mobile */}
         </div>
       </div>
     </div>
