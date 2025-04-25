@@ -195,7 +195,7 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
                         <Link
                           href={getCategoryUrl(category)}
                           onClick={handleClick}
-                          className="block py-3 px-8 text-orange-600 hover:text-orange-700 font-bold flex items-center text-sm uppercase transition-colors"
+                          className=" py-3 px-8 text-orange-600 hover:text-orange-700 font-bold flex items-center text-sm uppercase transition-colors"
                         >
                           Explore More <ChevronRight className="h-4 w-4 ml-1" />
                         </Link>
