@@ -77,7 +77,7 @@ export function HeroBanner({ items }) {
                     )}
                   </div>
 
-                  <div className="w-full lg:col-span-9 relative  h-[250px] md:h-[450px] lg:h-[450px] xl:h-[500px]  order-2 mt-8 lg:mt-2">
+                  <div className="w-full lg:col-span-9 xl:p-8 relative  h-[250px] md:h-[450px] lg:h-[450px] 2xl:h-[500px]   order-2 mt-8 lg:mt-2">
                     <div className="w-full h-full relative">
                       <Image
                         src={item.image}
