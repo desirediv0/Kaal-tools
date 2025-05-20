@@ -33,7 +33,7 @@ export function HeroBanner({ items }) {
   }, [showControls]);
 
   return (
-    <div className="w-full relative min-h-[450px] md:min-h-[650px] lg:min-h-[520px]">
+    <div className="w-full relative min-h-[450px] md:min-h-[650px] lg:min-h-[510px]">
       <div
         className="absolute inset-0 w-full h-full z-0"
         style={{
