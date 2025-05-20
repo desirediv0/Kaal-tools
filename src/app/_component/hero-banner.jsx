@@ -33,7 +33,7 @@ export function HeroBanner({ items }) {
   }, [showControls]);
 
   return (
-    <div className="w-full relative min-h-[450px] md:min-h-[650px] lg:min-h-[510px]">
+    <div className="w-full relative min-h-[450px] md:min-h-[650px] lg:min-h-[500px]">
       <div
         className="absolute inset-0 w-full h-full z-0"
         style={{
@@ -77,7 +77,7 @@ export function HeroBanner({ items }) {
                     )}
                   </div>
 
-                  <div className="w-full lg:col-span-9 relative  h-[250px] md:h-[450px] lg:h-[450px]  xl:h-[550px] order-2 mt-8 lg:mt-2">
+                  <div className="w-full lg:col-span-9 relative  h-[250px] md:h-[450px] lg:h-[450px] xl:h-[500px]  order-2 mt-8 lg:mt-2">
                     <div className="w-full h-full relative">
                       <Image
                         src={item.image}
