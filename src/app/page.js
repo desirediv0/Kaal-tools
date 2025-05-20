@@ -65,7 +65,7 @@ const items2 = [
     heading: "Power Up Your Projects with Tools You Can Count On.",
     shortdesc:
       "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
-  }
+  },
 ];
 
 export default function page() {
