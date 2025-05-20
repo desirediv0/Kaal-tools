@@ -6,7 +6,7 @@ import ProductCard from "./product-card";
 import { fetchCategoryProducts, getAllCategoriesAndSubCategories } from "@/Api";
 
 const stripHtml = (html) => {
-  return html?.replace(/<[^>]*>/g, '') || '';
+  return html?.replace(/<[^>]*>/g, "") || "";
 };
 
 export default function ProductPage({ initialCategory, initialSubCategory }) {
@@ -15,26 +15,32 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState(initialCategory || "all");
-  const [activeSubCategory, setActiveSubCategory] = useState(initialSubCategory || null);
+  const [activeCategory, setActiveCategory] = useState(
+    initialCategory || "all"
+  );
+  const [activeSubCategory, setActiveSubCategory] = useState(
+    initialSubCategory || null
+  );
   const [openCategory, setOpenCategory] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const updateUrl = (params) => {
     const newParams = new URLSearchParams(searchParams);
-    newParams.delete('category');
-    newParams.delete('subcategory');
+    newParams.delete("category");
+    newParams.delete("subcategory");
 
     if (params.category) {
-      newParams.set('category', params.category.toLowerCase());
+      newParams.set("category", params.category.toLowerCase());
     }
     if (params.subcategory) {
-      // Properly encode subcategory to handle special characters like &
-      newParams.set('subcategory', encodeURIComponent(params.subcategory.toLowerCase()));
+      const encodedSubcategory = encodeURIComponent(
+        params.subcategory.toLowerCase()
+      );
+      newParams.set("subcategory", encodedSubcategory);
     }
 
     router.push(`/product?${newParams.toString()}`);
@@ -63,34 +69,43 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
       setLoading(true);
       scrollToTop();
       try {
-        let subcategory = searchParams.get('subcategory');
+        let subcategory = searchParams.get("subcategory");
+        if (subcategory) {
+          try {
+            subcategory = decodeURIComponent(subcategory);
+          } catch (e) {
+            console.error("Error decoding subcategory:", e);
+          }
+        }
 
         const [categoryData, productData] = await Promise.all([
           getAllCategoriesAndSubCategories(),
           fetchCategoryProducts({
-            categoryName: searchParams.get('category'),
-            subcategoryName: subcategory
-          })
+            categoryName: searchParams.get("category"),
+            subcategoryName: subcategory,
+          }),
         ]);
 
         if (categoryData.success) {
           const filteredCategories = categoryData.data.filter(
-            cat => cat.name !== "Uncategorized" && cat.name !== "All"
+            (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
           );
           setCategories(filteredCategories);
         }
 
-        if (!productData.success && searchParams.get('subcategory')) {
+        if (!productData.success && searchParams.get("subcategory")) {
           setProducts([]);
           return;
         }
 
         if (productData.success) {
-          setProducts(productData.data.products.map(product => ({
-            ...product,
-            shortDesc: stripHtml(product.shortDesc),
-            description: stripHtml(product.description)
-          })));
+          setProducts(
+            productData.data.products.map((product) => ({
+              ...product,
+              shortDesc: stripHtml(product.shortDesc),
+              description: stripHtml(product.description),
+            }))
+          );
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -119,8 +134,9 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
       <div className="flex gap-6">
         <aside
-          className={`${isSidebarOpen ? "block" : "hidden"
-            } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
+          className={`${
+            isSidebarOpen ? "block" : "hidden"
+          } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
         >
           <h2 className="text-xl font-bold mb-4">Categories</h2>
           <div className="space-y-2">
@@ -131,17 +147,19 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                     handleCategory(category.name);
                     toggleDropdown(category.name);
                   }}
-                  className={`w-full text-left px-2 py-1.5 rounded ${activeCategory === category.name
-                    ? "bg-orange-100 text-orange-600"
-                    : "hover:bg-gray-100"
-                    }`}
+                  className={`w-full text-left px-2 py-1.5 rounded ${
+                    activeCategory === category.name
+                      ? "bg-orange-100 text-orange-600"
+                      : "hover:bg-gray-100"
+                  }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="uppercase">{category.name}</span>
                     {category.subCategories.length > 0 && (
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform ${openCategory === category.name ? "rotate-180" : ""
-                          }`}
+                        className={`h-4 w-4 transition-transform ${
+                          openCategory === category.name ? "rotate-180" : ""
+                        }`}
                       />
                     )}
                   </div>
@@ -154,10 +172,11 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                         <li key={sub.id}>
                           <button
                             onClick={() => handleSubCategory(sub.name)}
-                            className={`w-full text-left px-2 py-1.5 rounded ${activeSubCategory === sub.name
-                              ? "text-orange-600"
-                              : "text-gray-600 hover:text-orange-500"
-                              }`}
+                            className={`w-full text-left px-2 py-1.5 rounded ${
+                              activeSubCategory === sub.name
+                                ? "text-orange-600"
+                                : "text-gray-600 hover:text-orange-500"
+                            }`}
                           >
                             <span className="uppercase">{sub.name}</span>
                           </button>
