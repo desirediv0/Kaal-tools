@@ -53,9 +53,9 @@ export function HeroBanner({ items }) {
           <CarouselContent className="h-full">
             {items.map((item, index) => (
               <CarouselItem key={index} className="h-full">
-                <div className="flex flex-col lg:grid lg:grid-cols-12 h-full items-center pt-8 xl:pr-2 xl:pl-6 pb-8 md:pb-12 lg:pb-0">
-                  <div className="w-full lg:col-span-4 xl:col-span-3 flex flex-col sm:mt-10 xl:mt-[-80px] text-white order-1 mb-2 lg:mb-0 text-center lg:text-start">
-                    <h1 className="text-4xl lg:text-5xl font-semibold text-shadow uppercase break-words">
+                <div className="flex flex-col lg:grid lg:grid-cols-12 h-full items-center pt-8 xl:pr-2  xl:pl-6 pb-8 md:pb-12 lg:pb-0">
+                  <div className="w-[500px] lg:p-5 lg:col-span-4 xl:col-span-3 flex flex-col sm:mt-10 xl:mt-[-80px] text-white order-1 mb-2 lg:mb-0 text-center lg:text-start">
+                    <h1 className="text-4xl lg:text-5xl  font-semibold text-shadow uppercase break-words">
                       {item.head1}
                     </h1>
                     <h2
@@ -77,13 +77,13 @@ export function HeroBanner({ items }) {
                     )}
                   </div>
 
-                  <div className="w-full lg:col-span-8 xl:col-span-9 relative h-[250px] md:h-[450px] lg:h-[450px] order-2 mt-8 lg:mt-2">
+                  <div className="w-full sm:col-span-4  lg:col-span-8  xl:col-span-9 relative h-[250px] md:h-[450px] lg:h-[450px] order-2 mt-8 lg:mt-2">
                     <div className="w-full h-full relative">
                       <Image
                         src={item.image}
                         alt={`Slide ${index + 1}`}
                         fill
-                        className="object-contain md:object-cover lg:object-contain"
+                        className="object-contain md:object-contain lg:object-contain"
                         priority={index === 0}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 66vw"
                         quality={90}
