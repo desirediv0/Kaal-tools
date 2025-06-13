@@ -3,7 +3,8 @@ import { useState, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Phone, X, MessageCircle } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import SearchBar from "./SearchBar";
 import { SearchResults } from "./SearchResults";
 import { getAllCategoriesAndSubCategories, searchProducts } from "@/Api";
@@ -24,31 +25,36 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, []);
 
-  const handleSearch = useCallback(async (query) => {
-    if (!query?.trim()) {
-      clearSearch();
-      return;
-    }
+  const handleSearch = useCallback(
+    async (query) => {
+      if (!query?.trim()) {
+        clearSearch();
+        return;
+      }
 
-    setIsSearching(true);
-    try {
-      const results = await searchProducts(query);
-      setSearchResults(results);
-    } catch (error) {
-      console.error("Search error:", error);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  }, [clearSearch])
+      setIsSearching(true);
+      try {
+        const results = await searchProducts(query);
+        setSearchResults(results);
+      } catch (error) {
+        console.error("Search error:", error);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [clearSearch]
+  );
 
-  const handleMegaMenuOpen = useCallback((isOpen) => {
-    setIsMegaMenuOpen(isOpen);
-    if (isOpen) {
-      clearSearch();
-    }
-  }, [clearSearch]);
-
+  const handleMegaMenuOpen = useCallback(
+    (isOpen) => {
+      setIsMegaMenuOpen(isOpen);
+      if (isOpen) {
+        clearSearch();
+      }
+    },
+    [clearSearch]
+  );
 
   const isActive = (path) => pathname === path;
 
@@ -80,7 +86,9 @@ export default function Header() {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 relative">
-            <span className="absolute top-5 md:top-7 right-0 md:right-2 text-xs font-medium">®</span>
+            <span className="absolute top-5 md:top-7 right-0 md:right-2 text-xs font-medium">
+              ®
+            </span>
             <Image
               src="/logo.webp"
               alt="Logo"
@@ -119,9 +127,9 @@ export default function Header() {
               href="https://wa.me/918800199820"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba57] text-white px-4 py-2 rounded-lg transition-colors"
             >
-              <MessageCircle className="h-5 w-5" />
+              <FaWhatsapp className="h-5 w-5" />
               <span>Get Quote</span>
             </a>
           </div>
@@ -148,8 +156,11 @@ export default function Header() {
               <li>
                 <Link
                   href="/"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                    }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${
+                    isActive("/")
+                      ? "text-black font-bold"
+                      : "text-white hover:text-gray-100"
+                  }`}
                 >
                   Home
                 </Link>
@@ -157,20 +168,30 @@ export default function Header() {
               <li>
                 <Link
                   href="/about"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/about") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                    }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${
+                    isActive("/about")
+                      ? "text-black font-bold"
+                      : "text-white hover:text-gray-100"
+                  }`}
                 >
                   About
                 </Link>
               </li>
               <li>
-                <MegaMenu isMobile={false} categories={categories} onMenuToggle={handleMegaMenuOpen} />
+                <MegaMenu
+                  isMobile={false}
+                  categories={categories}
+                  onMenuToggle={handleMegaMenuOpen}
+                />
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className={`py-1 px-4 transition-colors font-bold text-sm ${isActive("/contact") ? "text-black font-bold" : "text-white hover:text-gray-100"
-                    }`}
+                  className={`py-1 px-4 transition-colors font-bold text-sm ${
+                    isActive("/contact")
+                      ? "text-black font-bold"
+                      : "text-white hover:text-gray-100"
+                  }`}
                 >
                   Contact
                 </Link>
@@ -181,7 +202,11 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden fixed inset-0 bg-white z-50 ${isMobileMenuOpen ? "block" : "hidden"}`}>
+      <div
+        className={`md:hidden fixed inset-0 bg-white z-50 ${
+          isMobileMenuOpen ? "block" : "hidden"
+        }`}
+      >
         <div className="h-full overflow-y-auto">
           {/* Mobile Header with Close Button */}
           <div className="sticky top-0 bg-white border-b z-20 flex items-center justify-between p-4">
@@ -218,8 +243,11 @@ export default function Header() {
                 <Link
                   href="/"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/") ? "text-black font-bold" : "hover:text-orange-500"
-                    }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/")
+                      ? "text-black font-bold"
+                      : "hover:text-orange-500"
+                  }`}
                 >
                   Home
                 </Link>
@@ -228,21 +256,31 @@ export default function Header() {
                 <Link
                   href="/about"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/about") ? "text-black font-bold" : "hover:text-orange-500"
-                    }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/about")
+                      ? "text-black font-bold"
+                      : "hover:text-orange-500"
+                  }`}
                 >
                   About
                 </Link>
               </li>
               <li className="border-b">
-                <MegaMenu isMobile={true} categories={categories} handleMobileClick={handleMobileClick} />
+                <MegaMenu
+                  isMobile={true}
+                  categories={categories}
+                  handleMobileClick={handleMobileClick}
+                />
               </li>
               <li className="border-b">
                 <Link
                   href="/contact"
                   onClick={handleMobileClick}
-                  className={`block px-4 py-2 transition-colors text-base font-bold ${isActive("/contact") ? "text-black font-bold" : "hover:text-orange-500"
-                    }`}
+                  className={`block px-4 py-2 transition-colors text-base font-bold ${
+                    isActive("/contact")
+                      ? "text-black font-bold"
+                      : "hover:text-orange-500"
+                  }`}
                 >
                   Contact
                 </Link>
@@ -263,9 +301,9 @@ export default function Header() {
               href="https://wa.me/918800199820"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba57] text-white px-4 py-2 rounded-lg transition-colors"
             >
-              <MessageCircle className="h-5 w-5" />
+              <FaWhatsapp className="h-5 w-5" />
               <span>Get Quote on WhatsApp</span>
             </a>
           </div>

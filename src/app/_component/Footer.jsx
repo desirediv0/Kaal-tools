@@ -5,7 +5,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import { RiFacebookCircleFill } from "react-icons/ri";
-import { FaInstagram, FaLinkedin, FaPinterest, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { FaYoutube, FaInstagram, FaLinkedin, FaPinterest, FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -31,13 +31,56 @@ export default function Footer() {
               className="hover:text-gray-300 transition-colors"
             >
               <h2 className="text-base">Products</h2>
-            </Link>
-            <Link
+            </Link>            <Link
               href="/contact"
               className="hover:text-gray-300 transition-colors"
             >
               <h2 className="text-base">Contact</h2>
-            </Link>
+            </Link>            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
+              <a
+                target="_blank"
+                href="https://www.facebook.com/kaaltools"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-[#1877F2] hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <RiFacebookCircleFill className="text-white text-base sm:text-lg" />
+              </a>
+
+              <a
+                target="_blank"
+                href="https://www.youtube.com/@kaaltools"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-[#FF0000] hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <FaYoutube className="text-white text-base sm:text-lg" />
+              </a>
+              <a
+                href="https://www.instagram.com/kaaltools"
+                target="_blank"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-[#E4405F] hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <FaInstagram className="text-white text-base sm:text-lg" />
+              </a>
+              <a
+                target="_blank"
+                href="https://in.pinterest.com/kaaltools"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-[#E60023] hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <FaPinterest className="text-white text-base sm:text-lg" />
+              </a>
+              <a
+                target="_blank"
+                href="https://x.com/Kaaltools"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-black hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <FaXTwitter className="text-white text-base sm:text-lg" />
+              </a>
+              <a
+                target="_blank"
+                href="https://www.linkedin.com/company/kaal-tools"
+                className="w-7 h-7 sm:w-8 sm:h-8 bg-[#0A66C2] hover:opacity-90 transition-opacity rounded-full flex items-center justify-center"
+              >
+                <FaLinkedin className="text-white text-base sm:text-lg" />
+              </a>
+            </div>
           </section>
 
           {/* Categories Column 1 */}
@@ -139,49 +182,6 @@ export default function Footer() {
           >
             Xcel B2B
           </Link>
-        </div>
-        <div className=" mx-auto flex  items-center justify-center gap-4 py-4">
-          <a
-            target="_blank"
-            href="https://www.facebook.com/kaaltools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <RiFacebookCircleFill />
-          </a>{" "}
-          <a
-            href="https://www.instagram.com/kaaltools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <FaInstagram />{" "}
-          </a>
-          <a
-            target="_blank"
-            href="https://in.pinterest.com/kaaltools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <FaPinterest />
-          </a>
-          <a
-            target="_blank"
-            href="https://x.com/Kaaltools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <FaXTwitter />
-          </a>
-          <a
-            target="_blank"
-            href="https://www.youtube.com/@kaaltools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <FaYoutube />
-          </a>
-          <a
-            target="_blank"
-            href="https://www.linkedin.com/company/kaal-tools"
-            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
-          >
-            <FaLinkedin />
-          </a>
         </div>
       </div>
     </div>
