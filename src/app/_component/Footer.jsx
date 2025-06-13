@@ -4,6 +4,8 @@ import { LuMail } from "react-icons/lu";
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
+import { RiFacebookCircleFill } from "react-icons/ri";
+import { FaInstagram, FaLinkedin, FaPinterest, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -128,7 +130,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 max-w-7xl mx-auto">
+      <div className="border-t border-gray-800 max-w-7xl mx-auto flex md:flex-row flex-col items-center justify-between px-2 py-4">
         <div className="container mx-auto px-4 py-4 text-base text-center sm:text-left">
           ©Kaal Tools 2025 | All Rights Reserved | Designed by{" "}
           <Link
@@ -137,6 +139,49 @@ export default function Footer() {
           >
             Xcel B2B
           </Link>
+        </div>
+        <div className=" mx-auto flex  items-center justify-center gap-4 py-4">
+          <a
+            target="_blank"
+            href="https://www.facebook.com/kaaltools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <RiFacebookCircleFill />
+          </a>{" "}
+          <a
+            href="https://www.instagram.com/kaaltools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <FaInstagram />{" "}
+          </a>
+          <a
+            target="_blank"
+            href="https://in.pinterest.com/kaaltools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <FaPinterest />
+          </a>
+          <a
+            target="_blank"
+            href="https://x.com/Kaaltools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <FaXTwitter />
+          </a>
+          <a
+            target="_blank"
+            href="https://www.youtube.com/@kaaltools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <FaYoutube />
+          </a>
+          <a
+            target="_blank"
+            href="https://www.linkedin.com/company/kaal-tools"
+            className="text-white hover:text-[#ff4d05] transition-colors text-xl"
+          >
+            <FaLinkedin />
+          </a>
         </div>
       </div>
     </div>
