@@ -178,7 +178,7 @@ export default function Component() {
           ))}
           <section>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.288074788611!2d76.96075877528283!3d28.470869875753362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d17957da3b1e7%3A0xe31b6d39c72cc555!2sDesire%20Div%20-%20Website%20Designing%20Company%20in%20Gurgaon!5e0!3m2!1sen!2sin!4v1731919600012!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7016.78376423322!2d76.99465719243365!3d28.437600903086597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d17f1c6051c9b%3A0xf3d6129187592d59!2sUdyog%20Vihar%20Industrial%20Area%20Phase%20VI%2C%20Sector%2037%2C%20Gurugram%2C%20Haryana!5e0!3m2!1sen!2sin!4v1751452705201!5m2!1sen!2sin"
               width="100%"
               height="310"
               allowFullScreen=""
