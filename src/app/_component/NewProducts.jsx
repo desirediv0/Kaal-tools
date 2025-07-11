@@ -5,16 +5,11 @@ import { Loader2Icon, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchProducts } from "@/Api";
 import Wrapper from "./Wrapper";
 import ProductCard from "./product-card";
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function NewProducts() {
-  const [data, setData] = useState({
-    products: [],
-    totalProducts: 0,
-    totalPages: 0,
-    currentPage: 1
-  });
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const autoplay = useRef(
@@ -28,7 +23,7 @@ export default function NewProducts() {
     {
       loop: true,
       align: "start",
-      slidesToScroll: 1
+      slidesToScroll: 1,
     },
     [autoplay.current]
   );
@@ -55,25 +50,19 @@ export default function NewProducts() {
 
   useEffect(() => {
     if (emblaApi) {
-      emblaApi.on('select', () => {
+      emblaApi.on("select", () => {
         setSelectedIndex(emblaApi.selectedScrollSnap());
       });
     }
   }, [emblaApi]);
 
-  const featuredProducts = Array.isArray(data)
-    ? data.slice(0, 12)
-    : data.products?.slice(0, 12);
+  const featuredProducts = data.slice(0, 20);
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
         const productData = await fetchProducts();
-        if (Array.isArray(productData)) {
-          setData(productData);
-        } else {
-          setData(productData);
-        }
+        setData(productData);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -87,14 +76,18 @@ export default function NewProducts() {
     <section className="w-full bg-gray-100 py-12">
       <Wrapper>
         <div className="w-full pb-12 flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold text-black uppercase">New Arrivals</h1>
+          <h1 className="text-4xl font-bold text-black uppercase">
+            New Arrivals
+          </h1>
           <span className="bg-orange-500 w-44 h-1 rounded-full mt-4"></span>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center w-full h-64">
             <Loader2Icon className="h-12 w-12 animate-spin text-orange-500" />
-            <span className="ml-4 text-xl font-medium text-black">Loading...</span>
+            <span className="ml-4 text-xl font-medium text-black">
+              Loading...
+            </span>
           </div>
         ) : (
           <div className="relative">
@@ -152,10 +145,11 @@ export default function NewProducts() {
                 <button
                   key={index}
                   onClick={() => emblaApi?.scrollTo(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${selectedIndex === index
-                    ? 'bg-orange-500 scale-110'
-                    : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    selectedIndex === index
+                      ? "bg-orange-500 scale-110"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
