@@ -2,14 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export default function MegaMenu({ isMobile, categories, handleMobileClick, onMenuToggle }) {
+export default function MegaMenu({
+  isMobile,
+  categories,
+  handleMobileClick,
+  onMenuToggle,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
   // Filter out unwanted categories
-  const filteredCategories = categories?.filter(cat =>
-    cat.name !== "Uncategorized" && cat.name !== "All"
-  ) || [];
+  const filteredCategories =
+    categories?.filter(
+      (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
+    ) || [];
 
   // Click outside handler
   useEffect(() => {
@@ -20,7 +26,8 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isMobile]);
 
@@ -44,9 +51,8 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
   const getSubCategoryUrl = (subCategory) => {
     // Format the subcategory name for URL
     const formattedName = subCategory.name.toLowerCase();
-
     // Use encodeURIComponent for proper encoding of special characters
-    return `/product?subcategory=${encodeURIComponent(formattedName)}`;
+    return `/product/subcategory/${encodeURIComponent(formattedName)}`;
   };
 
   // Function to get limited subcategories
@@ -57,7 +63,7 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
 
     return {
       displayItems: subcategories.slice(0, 5),
-      hasMore: true
+      hasMore: true,
     };
   };
 
@@ -75,7 +81,11 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
           className="flex items-center gap-1 py-2 px-4 text-sm font-bold text-white hover:text-gray-100 transition-colors"
         >
           Products
-          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`h-4 w-4 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
         </button>
 
         {isOpen && (
@@ -83,14 +93,16 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
             className="fixed top-[145px] left-0 right-0 mx-auto w-full max-w-7xl bg-white shadow-xl rounded-lg 
               p-4 md:p-6 z-50"
             style={{
-              maxHeight: 'calc(100vh - 160px)',
-              margin: '0 auto'
+              maxHeight: "calc(100vh - 160px)",
+              margin: "0 auto",
             }}
           >
             <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto max-h-[calc(100vh-180px)]">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {filteredCategories.map((category) => {
-                  const { displayItems, hasMore } = getLimitedSubcategories(category.subCategories);
+                  const { displayItems, hasMore } = getLimitedSubcategories(
+                    category.subCategories
+                  );
 
                   return (
                     <div key={category.id} className="min-w-0">
@@ -122,7 +134,8 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
                                 onClick={handleClick}
                                 className="text-orange-600 hover:text-orange-700 font-bold flex items-center text-sm uppercase transition-colors"
                               >
-                                Explore More <ChevronRight className="h-4 w-4 ml-1" />
+                                Explore More{" "}
+                                <ChevronRight className="h-4 w-4 ml-1" />
                               </Link>
                             </li>
                           )}
@@ -152,20 +165,26 @@ export default function MegaMenu({ isMobile, categories, handleMobileClick, onMe
         className="flex items-center justify-between w-full py-3 px-4 text-base font-bold"
       >
         <span>Products</span>
-        <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-4 w-4 transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       <div
         className={`scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-50 bg-gray-50`}
         style={{
-          maxHeight: isOpen ? 'calc(100vh - 120px)' : '0',
-          transition: 'max-height 0.3s ease-in-out',
-          overflowY: isOpen ? 'auto' : 'hidden'
+          maxHeight: isOpen ? "calc(100vh - 120px)" : "0",
+          transition: "max-height 0.3s ease-in-out",
+          overflowY: isOpen ? "auto" : "hidden",
         }}
       >
         <div className="py-2">
           {filteredCategories.map((category) => {
-            const { displayItems, hasMore } = getLimitedSubcategories(category.subCategories);
+            const { displayItems, hasMore } = getLimitedSubcategories(
+              category.subCategories
+            );
 
             return (
               <div key={category.id} className="border-b last:border-b-0">

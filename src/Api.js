@@ -57,6 +57,33 @@ export const getAllCategoriesAndSubCategories = async () => {
   }
 };
 
+export const getSubcategoriesByCategory = async (categoryName) => {
+  try {
+    const encodedCategory = encodeURIComponent(
+      categoryName.toLowerCase().trim()
+    );
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subcategory/by-category?category=${encodedCategory}`,
+      {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching subcategories by category:", error);
+    return {
+      success: false,
+      data: { subcategories: [] },
+      message: error.message,
+    };
+  }
+};
+
 export const submitContactForm = async (formData) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {

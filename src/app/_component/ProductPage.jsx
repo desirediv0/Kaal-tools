@@ -1,9 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Filter } from "lucide-react";
+import { ChevronDown, Filter, ArrowLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./product-card";
-import { fetchCategoryProducts, getAllCategoriesAndSubCategories } from "@/Api";
+import {
+  fetchCategoryProducts,
+  getAllCategoriesAndSubCategories,
+  getSubcategoriesByCategory,
+} from "@/Api";
 
 const stripHtml = (html) => {
   return html?.replace(/<[^>]*>/g, "") || "";
@@ -15,13 +19,8 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState(
-    initialCategory || "all"
-  );
-  const [activeSubCategory, setActiveSubCategory] = useState(
-    initialSubCategory || null
-  );
-  const [openCategory, setOpenCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [viewMode, setViewMode] = useState("categories"); // 'categories' or 'subcategories'
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const scrollToTop = () => {
@@ -46,177 +45,329 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     router.push(`/product?${newParams.toString()}`);
   };
 
-  const handleCategory = async (category) => {
-    setActiveCategory(category);
-    setActiveSubCategory(null);
-    updateUrl({ category });
+  const handleCategoryClick = async (category) => {
+    setLoading(true);
+    try {
+      const subcategoryData = await getSubcategoriesByCategory(category.name);
+
+      if (subcategoryData.success) {
+        setSelectedCategory({
+          ...category,
+          subCategories: subcategoryData.data.subcategories,
+        });
+        setViewMode("subcategories");
+        updateUrl({ category: category.name });
+      } else {
+        console.error(
+          "Failed to fetch subcategories:",
+          subcategoryData.message
+        );
+        // Fallback to original category data
+        setSelectedCategory(category);
+        setViewMode("subcategories");
+        updateUrl({ category: category.name });
+      }
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      // Fallback to original category data
+      setSelectedCategory(category);
+      setViewMode("subcategories");
+      updateUrl({ category: category.name });
+    } finally {
+      setLoading(false);
+    }
     setIsSidebarOpen(false);
     scrollToTop();
-    router.refresh();
   };
 
-  const handleSubCategory = async (subcategory) => {
-    setActiveSubCategory(subcategory);
-    setActiveCategory(null);
-    updateUrl({ subcategory });
+  const handleSubCategoryClick = async (subcategory) => {
+    setLoading(true);
+    try {
+      const productData = await fetchCategoryProducts({
+        subcategoryName: subcategory.name,
+      });
+
+      if (productData.success) {
+        setProducts(
+          productData.data.products.map((product) => ({
+            ...product,
+            shortDesc: stripHtml(product.shortDesc),
+            description: stripHtml(product.description),
+          }))
+        );
+        setViewMode("products");
+        updateUrl({ subcategory: subcategory.name });
+      } else {
+        setProducts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching subcategory products:", error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
     setIsSidebarOpen(false);
     scrollToTop();
-    router.refresh();
+  };
+
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+    setViewMode("categories");
+    setProducts([]);
+    updateUrl({});
+    scrollToTop();
+  };
+
+  const handleBackToSubcategories = () => {
+    setViewMode("subcategories");
+    setProducts([]);
+    updateUrl({ category: selectedCategory.name });
+    scrollToTop();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      scrollToTop();
       try {
-        let subcategory = searchParams.get("subcategory");
-        if (subcategory) {
-          try {
-            subcategory = decodeURIComponent(subcategory);
-          } catch (e) {
-            console.error("Error decoding subcategory:", e);
-          }
-        }
+        const categoryParam = searchParams.get("category");
+        const subcategoryParam = searchParams.get("subcategory");
 
-        const [categoryData, productData] = await Promise.all([
-          getAllCategoriesAndSubCategories(),
-          fetchCategoryProducts({
-            categoryName: searchParams.get("category"),
-            subcategoryName: subcategory,
-          }),
-        ]);
-
-        if (categoryData.success) {
-          const filteredCategories = categoryData.data.filter(
-            (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
-          );
-          setCategories(filteredCategories);
-        }
-
-        if (!productData.success && searchParams.get("subcategory")) {
-          setProducts([]);
-          return;
-        }
-
-        if (productData.success) {
+        if (subcategoryParam) {
+          // Show only products for subcategory
+          const decodedSubcategory = decodeURIComponent(subcategoryParam);
+          const productData = await fetchCategoryProducts({
+            subcategoryName: decodedSubcategory,
+          });
           setProducts(
-            productData.data.products.map((product) => ({
-              ...product,
-              shortDesc: stripHtml(product.shortDesc),
-              description: stripHtml(product.description),
-            }))
+            productData.success
+              ? productData.data.products.map((product) => ({
+                  ...product,
+                  shortDesc: stripHtml(product.shortDesc),
+                  description: stripHtml(product.description),
+                }))
+              : []
           );
+          setViewMode("products");
+        } else if (categoryParam) {
+          // Show only subcategories for category
+          const decodedCategory = decodeURIComponent(categoryParam);
+
+          // First fetch categories if not already loaded
+          let categoryData = null;
+          if (categories.length === 0) {
+            categoryData = await getAllCategoriesAndSubCategories();
+            if (categoryData.success) {
+              const filteredCategories = categoryData.data.filter(
+                (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
+              );
+              setCategories(filteredCategories);
+            }
+          }
+
+          // Find the category
+          const categoriesToSearch =
+            categories.length > 0
+              ? categories
+              : categoryData?.success
+              ? categoryData.data.filter(
+                  (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
+                )
+              : [];
+
+          let category = null;
+          if (categoriesToSearch.length > 0) {
+            category = categoriesToSearch.find(
+              (cat) => cat.name.toLowerCase() === decodedCategory.toLowerCase()
+            );
+            if (!category) {
+              category = categoriesToSearch.find(
+                (cat) =>
+                  cat.name
+                    .toLowerCase()
+                    .includes(decodedCategory.toLowerCase()) ||
+                  decodedCategory.toLowerCase().includes(cat.name.toLowerCase())
+              );
+            }
+            if (!category) {
+              const cleanDecodedCategory = decodedCategory
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]/g, "")
+                .trim();
+              category = categoriesToSearch.find(
+                (cat) =>
+                  cat.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, "")
+                    .trim() === cleanDecodedCategory
+              );
+            }
+          }
+
+          if (category) {
+            const subcategoryData = await getSubcategoriesByCategory(
+              category.name
+            );
+            setSelectedCategory({
+              ...category,
+              subCategories: subcategoryData.success
+                ? subcategoryData.data.subcategories
+                : [],
+            });
+            setViewMode("subcategories");
+          } else {
+            setSelectedCategory(null);
+            setViewMode("subcategories");
+          }
+        } else {
+          // No params: show all categories
+          const categoryData = await getAllCategoriesAndSubCategories();
+          if (categoryData.success) {
+            const filteredCategories = categoryData.data.filter(
+              (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
+            );
+            setCategories(filteredCategories);
+          }
+          setViewMode("categories");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
+    // eslint-disable-next-line
   }, [searchParams]);
 
-  const toggleDropdown = (categoryName) => {
-    setOpenCategory(openCategory === categoryName ? null : categoryName);
+  // Only show categories if viewMode is 'categories' and no category/subcategory param
+  const renderCategories = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {categories.map((category) => (
+        <div
+          key={category.id}
+          onClick={() => handleCategoryClick(category)}
+          className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200"
+        >
+          <h3 className="text-lg font-semibold text-gray-800 mb-2 uppercase">
+            {category.name}
+          </h3>
+          <p className="text-gray-600 text-sm">
+            {category.subCategories.length} subcategories
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+
+  // Only show subcategories if viewMode is 'subcategories' and selectedCategory is set
+  const renderSubcategories = () => {
+    if (!selectedCategory) {
+      return (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No category selected</p>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">
+            {selectedCategory.name} - Subcategories
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {selectedCategory.subCategories &&
+          selectedCategory.subCategories.length > 0 ? (
+            selectedCategory.subCategories.map((subcategory) => (
+              <div
+                key={subcategory.id}
+                onClick={() => {
+                  // Navigate to the dedicated subcategory page instead of using query params
+                  const encodedSubcategory = encodeURIComponent(
+                    subcategory.name.toLowerCase()
+                  );
+                  router.push(`/product/subcategory/${encodedSubcategory}`);
+                }}
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 overflow-hidden"
+              >
+                <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                  <img
+                    src={subcategory.image || "/b1.jpg"}
+                    alt={subcategory.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = "/b1.jpg";
+                    }}
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2 uppercase">
+                    {subcategory.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {subcategory._count?.products || 0} products
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              No subcategories found for this category
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
+
+  // Only show products if viewMode is 'products'
+  const renderProducts = () => (
+    <div>
+      <div className="mb-6">
+        <button
+          onClick={handleBackToSubcategories}
+          className="flex items-center gap-2 text-orange-600 hover:text-orange-700 mb-4"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Subcategories
+        </button>
+        <h2 className="text-2xl font-bold text-gray-800">Products</h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {products.map((product, index) => (
+          <ProductCard
+            key={index}
+            title={product.title}
+            price={product.price}
+            saleprice={product.saleprice}
+            image={product.image}
+            href={`/product/${product.slug}`}
+            className={"bg-[#1155CC] p-2 text-center"}
+            textClass={"text-white font-[400]"}
+          />
+        ))}
+        {products.length === 0 && (
+          <div className="col-span-full text-center py-12 text-gray-500">
+            No products found
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <button
-        className="lg:hidden flex items-center gap-2 mb-4 text-gray-600"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Filter className="h-5 w-5" />
-        <span>Filter Products</span>
-      </button>
-
-      <div className="flex gap-6">
-        <aside
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } lg:block lg:w-1/4 bg-white p-4 rounded-lg shadow-md h-fit`}
-        >
-          <h2 className="text-xl font-bold mb-4">Categories</h2>
-          <div className="space-y-2">
-            {categories.map((category) => (
-              <div key={category.id}>
-                <button
-                  onClick={() => {
-                    handleCategory(category.name);
-                    toggleDropdown(category.name);
-                  }}
-                  className={`w-full text-left px-2 py-1.5 rounded ${
-                    activeCategory === category.name
-                      ? "bg-orange-100 text-orange-600"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="uppercase">{category.name}</span>
-                    {category.subCategories.length > 0 && (
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                          openCategory === category.name ? "rotate-180" : ""
-                        }`}
-                      />
-                    )}
-                  </div>
-                </button>
-
-                {category.subCategories.length > 0 &&
-                  openCategory === category.name && (
-                    <ul className="ml-4 mt-1 space-y-1">
-                      {category.subCategories.map((sub) => (
-                        <li key={sub.id}>
-                          <button
-                            onClick={() => handleSubCategory(sub.name)}
-                            className={`w-full text-left px-2 py-1.5 rounded ${
-                              activeSubCategory === sub.name
-                                ? "text-orange-600"
-                                : "text-gray-600 hover:text-orange-500"
-                            }`}
-                          >
-                            <span className="uppercase">{sub.name}</span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-              </div>
-            ))}
-          </div>
-        </aside>
-
-        <main className="lg:w-3/4 w-full">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map((product, index) => (
-                <ProductCard
-                  key={index}
-                  title={product.title}
-                  price={product.price}
-                  saleprice={product.saleprice}
-                  image={product.image}
-                  href={`/product/${product.slug}`}
-                  className={"bg-[#1155CC] p-2 text-center"}
-                  textClass={"text-white font-[400]"}
-                />
-              ))}
-              {products.length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-500">
-                  No products found
-                </div>
-              )}
-            </div>
-          )}
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+      ) : (
+        <main className="w-full">
+          {viewMode === "categories" && renderCategories()}
+          {viewMode === "subcategories" && renderSubcategories()}
+          {viewMode === "products" && renderProducts()}
         </main>
-      </div>
+      )}
     </div>
   );
 }
