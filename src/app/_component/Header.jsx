@@ -67,11 +67,15 @@ export default function Header() {
     const fetchCategories = async () => {
       try {
         const result = await getAllCategoriesAndSubCategories();
-        if (result.success) {
+        if (result.success && Array.isArray(result.data)) {
           setCategories(result.data);
+        } else {
+          console.warn("Invalid categories data received:", result);
+          setCategories([]);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
+        setCategories([]);
       } finally {
         setLoading(false);
       }

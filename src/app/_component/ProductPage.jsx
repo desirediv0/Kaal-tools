@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Filter, ArrowLeft } from "lucide-react";
+import { ChevronDown, Filter, ArrowLeft, Menu } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./product-card";
+import CategorySidebar from "./CategorySidebar";
+import CategorySidebarDesktop from "./CategorySidebarDesktop";
 import {
   fetchCategoryProducts,
   getAllCategoriesAndSubCategories,
@@ -22,6 +24,10 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [viewMode, setViewMode] = useState("categories"); // 'categories' or 'subcategories'
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCategorySidebarOpen, setIsCategorySidebarOpen] = useState(false);
+
+  const currentCategory = searchParams.get("category");
+  const currentSubcategory = searchParams.get("subcategory");
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -77,6 +83,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
       setLoading(false);
     }
     setIsSidebarOpen(false);
+    // Don't close category sidebar - keep it open
     scrollToTop();
   };
 
@@ -107,6 +114,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
       setLoading(false);
     }
     setIsSidebarOpen(false);
+    // Don't close category sidebar - keep it open
     scrollToTop();
   };
 
@@ -121,7 +129,11 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   const handleBackToSubcategories = () => {
     setViewMode("subcategories");
     setProducts([]);
-    updateUrl({ category: selectedCategory.name });
+    if (selectedCategory) {
+      updateUrl({ category: selectedCategory.name });
+    } else if (currentCategory) {
+      updateUrl({ category: currentCategory });
+    }
     scrollToTop();
   };
 
@@ -252,7 +264,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
             {category.name}
           </h3>
           <p className="text-gray-600 text-sm">
-            {category.subCategories.length} subcategories
+            {category.subCategories?.length || 0} subcategories
           </p>
         </div>
       ))}
@@ -357,17 +369,120 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+      {/* Mobile Category Sidebar Toggle Button */}
+      <div className="mb-6 flex items-center justify-between md:hidden">
+        <button
+          onClick={() => setIsCategorySidebarOpen(true)}
+          className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+        >
+          <Menu className="h-5 w-5" />
+          Browse Categories
+        </button>
+
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <span
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => {
+              updateUrl({});
+              setViewMode("categories");
+              setSelectedCategory(null);
+              setProducts([]);
+            }}
+          >
+            All Categories
+          </span>
+          {currentCategory && (
+            <>
+              <span>/</span>
+              <span
+                className="cursor-pointer hover:text-orange-600"
+                onClick={() => {
+                  updateUrl({ category: currentCategory });
+                  setViewMode("subcategories");
+                  setProducts([]);
+                }}
+              >
+                {decodeURIComponent(currentCategory)}
+              </span>
+            </>
+          )}
+          {currentSubcategory && (
+            <>
+              <span>/</span>
+              <span className="text-orange-600">
+                {decodeURIComponent(currentSubcategory)}
+              </span>
+            </>
+          )}
         </div>
-      ) : (
-        <main className="w-full">
-          {viewMode === "categories" && renderCategories()}
-          {viewMode === "subcategories" && renderSubcategories()}
-          {viewMode === "products" && renderProducts()}
-        </main>
-      )}
+      </div>
+
+      {/* Desktop Breadcrumb Navigation */}
+      <div className="mb-6 hidden md:flex items-center gap-2 text-sm text-gray-600">
+        <span
+          className="cursor-pointer hover:text-orange-600"
+          onClick={() => {
+            updateUrl({});
+            setViewMode("categories");
+            setSelectedCategory(null);
+            setProducts([]);
+          }}
+        >
+          All Categories
+        </span>
+        {currentCategory && (
+          <>
+            <span>/</span>
+            <span
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => {
+                updateUrl({ category: currentCategory });
+                setViewMode("subcategories");
+                setProducts([]);
+              }}
+            >
+              {decodeURIComponent(currentCategory)}
+            </span>
+          </>
+        )}
+        {currentSubcategory && (
+          <>
+            <span>/</span>
+            <span className="text-orange-600">
+              {decodeURIComponent(currentSubcategory)}
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="flex gap-6">
+        {/* Desktop Category Sidebar - Always Visible */}
+        <div className="hidden md:block w-80 flex-shrink-0">
+          <CategorySidebarDesktop />
+        </div>
+
+        {/* Mobile Category Sidebar */}
+        <CategorySidebar
+          isOpen={isCategorySidebarOpen}
+          onClose={() => setIsCategorySidebarOpen(false)}
+        />
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+            </div>
+          ) : (
+            <main className="w-full">
+              {viewMode === "categories" && renderCategories()}
+              {viewMode === "subcategories" && renderSubcategories()}
+              {viewMode === "products" && renderProducts()}
+            </main>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

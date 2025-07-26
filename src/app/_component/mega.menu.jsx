@@ -11,11 +11,12 @@ export default function MegaMenu({
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // Filter out unwanted categories
-  const filteredCategories =
-    categories?.filter(
-      (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
-    ) || [];
+  // Ensure categories is always an array and filter out unwanted categories
+  const filteredCategories = Array.isArray(categories) 
+    ? categories.filter(
+        (cat) => cat.name !== "Uncategorized" && cat.name !== "All"
+      )
+    : [];
 
   // Click outside handler
   useEffect(() => {

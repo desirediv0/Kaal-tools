@@ -51,9 +51,23 @@ export const getAllCategoriesAndSubCategories = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/category`);
     const data = await response.json();
+    
+    // Handle the new paginated response structure
+    if (data.success && data.data && data.data.categories) {
+      return {
+        success: true,
+        data: data.data.categories // Return just the categories array
+      };
+    }
+    
+    // Fallback for old structure or error
     return data;
   } catch (error) {
-    throw error;
+    console.error("Error fetching categories:", error);
+    return {
+      success: false,
+      data: []
+    };
   }
 };
 
