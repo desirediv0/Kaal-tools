@@ -11,7 +11,7 @@ export default function CategorySidebar({ isOpen, onClose }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [categories, setCategories] = useState([]);
-  const [expandedCategories, setExpandedCategories] = useState(new Set());
+  const [expandedCategory, setExpandedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [categorySubcategories, setCategorySubcategories] = useState({});
 
@@ -29,42 +29,8 @@ export default function CategorySidebar({ isOpen, onClose }) {
           );
           setCategories(filteredCategories);
 
-          // Auto-expand categories that have subcategories and current category
-          const categoriesToExpand = new Set();
-
-          // Add current category if present
-          if (currentCategory) {
-            categoriesToExpand.add(currentCategory.toLowerCase());
-          }
-
-          // Add categories that have subcategories
-          filteredCategories.forEach((category) => {
-            if (category.subCategories && category.subCategories.length > 0) {
-              categoriesToExpand.add(category.name.toLowerCase());
-            }
-          });
-
-          setExpandedCategories(categoriesToExpand);
-
-          // Pre-load subcategories for expanded categories
-          for (const category of filteredCategories) {
-            if (categoriesToExpand.has(category.name.toLowerCase())) {
-              try {
-                const subcategoryData = await getSubcategoriesByCategory(
-                  category.name
-                );
-                if (subcategoryData.success) {
-                  setCategorySubcategories((prev) => ({
-                    ...prev,
-                    [category.name.toLowerCase()]:
-                      subcategoryData.data.subcategories,
-                  }));
-                }
-              } catch (error) {
-                console.error("Error fetching subcategories:", error);
-              }
-            }
-          }
+          // Don't auto-expand any category by default
+          // Only expand if user explicitly clicks
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -74,16 +40,17 @@ export default function CategorySidebar({ isOpen, onClose }) {
     };
 
     fetchCategories();
-  }, [currentCategory]);
+  }, []);
 
   const toggleCategory = async (categoryName) => {
     const categoryKey = categoryName.toLowerCase();
-    const newExpanded = new Set(expandedCategories);
 
-    if (newExpanded.has(categoryKey)) {
-      newExpanded.delete(categoryKey);
+    // If clicking the same category, close it
+    if (expandedCategory === categoryKey) {
+      setExpandedCategory(null);
     } else {
-      newExpanded.add(categoryKey);
+      // If clicking a different category, close the previous one and open the new one
+      setExpandedCategory(categoryKey);
 
       // Fetch subcategories if not already loaded
       if (!categorySubcategories[categoryKey]) {
@@ -102,8 +69,6 @@ export default function CategorySidebar({ isOpen, onClose }) {
         }
       }
     }
-
-    setExpandedCategories(newExpanded);
   };
 
   const handleCategoryClick = (categoryName) => {
@@ -184,7 +149,7 @@ export default function CategorySidebar({ isOpen, onClose }) {
           <div className="p-4">
             {categories.map((category) => {
               const categoryKey = category.name.toLowerCase();
-              const isExpanded = expandedCategories.has(categoryKey);
+              const isExpanded = expandedCategory === categoryKey;
               const isActive = isCategoryActive(category.name);
               const subcategories = categorySubcategories[categoryKey] || [];
 
@@ -234,7 +199,9 @@ export default function CategorySidebar({ isOpen, onClose }) {
                               handleSubcategoryClick(subcategory.name)
                             }
                           >
-                            {subcategory.name}
+                            <span className="uppercase">
+                              {subcategory.name}
+                            </span>
                           </div>
                         );
                       })}

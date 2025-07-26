@@ -34,74 +34,95 @@ export default function SubcategoryProductsPage({ params }) {
     fetchProducts();
   }, [slug]);
 
+  const decodedSlug = decodeURIComponent(slug);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Mobile Category Sidebar Toggle Button */}
-      <div className="mb-6 flex items-center justify-between md:hidden">
-        <button
-          onClick={() => setIsCategorySidebarOpen(true)}
-          className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
-        >
-          <Menu className="h-5 w-5" />
-          Browse Categories
-        </button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Banner/Header Section */}
+      <div className="bg-gradient-to-r from-gray-200 to-gray-200 text-black py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold uppercase">
+              {decodedSlug.replace(/-/g, " ")}
+            </h1>
+            <p className="text-gray-800 mt-2">
+              Quality products for your needs
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Desktop Breadcrumb Navigation */}
-      <div className="mb-6 hidden md:flex items-center gap-2 text-sm text-gray-600">
-        <span
-          className="cursor-pointer hover:text-orange-600"
-          onClick={() => router.push("/product")}
-        >
-          All Categories
-        </span>
-        <span>/</span>
-        <span className="text-orange-600">
-          {decodeURIComponent(slug).replace(/-/g, " ")}
-        </span>
-      </div>
-
-      <div className="flex gap-6">
-        {/* Desktop Category Sidebar - Always Visible */}
-        <div className="hidden md:block w-80 flex-shrink-0">
-          <CategorySidebarDesktop />
+      <div className="container mx-auto px-4 md:px-8 py-8">
+        {/* Mobile Category Sidebar Toggle Button */}
+        <div className="mb-6 flex items-center justify-between md:hidden">
+          <button
+            onClick={() => setIsCategorySidebarOpen(true)}
+            className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            <Menu className="h-5 w-5" />
+            Browse Categories
+          </button>
         </div>
 
-        {/* Mobile Category Sidebar */}
-        <CategorySidebar
-          isOpen={isCategorySidebarOpen}
-          onClose={() => setIsCategorySidebarOpen(false)}
-        />
+        {/* Desktop Breadcrumb Navigation */}
+        <div className="mb-6 hidden md:flex items-center gap-2 text-sm text-gray-600">
+          <span
+            className="cursor-pointer hover:text-gray-800"
+            onClick={() => router.push("/product")}
+          >
+            Home
+          </span>
+          <span>/</span>
+          <span className="text-gray-800 uppercase">
+            {decodedSlug.replace(/-/g, " ")}
+          </span>
+        </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-6 capitalize">
-            Products for {decodeURIComponent(slug).replace(/-/g, " ")}
-          </h2>
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-            </div>
-          ) : products.length === 0 ? (
-            <div className="text-center text-gray-500 py-12">
-              No products found
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map((product, index) => (
-                <ProductCard
-                  key={index}
-                  title={product.title}
-                  price={product.price}
-                  saleprice={product.saleprice}
-                  image={product.image}
-                  href={`/product/${product.slug}`}
-                  className={"bg-[#1155CC] p-2 text-center"}
-                  textClass={"text-white font-[400]"}
-                />
-              ))}
-            </div>
-          )}
+        <div className="flex gap-6">
+          {/* Desktop Category Sidebar - Always Visible */}
+          <div className="hidden md:block w-80 flex-shrink-0">
+            <CategorySidebarDesktop />
+          </div>
+
+          {/* Mobile Category Sidebar */}
+          <CategorySidebar
+            isOpen={isCategorySidebarOpen}
+            onClose={() => setIsCategorySidebarOpen(false)}
+          />
+
+          {/* Main Content */}
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold mb-6 uppercase text-center">
+              {decodedSlug.replace(/-/g, " ")}
+            </h2>
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-600"></div>
+              </div>
+            ) : products.length === 0 ? (
+              <div className="text-center text-gray-500 py-12">
+                No products found
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                {products
+                  .slice()
+                  .reverse()
+                  .map((product, index) => (
+                    <ProductCard
+                      key={index}
+                      title={product.title}
+                      price={product.price}
+                      saleprice={product.saleprice}
+                      image={product.image}
+                      href={`/product/${product.slug}`}
+                      className={"bg-[#1155CC] p-2 text-center"}
+                      textClass={"text-white font-[400]"}
+                    />
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
