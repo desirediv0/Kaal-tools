@@ -2,24 +2,30 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const ProductCard = ({ title, saleprice, image, href, tag, className, textClass }) => {
-
+const ProductCard = ({
+  title,
+  saleprice,
+  image,
+  href,
+  tag,
+  className,
+  textClass,
+}) => {
   const getImageUrl = (image) => {
-    if (!image) return 'https://placehold.co/600x400?text=No+Image'
-    if (image.startsWith('http')) return image;
-    return image.startsWith('/') ? image : `/${image}`;
+    if (!image) return "/place.jpeg";
+    if (image.startsWith("http")) return image;
+    return image.startsWith("/") ? image : `/${image}`;
   };
 
-
-
   return (
-    <Link href={href} className="block hover:scale-105 transform  transition-transform duration-300">
+    <Link
+      href={href}
+      className="block hover:scale-105 transform  transition-transform duration-300"
+    >
       <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden relative h-full flex flex-col">
         {saleprice ? (
           <div className="absolute -left-8 top-4 rotate-[-45deg] bg-orange-500 text-white px-10 py-1 shadow-lg z-10">
-            <span className="text-sm font-semibold">
-              {tag || 'SALE'}
-            </span>
+            <span className="text-sm font-semibold">{tag || "SALE"}</span>
           </div>
         ) : null}
         <div className="relative flex-shrink-0">
@@ -32,7 +38,9 @@ const ProductCard = ({ title, saleprice, image, href, tag, className, textClass 
           />
         </div>
         <div className={`p-4 flex flex-col flex-grow w-full ${className}`}>
-          <h2 className={`text-sm  line-clamp-2 w-full uppercase text-center text-black ${textClass}`}>
+          <h2
+            className={`text-sm  line-clamp-2 w-full uppercase text-center text-black ${textClass}`}
+          >
             {title}
           </h2>
           {/* <div className="mt-2">

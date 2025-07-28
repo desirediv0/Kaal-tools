@@ -250,13 +250,13 @@ export default function ProductPage() {
               >
                 <div className="relative flex-shrink-0">
                   <Image
-                    src={subcategory.image || "/b1.jpg"}
+                    src={subcategory.image || "/place.jpeg"}
                     alt={subcategory.name}
                     width={800}
                     height={500}
                     className="w-full h-60 object-contain"
                     onError={(e) => {
-                      e.target.src = "/b1.jpg";
+                      e.target.src = "/place.jpeg";
                     }}
                   />
                 </div>
@@ -264,8 +264,8 @@ export default function ProductPage() {
                   <h3 className="text-sm line-clamp-2 w-full uppercase text-white font-[400]">
                     {subcategory.name}
                   </h3>
-                  <p className="text-white text-xs mt-2 opacity-90">
-                    {subcategory._count?.products || 0} products
+                  <p className="text-white text-sm mt-2 opacity-90">
+                    {`(${subcategory._count?.products || 0})`} products
                   </p>
                 </div>
               </div>
