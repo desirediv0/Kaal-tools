@@ -233,7 +233,7 @@ export default function ProductPage() {
     }
     return (
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2">
           {selectedCategory.subCategories &&
           selectedCategory.subCategories.length > 0 ? (
             selectedCategory.subCategories.map((subcategory) => (
@@ -254,7 +254,7 @@ export default function ProductPage() {
                     alt={subcategory.name}
                     width={800}
                     height={500}
-                    className="w-full h-60 object-cover"
+                    className="w-full h-60 object-contain"
                     onError={(e) => {
                       e.target.src = "/b1.jpg";
                     }}
