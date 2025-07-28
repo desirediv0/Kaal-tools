@@ -100,11 +100,10 @@ export const getSubcategoriesByCategory = async (categoryName) => {
 
 export const getSubcategoryInfoByName = async (subcategoryName) => {
   try {
-    console.log("Searching for subcategory:", subcategoryName);
-    
-    // First get all subcategories to find the one with matching name
+    // Use the new public endpoint for getting subcategory info by name
+    const encodedName = encodeURIComponent(subcategoryName);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/subcategory`,
+      `${process.env.NEXT_PUBLIC_API_URL}/subcategory/info/${encodedName}`,
       {
         headers: {
           "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -113,81 +112,23 @@ export const getSubcategoryInfoByName = async (subcategoryName) => {
         },
       }
     );
-    const data = await response.json();
 
-    if (data.success && data.data) {
-      // Normalize the search name (handle URL encoding and formatting)
-      const normalizedSearchName = decodeURIComponent(subcategoryName)
-        .toLowerCase()
-        .trim()
-        .replace(/-/g, " ")
-        .replace(/\s+/g, " ");
-
-      console.log("Normalized search name:", normalizedSearchName);
-
-      // Find the subcategory with matching name using multiple matching strategies
-      let subcategory = data.data.find(
-        (sub) => sub.name.toLowerCase().trim() === normalizedSearchName
-      );
-
-      // If exact match not found, try partial matching
-      if (!subcategory) {
-        subcategory = data.data.find(
-          (sub) =>
-            sub.name.toLowerCase().trim().includes(normalizedSearchName) ||
-            normalizedSearchName.includes(sub.name.toLowerCase().trim())
-        );
-      }
-
-      // If still not found, try normalized matching
-      if (!subcategory) {
-        const cleanSearchName = normalizedSearchName
-          .replace(/[^a-z0-9\s]/g, "")
-          .trim();
-        subcategory = data.data.find((sub) => {
-          const cleanSubName = sub.name
-            .toLowerCase()
-            .replace(/[^a-z0-9\s]/g, "")
-            .trim();
-          return cleanSubName === cleanSearchName;
-        });
-      }
-
-      // If still not found, try URL-encoded matching
-      if (!subcategory) {
-        const urlEncodedName = encodeURIComponent(subcategoryName.toLowerCase());
-        subcategory = data.data.find((sub) => {
-          const encodedSubName = encodeURIComponent(sub.name.toLowerCase());
-          return encodedSubName === urlEncodedName;
-        });
-      }
-
-      if (subcategory) {
-        console.log("Found subcategory:", subcategory.name);
-        // Get detailed info including parent category
-        const detailResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/subcategory/${subcategory.id}`,
-          {
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        );
-        const detailData = await detailResponse.json();
-        return detailData;
-      } else {
-        console.log("Subcategory not found in API response");
-        console.log("Available subcategories:", data.data.map(sub => sub.name));
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return {
-      success: false,
-      data: null,
-      message: "Subcategory not found",
-    };
+    const data = await response.json();
+
+    // Handle the API response structure where data is nested under 'message'
+    if (data.success && data.message) {
+      return {
+        success: true,
+        data: data.message,
+        message: data.data || "Subcategory fetched successfully",
+      };
+    }
+
+    return data;
   } catch (error) {
     console.error("Error fetching subcategory info:", error);
     return {

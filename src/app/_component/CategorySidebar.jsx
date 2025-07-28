@@ -192,7 +192,7 @@ export default function CategorySidebar({ isOpen, onClose }) {
           .replace(/-/g, " ")
           .replace(/\s+/g, " ");
 
-        // Try multiple matching strategies
+        // Try multiple matching strategies with case-insensitive comparison
         const exactMatch = normalizedSubcategoryName === normalizedSlug;
         const partialMatch =
           normalizedSubcategoryName.includes(normalizedSlug) ||
@@ -208,7 +208,19 @@ export default function CategorySidebar({ isOpen, onClose }) {
             subcategoryName.toLowerCase().replace(/\s+/g, " ")
           ) === slug;
 
-        return exactMatch || partialMatch || cleanMatch || urlEncodedMatch;
+        // Case-insensitive comparison for the original names
+        const caseInsensitiveMatch =
+          subcategoryName.toLowerCase() === decodedSlug.toLowerCase() ||
+          subcategoryName.toLowerCase().replace(/\s+/g, " ") ===
+            decodedSlug.toLowerCase().replace(/\s+/g, " ");
+
+        return (
+          exactMatch ||
+          partialMatch ||
+          cleanMatch ||
+          urlEncodedMatch ||
+          caseInsensitiveMatch
+        );
       }
     }
 
