@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Filter, ArrowLeft, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./product-card";
 import CategorySidebar from "./CategorySidebar";
@@ -15,7 +15,7 @@ const stripHtml = (html) => {
   return html?.replace(/<[^>]*>/g, "") || "";
 };
 
-export default function ProductPage({ initialCategory, initialSubCategory }) {
+export default function ProductPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [products, setProducts] = useState([]);
@@ -84,56 +84,6 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     }
     setIsSidebarOpen(false);
     // Don't close category sidebar - keep it open
-    scrollToTop();
-  };
-
-  const handleSubCategoryClick = async (subcategory) => {
-    setLoading(true);
-    try {
-      const productData = await fetchCategoryProducts({
-        subcategoryName: subcategory.name,
-      });
-
-      if (productData.success) {
-        setProducts(
-          productData.data.products.map((product) => ({
-            ...product,
-            shortDesc: stripHtml(product.shortDesc),
-            description: stripHtml(product.description),
-          }))
-        );
-        setViewMode("products");
-        updateUrl({ subcategory: subcategory.name });
-      } else {
-        setProducts([]);
-      }
-    } catch (error) {
-      console.error("Error fetching subcategory products:", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-    setIsSidebarOpen(false);
-    // Don't close category sidebar - keep it open
-    scrollToTop();
-  };
-
-  const handleBackToCategories = () => {
-    setSelectedCategory(null);
-    setViewMode("categories");
-    setProducts([]);
-    updateUrl({});
-    scrollToTop();
-  };
-
-  const handleBackToSubcategories = () => {
-    setViewMode("subcategories");
-    setProducts([]);
-    if (selectedCategory) {
-      updateUrl({ category: selectedCategory.name });
-    } else if (currentCategory) {
-      updateUrl({ category: currentCategory });
-    }
     scrollToTop();
   };
 
@@ -253,7 +203,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
   // Only show categories if viewMode is 'categories' and no category/subcategory param
   const renderCategories = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
       {categories.map((category) => (
         <div
           key={category.id}
@@ -282,12 +232,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
     }
     return (
       <div>
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 uppercase">
-            {selectedCategory.name}
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
           {selectedCategory.subCategories &&
           selectedCategory.subCategories.length > 0 ? (
             selectedCategory.subCategories.map((subcategory) => (
@@ -300,23 +245,23 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                   );
                   router.push(`/product/subcategory/${encodedSubcategory}`);
                 }}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 overflow-hidden"
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden relative h-full flex flex-col cursor-pointer hover:scale-105 transform"
               >
-                <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                <div className="relative flex-shrink-0">
                   <img
                     src={subcategory.image || "/b1.jpg"}
                     alt={subcategory.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-60 object-contain"
                     onError={(e) => {
                       e.target.src = "/b1.jpg";
                     }}
                   />
                 </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2 uppercase">
+                <div className="p-4 flex flex-col flex-grow w-full bg-[#1155CC] text-center">
+                  <h3 className="text-sm line-clamp-2 w-full uppercase text-white font-[400]">
                     {subcategory.name}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-white text-xs mt-2 opacity-90">
                     {subcategory._count?.products || 0} products
                   </p>
                 </div>
@@ -335,21 +280,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
   // Only show products if viewMode is 'products'
   const renderProducts = () => (
     <div>
-      <div className="mb-6 text-center">
-        <button
-          onClick={handleBackToSubcategories}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-700 mb-4 mx-auto"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Subcategories
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800 uppercase">
-          {currentSubcategory
-            ? decodeURIComponent(currentSubcategory)
-            : "Products"}
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
         {products
           .slice()
           .reverse()
@@ -361,7 +292,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
               saleprice={product.saleprice}
               image={product.image}
               href={`/product/${product.slug}`}
-              className={"bg-gray-600 p-2 text-center"}
+              className={"bg-[#1155CC] p-2 text-center"}
               textClass={"text-white font-[400]"}
             />
           ))}
@@ -376,8 +307,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Banner/Header Section */}
-      <div className="bg-gradient-to-r from-gray-200 to-gray-200 text-black py-16">
+      <div className="bg-[#111827] text-white py-14">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-3xl font-bold uppercase">
@@ -387,13 +317,9 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
                 ? decodeURIComponent(currentCategory)
                 : "All Products"}
             </h1>
-            <p className="text-gray-800 mt-2">
-              Discover quality tools and equipment
-            </p>
           </div>
         </div>
       </div>
-
       <div className="container mx-auto px-4 md:px-8 py-8">
         {/* Mobile Category Sidebar Toggle Button */}
         <div className="mb-6 flex items-center justify-between md:hidden">
@@ -410,10 +336,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
             <span
               className="cursor-pointer hover:text-gray-800"
               onClick={() => {
-                updateUrl({});
-                setViewMode("categories");
-                setSelectedCategory(null);
-                setProducts([]);
+                router.push("/");
               }}
             >
               Home
@@ -449,10 +372,7 @@ export default function ProductPage({ initialCategory, initialSubCategory }) {
           <span
             className="cursor-pointer hover:text-gray-800"
             onClick={() => {
-              updateUrl({});
-              setViewMode("categories");
-              setSelectedCategory(null);
-              setProducts([]);
+              router.push("/");
             }}
           >
             Home

@@ -29,8 +29,17 @@ export default function CategorySidebar({ isOpen, onClose }) {
           );
           setCategories(filteredCategories);
 
-          // Don't auto-expand any category by default
-          // Only expand if user explicitly clicks
+          // Auto-expand the current category if it exists
+          if (currentCategory) {
+            const categoryToExpand = filteredCategories.find(
+              (cat) => cat.name.toLowerCase() === currentCategory
+            );
+            if (categoryToExpand) {
+              setExpandedCategory(currentCategory);
+              // Fetch subcategories for the current category
+              fetchSubcategoriesForCategory(categoryToExpand.name);
+            }
+          }
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -40,7 +49,25 @@ export default function CategorySidebar({ isOpen, onClose }) {
     };
 
     fetchCategories();
-  }, []);
+  }, [currentCategory]);
+
+  const fetchSubcategoriesForCategory = async (categoryName) => {
+    const categoryKey = categoryName.toLowerCase();
+
+    if (!categorySubcategories[categoryKey]) {
+      try {
+        const subcategoryData = await getSubcategoriesByCategory(categoryName);
+        if (subcategoryData.success) {
+          setCategorySubcategories((prev) => ({
+            ...prev,
+            [categoryKey]: subcategoryData.data.subcategories,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+      }
+    }
+  };
 
   const toggleCategory = async (categoryName) => {
     const categoryKey = categoryName.toLowerCase();
@@ -53,30 +80,24 @@ export default function CategorySidebar({ isOpen, onClose }) {
       setExpandedCategory(categoryKey);
 
       // Fetch subcategories if not already loaded
-      if (!categorySubcategories[categoryKey]) {
-        try {
-          const subcategoryData = await getSubcategoriesByCategory(
-            categoryName
-          );
-          if (subcategoryData.success) {
-            setCategorySubcategories((prev) => ({
-              ...prev,
-              [categoryKey]: subcategoryData.data.subcategories,
-            }));
-          }
-        } catch (error) {
-          console.error("Error fetching subcategories:", error);
-        }
-      }
+      await fetchSubcategoriesForCategory(categoryName);
     }
   };
 
-  const handleCategoryClick = (categoryName) => {
+  const handleCategoryClick = async (categoryName) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.delete("category");
     newParams.delete("subcategory");
     newParams.set("category", categoryName.toLowerCase());
     router.push(`/product?${newParams.toString()}`);
+
+    // Auto-expand the clicked category
+    const categoryKey = categoryName.toLowerCase();
+    setExpandedCategory(categoryKey);
+
+    // Fetch subcategories if not already loaded
+    await fetchSubcategoriesForCategory(categoryName);
+
     // Don't close sidebar - keep it open
   };
 
