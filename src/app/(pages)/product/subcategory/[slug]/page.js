@@ -5,7 +5,7 @@ import { Menu } from "lucide-react";
 import ProductCard from "@/app/_component/product-card";
 import CategorySidebar from "@/app/_component/CategorySidebar";
 import CategorySidebarDesktop from "@/app/_component/CategorySidebarDesktop";
-import { fetchCategoryProducts } from "@/Api";
+import { fetchCategoryProducts, getSubcategoryInfoByName } from "@/Api";
 
 export default function SubcategoryProductsPage({ params }) {
   const router = useRouter();
@@ -13,25 +13,35 @@ export default function SubcategoryProductsPage({ params }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCategorySidebarOpen, setIsCategorySidebarOpen] = useState(false);
+  const [subcategoryInfo, setSubcategoryInfo] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         // Decode the slug first since it's already URL-encoded from the URL params
         const decodedSlug = decodeURIComponent(slug);
-        const data = await fetchCategoryProducts({
-          subcategoryName: decodedSlug,
-        });
-        setProducts(data.success ? data.data.products : []);
+
+        // Fetch both products and subcategory info
+        const [productData, subcategoryData] = await Promise.all([
+          fetchCategoryProducts({
+            subcategoryName: decodedSlug,
+          }),
+          getSubcategoryInfoByName(decodedSlug),
+        ]);
+
+        setProducts(productData.success ? productData.data.products : []);
+        setSubcategoryInfo(
+          subcategoryData.success ? subcategoryData.data : null
+        );
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
         setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, [slug]);
 
   const decodedSlug = decodeURIComponent(slug);
@@ -59,6 +69,36 @@ export default function SubcategoryProductsPage({ params }) {
             <Menu className="h-5 w-5" />
             Browse Categories
           </button>
+
+          {/* Mobile Breadcrumb Navigation */}
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <span
+              className="cursor-pointer hover:text-gray-800"
+              onClick={() => router.push("/")}
+            >
+              Home
+            </span>
+            {subcategoryInfo?.category && (
+              <>
+                <span>/</span>
+                <span
+                  className="cursor-pointer hover:text-gray-800"
+                  onClick={() => {
+                    const encodedCategory = encodeURIComponent(
+                      subcategoryInfo.category.name.toLowerCase()
+                    );
+                    router.push(`/product?category=${encodedCategory}`);
+                  }}
+                >
+                  {subcategoryInfo.category.name.toUpperCase()}
+                </span>
+              </>
+            )}
+            <span>/</span>
+            <span className="text-gray-800">
+              {decodedSlug.replace(/-/g, " ").toUpperCase()}
+            </span>
+          </div>
         </div>
 
         {/* Desktop Breadcrumb Navigation */}
@@ -69,6 +109,22 @@ export default function SubcategoryProductsPage({ params }) {
           >
             Home
           </span>
+          {subcategoryInfo?.category && (
+            <>
+              <span>/</span>
+              <span
+                className="cursor-pointer hover:text-gray-800"
+                onClick={() => {
+                  const encodedCategory = encodeURIComponent(
+                    subcategoryInfo.category.name.toLowerCase()
+                  );
+                  router.push(`/product?category=${encodedCategory}`);
+                }}
+              >
+                {subcategoryInfo.category.name.toUpperCase()}
+              </span>
+            </>
+          )}
           <span>/</span>
           <span className="text-gray-800 uppercase">
             {decodedSlug.replace(/-/g, " ")}

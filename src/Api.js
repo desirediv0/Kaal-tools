@@ -98,6 +98,106 @@ export const getSubcategoriesByCategory = async (categoryName) => {
   }
 };
 
+export const getSubcategoryInfoByName = async (subcategoryName) => {
+  try {
+    console.log("Searching for subcategory:", subcategoryName);
+    
+    // First get all subcategories to find the one with matching name
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subcategory`,
+      {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
+    const data = await response.json();
+
+    if (data.success && data.data) {
+      // Normalize the search name (handle URL encoding and formatting)
+      const normalizedSearchName = decodeURIComponent(subcategoryName)
+        .toLowerCase()
+        .trim()
+        .replace(/-/g, " ")
+        .replace(/\s+/g, " ");
+
+      console.log("Normalized search name:", normalizedSearchName);
+
+      // Find the subcategory with matching name using multiple matching strategies
+      let subcategory = data.data.find(
+        (sub) => sub.name.toLowerCase().trim() === normalizedSearchName
+      );
+
+      // If exact match not found, try partial matching
+      if (!subcategory) {
+        subcategory = data.data.find(
+          (sub) =>
+            sub.name.toLowerCase().trim().includes(normalizedSearchName) ||
+            normalizedSearchName.includes(sub.name.toLowerCase().trim())
+        );
+      }
+
+      // If still not found, try normalized matching
+      if (!subcategory) {
+        const cleanSearchName = normalizedSearchName
+          .replace(/[^a-z0-9\s]/g, "")
+          .trim();
+        subcategory = data.data.find((sub) => {
+          const cleanSubName = sub.name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, "")
+            .trim();
+          return cleanSubName === cleanSearchName;
+        });
+      }
+
+      // If still not found, try URL-encoded matching
+      if (!subcategory) {
+        const urlEncodedName = encodeURIComponent(subcategoryName.toLowerCase());
+        subcategory = data.data.find((sub) => {
+          const encodedSubName = encodeURIComponent(sub.name.toLowerCase());
+          return encodedSubName === urlEncodedName;
+        });
+      }
+
+      if (subcategory) {
+        console.log("Found subcategory:", subcategory.name);
+        // Get detailed info including parent category
+        const detailResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/subcategory/${subcategory.id}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          }
+        );
+        const detailData = await detailResponse.json();
+        return detailData;
+      } else {
+        console.log("Subcategory not found in API response");
+        console.log("Available subcategories:", data.data.map(sub => sub.name));
+      }
+    }
+
+    return {
+      success: false,
+      data: null,
+      message: "Subcategory not found",
+    };
+  } catch (error) {
+    console.error("Error fetching subcategory info:", error);
+    return {
+      success: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};
+
 export const submitContactForm = async (formData) => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {

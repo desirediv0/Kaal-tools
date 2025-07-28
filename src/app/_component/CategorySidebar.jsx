@@ -1,15 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ChevronRight, ChevronDown, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   getAllCategoriesAndSubCategories,
   getSubcategoriesByCategory,
+  getSubcategoryInfoByName,
 } from "@/Api";
 
 export default function CategorySidebar({ isOpen, onClose }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [categories, setCategories] = useState([]);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,6 +19,9 @@ export default function CategorySidebar({ isOpen, onClose }) {
 
   const currentCategory = searchParams.get("category");
   const currentSubcategory = searchParams.get("subcategory");
+
+  // Check if we're on a subcategory page
+  const isSubcategoryPage = pathname.includes("/product/subcategory/");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,15 +34,22 @@ export default function CategorySidebar({ isOpen, onClose }) {
           );
           setCategories(filteredCategories);
 
-          // Auto-expand the current category if it exists
-          if (currentCategory) {
+          // Handle different scenarios for auto-expanding categories
+          if (isSubcategoryPage) {
+            // We're on a subcategory page, need to find the parent category
+            const slug = pathname.split("/product/subcategory/")[1];
+            if (slug) {
+              const decodedSlug = decodeURIComponent(slug);
+              await handleSubcategoryPage(decodedSlug, filteredCategories);
+            }
+          } else if (currentCategory) {
+            // We're on a category page with query params
             const categoryToExpand = filteredCategories.find(
               (cat) => cat.name.toLowerCase() === currentCategory
             );
             if (categoryToExpand) {
               setExpandedCategory(currentCategory);
-              // Fetch subcategories for the current category
-              fetchSubcategoriesForCategory(categoryToExpand.name);
+              await fetchSubcategoriesForCategory(categoryToExpand.name);
             }
           }
         }
@@ -49,7 +61,56 @@ export default function CategorySidebar({ isOpen, onClose }) {
     };
 
     fetchCategories();
-  }, [currentCategory]);
+  }, [currentCategory, pathname, isSubcategoryPage]);
+
+  const handleSubcategoryPage = async (subcategoryName, filteredCategories) => {
+    try {
+      const subcategoryInfo = await getSubcategoryInfoByName(subcategoryName);
+
+      if (subcategoryInfo.success && subcategoryInfo.data) {
+        const parentCategory = subcategoryInfo.data.category;
+        if (parentCategory) {
+          const categoryKey = parentCategory.name.toLowerCase();
+          setExpandedCategory(categoryKey);
+
+          // Fetch subcategories for the parent category
+          await fetchSubcategoriesForCategory(parentCategory.name);
+        }
+      } else {
+        // Try to find the category by searching through all categories
+        for (const category of filteredCategories) {
+          const subcategoryData = await getSubcategoriesByCategory(
+            category.name
+          );
+          if (subcategoryData.success && subcategoryData.data.subcategories) {
+            const foundSubcategory = subcategoryData.data.subcategories.find(
+              (sub) => {
+                const normalizedSubName = sub.name.toLowerCase().trim();
+                const normalizedSearchName = subcategoryName
+                  .toLowerCase()
+                  .trim()
+                  .replace(/-/g, " ");
+                return (
+                  normalizedSubName === normalizedSearchName ||
+                  normalizedSubName.includes(normalizedSearchName) ||
+                  normalizedSearchName.includes(normalizedSubName)
+                );
+              }
+            );
+
+            if (foundSubcategory) {
+              const categoryKey = category.name.toLowerCase();
+              setExpandedCategory(categoryKey);
+              await fetchSubcategoriesForCategory(category.name);
+              break;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error handling subcategory page:", error);
+    }
+  };
 
   const fetchSubcategoriesForCategory = async (categoryName) => {
     const categoryKey = categoryName.toLowerCase();
@@ -102,14 +163,11 @@ export default function CategorySidebar({ isOpen, onClose }) {
   };
 
   const handleSubcategoryClick = (subcategoryName) => {
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete("category");
-    newParams.delete("subcategory");
-    newParams.set(
-      "subcategory",
-      encodeURIComponent(subcategoryName.toLowerCase())
+    // Navigate to the dedicated subcategory page
+    const encodedSubcategory = encodeURIComponent(
+      subcategoryName.toLowerCase()
     );
-    router.push(`/product?${newParams.toString()}`);
+    router.push(`/product/subcategory/${encodedSubcategory}`);
     // Don't close sidebar - keep it open
   };
 
@@ -118,9 +176,43 @@ export default function CategorySidebar({ isOpen, onClose }) {
   };
 
   const isSubcategoryActive = (subcategoryName) => {
-    return (
-      currentSubcategory === encodeURIComponent(subcategoryName.toLowerCase())
-    );
+    // Check if subcategory is active via query params
+    const isActiveViaParams =
+      currentSubcategory === encodeURIComponent(subcategoryName.toLowerCase());
+
+    // Check if subcategory is active via pathname (subcategory page)
+    if (isSubcategoryPage) {
+      const slug = pathname.split("/product/subcategory/")[1];
+      if (slug) {
+        const decodedSlug = decodeURIComponent(slug);
+        const normalizedSubcategoryName = subcategoryName.toLowerCase().trim();
+        const normalizedSlug = decodedSlug
+          .toLowerCase()
+          .trim()
+          .replace(/-/g, " ")
+          .replace(/\s+/g, " ");
+
+        // Try multiple matching strategies
+        const exactMatch = normalizedSubcategoryName === normalizedSlug;
+        const partialMatch =
+          normalizedSubcategoryName.includes(normalizedSlug) ||
+          normalizedSlug.includes(normalizedSubcategoryName);
+        const cleanMatch =
+          normalizedSubcategoryName.replace(/[^a-z0-9\s]/g, "").trim() ===
+          normalizedSlug.replace(/[^a-z0-9\s]/g, "").trim();
+
+        // Additional check for URL-encoded spaces
+        const urlEncodedMatch =
+          encodeURIComponent(subcategoryName.toLowerCase()) === slug ||
+          encodeURIComponent(
+            subcategoryName.toLowerCase().replace(/\s+/g, " ")
+          ) === slug;
+
+        return exactMatch || partialMatch || cleanMatch || urlEncodedMatch;
+      }
+    }
+
+    return isActiveViaParams;
   };
 
   if (loading) {
