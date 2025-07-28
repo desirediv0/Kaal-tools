@@ -10,6 +10,7 @@ import {
   getAllCategoriesAndSubCategories,
   getSubcategoriesByCategory,
 } from "@/Api";
+import Image from "next/image";
 
 const stripHtml = (html) => {
   return html?.replace(/<[^>]*>/g, "") || "";
@@ -248,10 +249,12 @@ export default function ProductPage() {
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden relative h-full flex flex-col cursor-pointer hover:scale-105 transform"
               >
                 <div className="relative flex-shrink-0">
-                  <img
+                  <Image
                     src={subcategory.image || "/b1.jpg"}
                     alt={subcategory.name}
-                    className="w-full h-60 object-contain"
+                    width={800}
+                    height={500}
+                    className="w-full h-60 object-cover"
                     onError={(e) => {
                       e.target.src = "/b1.jpg";
                     }}
