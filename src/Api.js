@@ -232,6 +232,8 @@ export const fetchCategoryProducts = async ({
       url = `${process.env.NEXT_PUBLIC_API_URL}/product/all?_t=${timestamp}`;
     }
 
+    console.log("Fetching category/all products:", { url, categoryName });
+
     const response = await fetch(url, {
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -240,6 +242,13 @@ export const fetchCategoryProducts = async ({
       },
     });
     const rawData = await response.json();
+
+    console.log("Category/All API response:", {
+      success: rawData.success,
+      productCount: rawData.data?.products?.length || 0,
+      totalProducts: rawData.data?.totalProducts || 0,
+    });
+
     return normalizeProductData(rawData);
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -264,30 +273,32 @@ const normalizeProductData = (rawData) => {
 
   const products = rawData.data?.products || rawData.data || [];
 
+  const normalizedProducts = products.map((product) => ({
+    id: product.id,
+    title: product.title || "Unnamed Product",
+    description: product.description || "",
+    shortDesc: product.shortDesc || product.description || "",
+    price: product.price,
+    saleprice: product.salePrice >= 0 ? product.salePrice : null,
+    image: product.image || "",
+    slug: product.slug || "",
+    images: Array.isArray(product.images)
+      ? product.images.map((img) =>
+          typeof img === "string" ? img : img.url || ""
+        )
+      : [],
+    categories: Array.isArray(product.categories)
+      ? product.categories.map((c) => c.category?.name || "Uncategorized")
+      : product.categories?.split(",").map((c) => c.trim()) || [],
+    subCategories: Array.isArray(product.subCategories)
+      ? product.subCategories.map((s) => s.subCategory?.name || "")
+      : [],
+  }));
+
   return {
     success: rawData.success || rawData.statusCode === 200,
     data: {
-      products: products.map((product) => ({
-        id: product.id,
-        title: product.title || "Unnamed Product",
-        description: product.description || "",
-        shortDesc: product.shortDesc || product.description || "",
-        price: product.price,
-        saleprice: product.salePrice >= 0 ? product.salePrice : null,
-        image: product.image || "",
-        slug: product.slug || "",
-        images: Array.isArray(product.images)
-          ? product.images.map((img) =>
-              typeof img === "string" ? img : img.url || ""
-            )
-          : [],
-        categories: Array.isArray(product.categories)
-          ? product.categories.map((c) => c.category?.name || "Uncategorized")
-          : product.categories?.split(",").map((c) => c.trim()) || [],
-        subCategories: Array.isArray(product.subCategories)
-          ? product.subCategories.map((s) => s.subCategory?.name || "")
-          : [],
-      })),
+      products: normalizedProducts,
     },
     message: rawData.message || "Products fetched successfully",
   };
