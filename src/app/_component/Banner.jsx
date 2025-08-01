@@ -47,25 +47,25 @@ export function Banner({ items, h }) {
               {item.link ? (
                 <Link href={item.link} className="block w-full h-full">
                   <div
-                    className="relative w-full md:aspect-[21/8] aspect-square cursor-pointer"
-                    style={{ height: h }}
+                    className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] cursor-pointer"
+                    style={h ? { height: h } : {}}
                   >
                     <Image
                       src={item.image}
                       alt={`Banner image ${index + 1}`}
                       fill
-                      sizes="100vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
                       style={{
                         objectFit: "cover",
                       }}
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
-                      <section className="md:w-2/3">
-                        <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 sm:p-4">
+                      <section className="w-full sm:w-4/5 md:w-2/3 px-2 sm:px-0">
+                        <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center select-none leading-tight">
                           {item.heading ? item.heading : ""}
                         </h2>
-                        <p className="text-lg mb-4 text-center select-none">
+                        <p className="text-sm sm:text-base md:text-lg mb-2 sm:mb-4 text-center select-none leading-relaxed">
                           {item.shortdesc ? item.shortdesc : ""}
                         </p>
                       </section>
@@ -74,25 +74,25 @@ export function Banner({ items, h }) {
                 </Link>
               ) : (
                 <div
-                  className="relative w-full md:aspect-[21/8] aspect-square"
-                  style={{ height: h }}
+                  className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px]"
+                  style={h ? { height: h } : {}}
                 >
                   <Image
                     src={item.image}
                     alt={`Banner image ${index + 1}`}
                     fill
-                    sizes="100vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
                     style={{
                       objectFit: "cover",
                     }}
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
-                    <section className="md:w-2/3">
-                      <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2 sm:p-4">
+                    <section className="w-full sm:w-4/5 md:w-2/3 px-2 sm:px-0">
+                      <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center select-none leading-tight">
                         {item.heading}
                       </h2>
-                      <p className="text-lg mb-4 text-center select-none">
+                      <p className="text-sm sm:text-base md:text-lg mb-2 sm:mb-4 text-center select-none leading-relaxed">
                         {item.shortdesc}
                       </p>
                     </section>
@@ -104,8 +104,8 @@ export function Banner({ items, h }) {
         </CarouselContent>
         {showControls && (
           <>
-            <CarouselPrevious className="absolute text-white left-0 top-1/2 -translate-y-1/2 rounded-none" />
-            <CarouselNext className="absolute text-white right-0 top-1/2 -translate-y-1/2 rounded-none" />
+            <CarouselPrevious className="absolute text-white left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-none bg-black/20 hover:bg-black/40" />
+            <CarouselNext className="absolute text-white right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-none bg-black/20 hover:bg-black/40" />
           </>
         )}
       </Carousel>
