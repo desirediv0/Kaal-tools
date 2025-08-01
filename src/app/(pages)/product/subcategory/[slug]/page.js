@@ -53,7 +53,7 @@ export default function SubcategoryProductsPage({ params }) {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-bold uppercase flex items-center justify-center gap-3">
-              <ChevronRight className="text-orange-500 text-2xl" />
+              <ChevronRight className="text-orange-500 text-2xl" size={35} />
               {decodedSlug.replace(/-/g, " ")}
             </h1>
           </div>
