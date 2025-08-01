@@ -61,10 +61,7 @@ const items = [
 ];
 const items2 = [
   {
-    image: "/ks2.webp",
-    heading: "Power Up Your Projects with Tools You Can Count On.",
-    shortdesc:
-      "Discover durable, high-performance tools designed for every project. Built to last, made to deliver.",
+    image: "/banner2.png",
   },
 ];
 

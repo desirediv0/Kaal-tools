@@ -63,10 +63,10 @@ export function Banner({ items, h }) {
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
                       <section className="md:w-2/3">
                         <h2 className="text-2xl md:text-6xl font-bold mb-4 text-center select-none">
-                          {item.heading}
+                          {item.heading ? item.heading : ""}
                         </h2>
                         <p className="text-lg mb-4 text-center select-none">
-                          {item.shortdesc}
+                          {item.shortdesc ? item.shortdesc : ""}
                         </p>
                       </section>
                     </div>
