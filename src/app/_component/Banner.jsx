@@ -13,10 +13,29 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+// Custom hook to detect screen size
+function useScreenSize() {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  return isMobile;
+}
+
 export function Banner({ items, h }) {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
   );
+  const isMobile = useScreenSize();
 
   const showControls = items.length > 1;
 
@@ -33,6 +52,36 @@ export function Banner({ items, h }) {
     }
   }, [showControls]);
 
+  // Function to get responsive image source
+  const getResponsiveImage = (item) => {
+    // If the item has a specific mobile image, use it
+    if (isMobile && item.mobileImage) {
+      return item.mobileImage;
+    }
+
+    // If the item has a specific desktop image, use it
+    if (!isMobile && item.desktopImage) {
+      return item.desktopImage;
+    }
+
+    // Default responsive behavior - use smbanner.png for mobile, banner2.png for desktop
+    if (isMobile) {
+      return "/smbanner.png";
+    } else {
+      return "/banner2.png";
+    }
+  };
+
+  // Function to get responsive height
+  const getResponsiveHeight = () => {
+    if (h) {
+      // If custom height is provided, use it
+      return h;
+    }
+    // Default responsive heights
+    return isMobile ? "50vh" : "55vh";
+  };
+
   return (
     <div className="w-full overflow-hidden relative">
       <Carousel
@@ -47,11 +96,11 @@ export function Banner({ items, h }) {
               {item.link ? (
                 <Link href={item.link} className="block w-full h-full">
                   <div
-                    className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] cursor-pointer"
-                    style={h ? { height: h } : {}}
+                    className="relative w-full cursor-pointer"
+                    style={{ height: getResponsiveHeight() }}
                   >
                     <Image
-                      src={item.image}
+                      src={getResponsiveImage(item)}
                       alt={`Banner image ${index + 1}`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
@@ -74,11 +123,11 @@ export function Banner({ items, h }) {
                 </Link>
               ) : (
                 <div
-                  className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px]"
-                  style={h ? { height: h } : {}}
+                  className="relative w-full"
+                  style={{ height: getResponsiveHeight() }}
                 >
                   <Image
-                    src={item.image}
+                    src={getResponsiveImage(item)}
                     alt={`Banner image ${index + 1}`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
