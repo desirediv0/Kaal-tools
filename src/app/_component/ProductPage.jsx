@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
+import { ChevronRight, Menu } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "./product-card";
 import CategorySidebar from "./CategorySidebar";
@@ -313,7 +313,8 @@ export default function ProductPage() {
       <div className="bg-[#111827] text-white py-14">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-3xl font-bold uppercase">
+            <h1 className="text-xl md:text-3xl font-bold uppercase flex items-center justify-center gap-3">
+              <ChevronRight className="text-orange-500 text-2xl" />
               {currentSubcategory
                 ? decodeURIComponent(currentSubcategory)
                 : currentCategory

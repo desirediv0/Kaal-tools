@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Menu } from "lucide-react";
+import { ChevronRight, Menu } from "lucide-react";
 import ProductCard from "@/app/_component/product-card";
 import CategorySidebar from "@/app/_component/CategorySidebar";
 import CategorySidebarDesktop from "@/app/_component/CategorySidebarDesktop";
@@ -52,7 +52,8 @@ export default function SubcategoryProductsPage({ params }) {
       <div className="bg-[#111827] text-white py-14">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-3xl font-bold uppercase">
+            <h1 className="text-xl md:text-3xl font-bold uppercase flex items-center justify-center gap-3">
+              <ChevronRight className="text-orange-500 text-2xl" />
               {decodedSlug.replace(/-/g, " ")}
             </h1>
           </div>
@@ -61,7 +62,7 @@ export default function SubcategoryProductsPage({ params }) {
 
       <div className="container mx-auto px-4 md:px-8 py-8">
         {/* Mobile Category Sidebar Toggle Button */}
-        <div className="mb-6 flex items-center justify-between md:hidden">
+        <div className="mb-6 flex items-center justify-between md:hidden flex-col md:flex-row gap-2">
           <button
             onClick={() => setIsCategorySidebarOpen(true)}
             className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
