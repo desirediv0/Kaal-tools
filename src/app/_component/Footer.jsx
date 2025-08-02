@@ -5,7 +5,13 @@ import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import { RiFacebookCircleFill } from "react-icons/ri";
-import { FaYoutube, FaInstagram, FaLinkedin, FaPinterest, FaXTwitter } from "react-icons/fa6";
+import {
+  FaYoutube,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterest,
+  FaXTwitter,
+} from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -31,12 +37,14 @@ export default function Footer() {
               className="hover:text-gray-300 transition-colors"
             >
               <h2 className="text-base">Products</h2>
-            </Link>            <Link
+            </Link>{" "}
+            <Link
               href="/contact"
               className="hover:text-gray-300 transition-colors"
             >
               <h2 className="text-base">Contact</h2>
-            </Link>            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
+            </Link>{" "}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
               <a
                 target="_blank"
                 href="https://www.facebook.com/kaaltools"
